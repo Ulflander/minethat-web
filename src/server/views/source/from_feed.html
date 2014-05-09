@@ -1,0 +1,31 @@
+
+
+<section class="form">
+    <h3>Setup a source from a feed</h3>
+    <a href="/app/sources">Sources</a>
+    <% if (!!data.error) { %>
+        <div class="server-error">
+            <%= data.error.message %>
+        </div>
+    <% } %>
+
+    <form id="source" method="post">
+        <div class="input-wrap">
+            <label for="feed_url">Source feed URL</label>
+            <input class="input" type="text" name="feed_url" placeholder="http://example.com/feed.xml" value="" />
+        </div>
+
+        <div class="input-wrap">
+            <label for="type">Source type</label>
+            <select name="type">
+                <option value="SPAM">Spam</option>
+                <option value="FAKE">Fake</option>
+                <option selected=selected value="CONTENT">Normal</option>
+            </select>
+        </div>
+
+        <div class="input-wrap cta">
+            <input type="submit" value="Import source" class="button" />
+        </div>
+    </form>
+</section>

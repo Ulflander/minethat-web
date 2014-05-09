@@ -1,0 +1,43 @@
+
+
+<section class="form">
+    <h3>Add a source</h3>
+    <a href="/app/sources">Sources</a>
+    <% if (!!data.error) { %>
+        <div class="server-error">
+            <%= data.error.message %>
+        </div>
+    <% } %>
+    <form id="source" method="post">
+        <div class="input-wrap">
+            <label for="name">Source name</label>
+            <input class="input" type="text" name="name" placeholder="The Daily Planet" value="<%= data.doc.name || '' %>" />
+        </div>
+
+        <div class="input-wrap">
+            <label for="url">Source URL</label>
+            <input class="input" type="text" name="url" placeholder="http://example.com/feed.xml" value="<%= data.doc.url || '' %>" />
+        </div>
+
+
+        <div class="input-wrap">
+            <label for="feed_url">Source feed URL</label>
+            <input class="input" type="text" name="feed_url" placeholder="http://example.com/feed.xml" value="<%= data.doc.feed_url || '' %>" />
+        </div>
+
+
+        <div class="input-wrap">
+            <label for="type">Source type</label>
+            <select name="type">
+                <option <%= data.doc.type == 'SPAM' ? 'selected=selected' : '' %> value="SPAM">Spam</option>
+                <option <%= data.doc.type == 'FAKE' ? 'selected=selected' : '' %> value="FAKE">Fake</option>
+                <option <%= data.doc.type == 'CONTENT' ? 'selected=selected' : '' %> value="CONTENT">Normal</option>
+            </select>
+
+        </div>
+
+        <div class="input-wrap cta">
+            <input type="submit" value="<%= data.status === 'exists' ? 'Edit source' : 'Add source' %>" class="button" />
+        </div>
+    </form>
+</section>

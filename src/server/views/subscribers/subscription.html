@@ -1,0 +1,26 @@
+
+<%- partial('header-public', {
+    title: 'Newsletter subscription | Minethat'
+}) %>
+
+<section class="subscription">
+    <% if (data.msg) { %>
+        <%= data.msg %>
+    <% } else if (data.sub.unactivated === true) { %>
+        <p>You are currently unsubscribed from our newsletter. Do you want to reactivate your subscription?</p>
+        <div class="input-wrap cta">
+            <a href="/subscription?id=<%= data.sub._id %>&action=subscribe" class="button">
+                <span class="main">Subscribe to newsletters</span>
+            </a>
+        </div>
+    <% } else { %>
+        <p>You are currently subscribed to our newsletter with email address <em><%= data.sub.email %></em>. Do you want to deactivate your subscription?</p>
+        <p>
+            <a href="/subscription?id=<%= data.sub._id %>&action=unsubscribe">
+                <span class="main">Unsubscribe from newsletters</span>
+            </a>
+        </p>
+    <% } %>
+</section>
+
+<%- partial('footer-public') %>

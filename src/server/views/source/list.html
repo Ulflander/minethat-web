@@ -1,0 +1,64 @@
+
+<section class="table">
+    <h3>Sources: <span class="count"><%= data.total %></span></h3>
+    <a href="/app/jobs">Jobs</a>
+    <a href="/app/documents">Documents</a>
+    <a href="/app/source/new">New source</a>
+    <a href="/app/source/generate">Setup source from feed</a>
+    <table class="sources">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Raw</th>
+            </tr>
+        </thead>
+        <% for(var i=0; i < data.docs.length; i++) {%>
+            <tr data-item-id="<%= data.docs[i]._id %>">
+                <td><%= data.docs[i]._id %></td>
+                <td><code><pre><%= data.docs[i] %></pre></code></td>
+                <td><a href="/app/source/<%= data.docs[i]._id %>">Edit</a></td>
+                <td><a href="/api/v1/source/<%= data.docs[i]._id %>" data-action="delete">Delete</a></td>
+            </tr>
+        <% } %>
+
+        <% if (data.hasNext || data.hasPrevious) { %>
+            <div class="paginate">
+
+                <% if (data.hasPrevious) { %>
+                    <a class="previous" href="?page=<%= data.page - 1 %>">Previous</a>
+                <% } %>
+                <% if (data.hasNext) { %>
+                    <a class="next" href="?page=<%= data.page + 1 %>">Next</a>
+                <% } %>
+            </div>
+        <% } %>
+    </table>
+</section>
+
+<script type="text/javascript" src="/js/app.js"></script>
+<script type="text/javascript">
+    $(function(){
+        $('[data-action=delete]').each(function(i, el) {
+            console.log(arguments);
+            $(el).on('click', function(e) {
+                e.preventDefault();
+                var xhr = new XMLHttpRequest();
+
+                xhr.open("DELETE", $(el).attr('href') , true);
+                xhr.setRequestHeader("Content-Type", "application/json");
+
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState == 4) {
+                        var resp = JSON.parse(xhr.responseText);
+                        alert(resp.status);
+                        if (resp.status === 'success') {
+                            $(el).parent('tr').remove();
+                        }
+                    }
+                };
+
+                xhr.send();
+            });
+        });
+    });
+</script>

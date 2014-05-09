@@ -1,0 +1,31 @@
+
+<section class="table">
+    <h3>Documents: <span class="count"><%= data.total %></span></h3>
+    <a href="/app/jobs">Jobs</a>
+    <table class="subscribers">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Raw</th>
+            </tr>
+        </thead>
+        <% for(var i=0; i < data.docs.length; i++) {%>
+            <tr data-item-id="<%= data.docs[i]._id %>">
+                <td><a href="/app/document/<%= data.docs[i]._id %>"><%= data.docs[i]._id %></a></td>
+                <td><code><pre><%= data.docs[i] %></pre></code></td>
+            </tr>
+        <% } %>
+
+        <% if (data.hasNext || data.hasPrevious) { %>
+            <div class="paginate">
+
+                <% if (data.hasPrevious) { %>
+                    <a class="previous" href="?page=<%= data.page - 1 %>">Previous</a>
+                <% } %>
+                <% if (data.hasNext) { %>
+                    <a class="next" href="?page=<%= data.page + 1 %>">Next</a>
+                <% } %>
+            </div>
+        <% } %>
+    </table>
+</section>
