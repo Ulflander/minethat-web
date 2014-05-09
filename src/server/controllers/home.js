@@ -133,6 +133,12 @@
                 sub: sub
             });
 
+            // Send email
+            mail.template('xav@minethat.co', 'He\'s in!',
+            'landing-subscribed-alert.html', {
+                sub: sub
+            });
+
             res.json({
                 status: 'success'
             });
