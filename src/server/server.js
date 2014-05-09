@@ -22,7 +22,7 @@
 
 
         app.use(require('./lib/auth.js').auth);
-        app.use(sstatic(__dirname + '/../../dist'));
+        app.use(sstatic(conf.WEB_SERVER_STATIC_PATH || (__dirname + '/../../dist')));
         app.use(body());
         app.use(initialize);
         app.use(router());
