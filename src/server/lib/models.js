@@ -7,11 +7,16 @@
 
     var ITEMS_PER_PAGE = 20,
         models = {},
-        logger = require('../conf.js').conf().logger,
+        conf = require('../conf.js').conf(),
+        logger = conf.logger,
         mongoose = require('mongoose');
 
     // Connect to DB
-    mongoose.connect('mongodb://localhost/minethat_local');
+    mongoose.connect('mongodb://'
+        + conf.MONGO_HOST + ':'
+        + conf.MONGO_PORT + '/'
+        + conf.MONGO_DB_PREFIX
+        + conf.env.toLowerCase());
 
     /**
      * Load model.
