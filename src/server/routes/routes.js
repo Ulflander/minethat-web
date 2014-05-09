@@ -28,6 +28,13 @@
 
 
     ///////////////////////
+    // ADMINISTRATION
+    '/admin/subscribers': ['get', 'subscriber'],
+    '/admin/subscribers.csv': ['get', 'subscriber.csv'],
+    '/admin/subscriber/:id': ['get', 'subscriber.display'],
+
+
+    ///////////////////////
     // REST API
     '/api/v1/sources': ['get', 'source.index'],
     '/api/v1/source/:id': [
@@ -61,9 +68,6 @@
 
     ///////////////////////
     // admin
-    '/admin/subscribers': ['get', 'subscribers.all'],
-    '/admin/subscribers.csv': ['get', 'subscribers.all_csv'],
-    '/admin/subscriber/:id': ['get', 'subscribers.one'],
 
 
     ///////////////////////

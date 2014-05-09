@@ -36,7 +36,7 @@
                 sub.save();
             }
 
-            cv.view(req, res, 'subscribers/subscription.html', {
+            cv.view(req, res, 'subscriber/subscription.html', {
                 msg: msg,
                 sub: sub
             });
