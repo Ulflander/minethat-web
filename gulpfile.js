@@ -180,7 +180,24 @@
         cb();
     });
 
+    gulp.task('build-js-no-check', function(cb) {
+        for (var k in stacks.stacks) {
+            gulp.src(stacks.get(k, 'js'))
+                .pipe(concat(k + '.js'))
+                .pipe(gulp.dest('dist/js/'))
+                .pipe(uglify())
+                .pipe(gulp.dest('dist/js/'))
+                .pipe(filesize());
+        }
+
+        cb();
+    });
+
+
     gulp.task('default', ['clean', 'qa-js', 'qa-js-validation', 'build-js', 'build-css']);
+
+    gulp.task('dev', ['clean', 'build-js-no-check', 'build-css']);
+
 
     gulp.task('watch', function() {
         WATCHING = true;

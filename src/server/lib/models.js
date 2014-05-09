@@ -12,11 +12,11 @@
         mongoose = require('mongoose');
 
     // Connect to DB
-    mongoose.connect('mongodb://'
-        + conf.MONGO_HOST + ':'
-        + conf.MONGO_PORT + '/'
-        + conf.MONGO_DB_PREFIX
-        + conf.env.toLowerCase());
+    mongoose.connect('mongodb://' +
+        conf.MONGO_HOST + ':' +
+        conf.MONGO_PORT + '/' +
+        conf.MONGO_DB_PREFIX +
+        conf.env.toLowerCase());
 
     /**
      * Load model.
