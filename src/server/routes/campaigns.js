@@ -9,6 +9,8 @@
      */
     exports.campaigns = {
 
+        'b': 'Blog',
+
         'r1': 'Reddit landing feedback',
         'r2': 'Reddit marketing campaign',
 
