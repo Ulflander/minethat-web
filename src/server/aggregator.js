@@ -13,7 +13,12 @@
         currSourcePage = 0,
         limitPerPage = 1;
 
-
+    /**
+     * Read feed and create jobs for each aggregated article.
+     *
+     * @param  {Object}   source   Source
+     * @param  {Function} callback Callback (mandatory)
+     */
     exports.aggregate = function(source, callback) {
         internet.feed(source.feed_url, function(err, feed) {
             var items = feed.items,
@@ -39,7 +44,11 @@
         });
     };
 
-
+    /**
+     * Aggregate articles, then update source last aggregation timestamp.
+     *
+     * @param  {Object} source Source to aggregate
+     */
     exports.check = function(source) {
         exports.aggregate(source, function(source) {
             model.update({
@@ -57,7 +66,10 @@
         });
     };
 
-    exports.sources = function() {
+    /**
+     * Aggregate articles from a bunch of sources.
+     */
+    exports.update = function() {
         model.find({}, {}, {skip: currSourcePage, limit: limitPerPage},
             function(err, objs) {
                 if (!!err) {
@@ -81,17 +93,18 @@
     };
 
 
-    // Require and read configuration
+    // Require and read configuration,
+    // then initialize infinite loop
     require('./conf.js').conf(function(conf) {
         logger = conf.logger;
         models = require('./lib/models.js');
         model = models.model('Source');
 
         setInterval(function() {
-            exports.sources();
+            exports.update();
         }, 30000);
 
-        exports.sources();
+        exports.update();
     });
 
 }());
