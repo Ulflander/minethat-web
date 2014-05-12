@@ -42,6 +42,44 @@
         cv.edit(req, res, 'Source', 'source/edit.html');
     };
 
+
+    // Only available through API
+    exports.check = function(req, res, next) {
+        // First ping feed to check if available
+        internet.feed(req.body.feed_url, function(err, feed) {
+            if (!!err || !feed) {
+                res.json({
+                    status: 'error',
+                    error: 'Invalid feed'
+                }, 422);
+                return;
+            }
+
+            // Second check if exists in database
+            req.findAll(req, 'Source', {
+                    feed_url: req.body.feed_url
+                }, null, null, function(err, objs) {
+                    if (!!err) {
+                        res.json({
+                            status: 'error',
+                            error: 'Internal error'
+                        }, 500);
+                        return;
+                    }
+                    console.log(objs);
+                    if (objs.total === 0) {
+                        res.json({
+                            status: 'success'
+                        }, 200);
+                    } else {
+                        res.json({
+                            status: 'exists'
+                        }, 409);
+                    }
+                });
+        });
+    };
+
     /**
      * Only available through API.
      *

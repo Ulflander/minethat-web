@@ -37,6 +37,7 @@
     ///////////////////////
     // REST API
     '/api/v1/sources': ['get', 'source.index'],
+    '/api/v1/sources/check': ['post', 'source.check'],
     '/api/v1/source/:id': [
         ['get', 'source.display'],
         ['post', 'source.edit'],

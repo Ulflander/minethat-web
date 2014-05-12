@@ -92,10 +92,19 @@
 
             exports.parse(data.toString());
 
-            // Call callback
-            if (typeof callback === 'function') {
-                callback(conf);
-            }
+            // Finally set root path async
+            fs.realpath(__dirname + '/../../', function(err, path) {
+                if (!!err) {
+                    logger.error('No way to get root path', err);
+                    process.exit(1);
+                }
+                conf.root = path;
+
+                // Call callback
+                if (typeof callback === 'function') {
+                    callback(conf);
+                }
+            });
         });
 
         return conf;

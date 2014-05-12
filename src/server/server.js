@@ -9,6 +9,7 @@
     var connect = require('connect'),
         sstatic = require('serve-static'),
         body = require('body-parser'),
+        blog = require('./lib/blog.js'),
         initialize = require('./lib/init.js').initialize,
         router = require('./routes/router.js').router,
         _404 = require('./controllers/404.js'),
@@ -20,9 +21,11 @@
         app.conf = conf;
         app.logger = conf.logger;
 
+        blog.init();
 
         app.use(require('./lib/auth.js').auth);
-        app.use(sstatic(conf.WEB_SERVER_STATIC_PATH || (__dirname + '/../../dist')));
+        app.use(sstatic(conf.WEB_SERVER_STATIC_PATH ||
+                (__dirname + '/../../dist')));
         app.use(body());
         app.use(initialize);
         app.use(router());

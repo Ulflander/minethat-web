@@ -37,14 +37,18 @@
                 return;
             }
 
-            parser.parseString(body, {}, function(err, feed) {
-                if (!!err) {
-                    callback(err);
-                    return;
-                }
+            try {
+                parser.parseString(body, {}, function(err, feed) {
+                    if (!!err) {
+                        callback(err);
+                        return;
+                    }
 
-                callback(null, feed);
-            });
+                    callback(null, feed);
+                });
+            } catch (e) {
+                callback(e);
+            }
         });
     };
 

@@ -241,7 +241,7 @@
      * @return {String} Template content
      */
     exports.requiresLoading = function(template) {
-        return !templates[template] || conf.env == 'local';
+        return !templates[template] || conf.env === 'local';
     };
 
     /**

@@ -27,7 +27,7 @@
                     type: String,
                     index: true
                 },
-                last_timestamp: {
+                last: {
                     type: Number
                 }
             }),

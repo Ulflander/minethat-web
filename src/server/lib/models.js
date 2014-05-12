@@ -83,7 +83,7 @@
             model = exports.model(model);
         }
 
-        model.count({}, function(err, count) {
+        model.count(conds || {}, function(err, count) {
             if (!!err) {
                 logger.error('Error querying db', err);
             }

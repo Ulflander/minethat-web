@@ -14,7 +14,7 @@
     };
 
     exports.csv = function(req, res, next) {
-
+        cv.find(req, res, 'Subscriber', 'subscriber/display.html');
     };
 
 }());
