@@ -24,12 +24,15 @@
   .input-wrap .error {
     border-radius: 2px; }
 
+.input-wrap.center {
+  text-align: center; }
+
 .input {
   display: block;
   background: #fff;
   width: 100%;
   border-radius: 2px;
-  border: 1px solid #cdcdcd;
+  border: 2px solid #ddd;
   padding: 8px 10px;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -37,8 +40,9 @@
   color: #3F3F3F; }
 
 .input:focus {
-  border-color: #3F3F3F;
-  color: #3F3F3F; }
+  border-color: #1180dd;
+  color: #3F3F3F;
+  box-shadow: 0 0 20px #bfdaef; }
 
 .input-wrap.invalid .input {
   border-color: #ec4000; }

@@ -5,6 +5,7 @@ $fourth-color: #fff;
 $standout-color: #1180dd;
 $standout-color-alt: #116cb9;
 $standout-color-alt2: #085290;
+$standout-color-light: #bfdaef;
 $error-color: #ec4000;
 
 
@@ -38,13 +39,16 @@ $error-color: #ec4000;
 
 }
 
+.input-wrap.center {
+    text-align: center;
+}
 
 .input {
     display: block;
     background: $fourth-color;
     width: 100%;
     border-radius: 2px;
-    border: 1px solid $second-color;
+    border: 2px solid $third-color;
     padding: 8px 10px;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
@@ -54,8 +58,9 @@ $error-color: #ec4000;
 }
 
 .input:focus {
-    border-color: $main-color;
+    border-color: $standout-color;
     color: $main-color;
+    box-shadow: 0 0 20px $standout-color-light;
 }
 
 

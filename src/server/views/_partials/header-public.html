@@ -3,17 +3,37 @@
 
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title><%= title %></title>
-        <meta name="description" content="">
+        <title><%= data.title || 'Minethat' %></title>
+        <meta name="description" content="<%= data.summary || '' %>">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="/css/landing.css">
+
+
+
+        <meta property="og:title" content="<%= data.title || 'Minethat' %>" />
+        <meta property="og:type" content="<%= data.type || 'profile' %>" />
+        <meta property="og:url" content="<%= data.url || 'http://minethat.com/' %>" />
+        <meta property="og:image" content="http://minethat.com/img/logo.png" />
+        <meta property="og:description" content="<%= data.summary || '' %>" />
+
+        <meta name="twitter:site" content="@min3that">
+        <meta name="twitter:title" content="<%= data.title || 'Minethat' %>">
+        <meta name="twitter:card" value="summary">
+        <meta name="twitter:description" content="<%= data.summary || '' %>">
+        <meta name="twitter:image" content="http://minethat.com/img/logo.png">
+
+
+
     </head>
     <body>
         <div class="wrapper">
             <header>
-                    <h1>
+                    <h1 class="<%= !!data.subtitle ? 'has_subtitle' : '' %>">
                         <a href="http://minethat.co" title="Minethat">
                             <img itemprop="logo" src="/img/logo.png" alt="Minethat" title="Minethat" />
                         </a>
                     </h1>
+                    <% if (!!data.subtitle) { %>
+                        <h4 class="subtitle"><%= data.subtitle %></h4>
+                    <% } %>
             </header>

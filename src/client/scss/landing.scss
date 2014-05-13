@@ -27,11 +27,22 @@ section {
     }
 }
 
+header h1.has_subtitle {
+    margin-bottom: 0px;
+}
+
+header .subtitle {
+    font-weight: 200;
+    text-transform: uppercase;
+    margin: 0 0 50px 0;
+}
+
 .subscription {
     text-align: center;
 }
 
-#subscribed {
+
+#subscribed, .share {
     ul {
       list-style-type: none;
       text-align: center;

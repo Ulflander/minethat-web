@@ -36,6 +36,11 @@
                 }
             });
 
+
+            if (window.location.hash === '#subscribe') {
+                $('input[name=email]').focus();
+            }
+
         },
 
         hideError: function(selector) {

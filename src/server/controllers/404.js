@@ -12,7 +12,7 @@
      * @param  {Function} next Callback
      */
     exports.index = function(req, res, next) {
-        req.logger.warn('Page not found: ' + req.url);
+        req.logger.warn('Page not found: [' + req.method + '] ' + req.url);
         cv.view(req, res, '404.html');
     };
 

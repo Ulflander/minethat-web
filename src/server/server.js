@@ -21,19 +21,21 @@
         app.conf = conf;
         app.logger = conf.logger;
 
-        blog.init();
+        // Discover and setup blog articles
+        blog.init(function() {
+            app.use(require('./lib/auth.js').auth);
+            app.use(sstatic(conf.WEB_SERVER_STATIC_PATH ||
+                    (__dirname + '/../../dist')));
+            app.use(body());
+            app.use(initialize);
+            app.use(router());
+            app.use(_404.index);
 
-        app.use(require('./lib/auth.js').auth);
-        app.use(sstatic(conf.WEB_SERVER_STATIC_PATH ||
-                (__dirname + '/../../dist')));
-        app.use(body());
-        app.use(initialize);
-        app.use(router());
-        app.use(_404.index);
+            app.listen(conf.WEB_SERVER_PORT);
+            app.logger.log('Server started on ' +
+                conf.WEB_SERVER_HOST + ':' + conf.WEB_SERVER_PORT);
+        });
 
-        app.listen(conf.WEB_SERVER_PORT);
-        app.logger.log('Server started on ' +
-            conf.WEB_SERVER_HOST + ':' + conf.WEB_SERVER_PORT);
     };
 
 }());

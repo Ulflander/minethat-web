@@ -26,6 +26,7 @@
     "ua-parser-js": "^0.6.2",
     "connect": "^2.14.3",
     "nodemailer": "^0.6.1",
+    "markdown": "*",
     "html-to-text": "0.0.8",
     "amqp": "^0.2.0",
     "connect-route": "^0.1.4",

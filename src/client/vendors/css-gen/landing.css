@@ -14,18 +14,26 @@ section p {
 section .cta {
   text-align: center; }
 
+header h1.has_subtitle {
+  margin-bottom: 0px; }
+
+header .subtitle {
+  font-weight: 200;
+  text-transform: uppercase;
+  margin: 0 0 50px 0; }
+
 .subscription {
   text-align: center; }
 
-#subscribed ul {
+#subscribed ul, .share ul {
   list-style-type: none;
   text-align: center; }
-#subscribed li {
+#subscribed li, .share li {
   display: inline-block;
   padding: 0 40px; }
-  #subscribed li i {
+  #subscribed li i, .share li i {
     font-size: 40px; }
-  #subscribed li span {
+  #subscribed li span, .share li span {
     display: none; }
 
 footer {

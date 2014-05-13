@@ -1,7 +1,8 @@
 
 
 /**
- * Initializes web server: read configuration, then run server.js.
+ * Initializes web server: read configuration, connect to rabbit,
+ * then run server.js.
  */
 (function() {
     'use strict';

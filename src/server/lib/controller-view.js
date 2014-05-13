@@ -278,10 +278,15 @@
      * @param  {Object} data     Data to send to view
      */
     exports.render = function(template, data) {
-        return ejs.render(templates[template], {
-            data: !!data ? data : {},
-            partial: exports.partial
-        });
+        try {
+            return ejs.render(templates[template], {
+                data: !!data ? data : {},
+                partial: exports.partial
+            });
+        } catch (err) {
+            conf.logger.error('Unable to render template', err);
+            return null;
+        }
     };
 
     /**

@@ -45,11 +45,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
-      <p class="stat">56.00</p>
+      <p class="stat">61.89</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
-      <p class="stat">89</p>
+      <p class="stat">99</p>
     </div>
   </div>
   <div class="row historical">
@@ -63,11 +63,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
-      <p class="stat">8.11</p>
+      <p class="stat">8.22</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
-      <p class="stat">0.25</p>
+      <p class="stat">0.29</p>
     </div>
   </div>
 </div>
@@ -91,92 +91,102 @@
 <div class="container">
   <div class="row">
     <textarea id="file-source" class="col-md-12">(function() {
-  &#039;use strict&#039;;
+    &#039;use strict&#039;;
+
+    /**
+     * Add a new route
+     *
+     * @param {String} route Route
+     * @param {Array} methodController Method and controller/function
+     */
+    exports.add = function(route, methodController) {
+        exports.routes[route] = methodController;
+    };
+
+    exports.routes = {
+
+        ///////////////////////
+        // APP
+        &#039;/app/sources&#039;: [&#039;get&#039;, &#039;source.index&#039;],
+        &#039;/app/source/new&#039;: [
+            [&#039;get&#039;, &#039;source.add&#039;],
+            [&#039;post&#039;, &#039;source.add&#039;]
+        ],
+        &#039;/app/source/generate&#039;: [
+            [&#039;get&#039;, &#039;source.from_feed&#039;],
+            [&#039;post&#039;, &#039;source.from_feed&#039;]
+        ],
+        &#039;/app/source/:id&#039;: [
+            [&#039;get&#039;, &#039;source.edit&#039;],
+            [&#039;post&#039;, &#039;source.edit&#039;]
+        ],
+
+        &#039;/app/documents&#039;: [&#039;get&#039;, &#039;document.index&#039;],
+        &#039;/app/document/:id&#039;: [&#039;get&#039;, &#039;document.display&#039;],
 
 
-  exports.routes = {
 
-    ///////////////////////
-    // APP
-    &#039;/app/sources&#039;: [&#039;get&#039;, &#039;source.index&#039;],
-    &#039;/app/source/new&#039;: [
-        [&#039;get&#039;, &#039;source.add&#039;],
-        [&#039;post&#039;, &#039;source.add&#039;]
-    ],
-    &#039;/app/source/generate&#039;: [
-        [&#039;get&#039;, &#039;source.from_feed&#039;],
-        [&#039;post&#039;, &#039;source.from_feed&#039;]
-    ],
-    &#039;/app/source/:id&#039;: [
-        [&#039;get&#039;, &#039;source.edit&#039;],
-        [&#039;post&#039;, &#039;source.edit&#039;]
-    ],
-
-    &#039;/app/documents&#039;: [&#039;get&#039;, &#039;document.index&#039;],
-    &#039;/app/document/:id&#039;: [&#039;get&#039;, &#039;document.display&#039;],
+        ///////////////////////
+        // ADMINISTRATION
+        &#039;/admin/subscribers&#039;: [&#039;get&#039;, &#039;subscriber&#039;],
+        &#039;/admin/subscribers.csv&#039;: [&#039;get&#039;, &#039;subscriber.csv&#039;],
+        &#039;/admin/subscriber/:id&#039;: [&#039;get&#039;, &#039;subscriber.display&#039;],
 
 
-
-    ///////////////////////
-    // ADMINISTRATION
-    &#039;/admin/subscribers&#039;: [&#039;get&#039;, &#039;subscriber&#039;],
-    &#039;/admin/subscribers.csv&#039;: [&#039;get&#039;, &#039;subscriber.csv&#039;],
-    &#039;/admin/subscriber/:id&#039;: [&#039;get&#039;, &#039;subscriber.display&#039;],
-
-
-    ///////////////////////
-    // REST API
-    &#039;/api/v1/sources&#039;: [&#039;get&#039;, &#039;source.index&#039;],
-    &#039;/api/v1/sources/check&#039;: [&#039;post&#039;, &#039;source.check&#039;],
-    &#039;/api/v1/source/:id&#039;: [
-        [&#039;get&#039;, &#039;source.display&#039;],
-        [&#039;post&#039;, &#039;source.edit&#039;],
-        [&#039;delete&#039;, &#039;source.remove&#039;]
-    ],
-    &#039;/api/v1/source&#039;: [&#039;post&#039;, &#039;source.add&#039;],
+        ///////////////////////
+        // REST API
+        &#039;/api/v1/sources&#039;: [&#039;get&#039;, &#039;source.index&#039;],
+        &#039;/api/v1/sources/check&#039;: [&#039;post&#039;, &#039;source.check&#039;],
+        &#039;/api/v1/source/:id&#039;: [
+            [&#039;get&#039;, &#039;source.display&#039;],
+            [&#039;post&#039;, &#039;source.edit&#039;],
+            [&#039;delete&#039;, &#039;source.remove&#039;]
+        ],
+        &#039;/api/v1/source&#039;: [&#039;post&#039;, &#039;source.add&#039;],
 
 
-    ///////////////////////
-    // PUBLIC
-    &#039;/&#039;: [&#039;get&#039;, &#039;home&#039;],
-    &#039;/ajax/landing_subscribe&#039;: [&#039;post&#039;, &#039;home.subscribe&#039;],
-    &#039;/subscription&#039;: [&#039;get&#039;, &#039;subscription&#039;]
+        ///////////////////////
+        // PUBLIC
+        &#039;/&#039;: [&#039;get&#039;, &#039;home&#039;],
+        &#039;/blog&#039;: [&#039;get&#039;, &#039;blog&#039;],
+        &#039;/ajax/landing_subscribe&#039;: [&#039;post&#039;, &#039;home.subscribe&#039;],
+        &#039;/subscription&#039;: [&#039;get&#039;, &#039;subscription&#039;]
 
 
-    /*
-    &#039;/subscription&#039;: [&#039;get&#039;, &#039;home.subscription&#039;],
-    &#039;/ajax/landing_subscribe&#039;: [&#039;post&#039;, &#039;home.subscribe&#039;],
+        /*
+        &#039;/subscription&#039;: [&#039;get&#039;, &#039;home.subscription&#039;],
+        &#039;/ajax/landing_subscribe&#039;: [&#039;post&#039;, &#039;home.subscribe&#039;],
 
 
-    ///////////////////////
-    // app
-    &#039;/app/jobs&#039;: [&#039;get&#039;, &#039;jobs.all&#039;],
-    &#039;/app/job/:id&#039;: [&#039;get&#039;, &#039;jobs.one&#039;],
+        ///////////////////////
+        // app
+        &#039;/app/jobs&#039;: [&#039;get&#039;, &#039;jobs.all&#039;],
+        &#039;/app/job/:id&#039;: [&#039;get&#039;, &#039;jobs.one&#039;],
 
-    &#039;/app/documents&#039;: [&#039;get&#039;, &#039;documents.all&#039;],
-    &#039;/app/document&#039;: [&#039;get&#039;, &#039;documents.one&#039;],
-
-
-    ///////////////////////
-    // admin
+        &#039;/app/documents&#039;: [&#039;get&#039;, &#039;documents.all&#039;],
+        &#039;/app/document&#039;: [&#039;get&#039;, &#039;documents.one&#039;],
 
 
-    ///////////////////////
-    // REST API
-    &#039;/api/v1/jobs&#039;: [&#039;get&#039;, &#039;jobs.all&#039;],
-    &#039;/api/v1/job/:jobId&#039;: [&#039;get&#039;, &#039;jobs.one&#039;],
+        ///////////////////////
+        // admin
 
 
-    &#039;/api/v1/documents&#039;: [&#039;get&#039;, &#039;documents.all&#039;],
+        ///////////////////////
+        // REST API
+        &#039;/api/v1/jobs&#039;: [&#039;get&#039;, &#039;jobs.all&#039;],
+        &#039;/api/v1/job/:jobId&#039;: [&#039;get&#039;, &#039;jobs.one&#039;],
 
 
-    ///////////////////////
-    // REST API
-    &#039;/api/v1/submit/url&#039;: [&#039;post&#039;, &#039;submit.url&#039;],
-    &#039;/api/v1/submit/string&#039;: [&#039;post&#039;, &#039;submit.string&#039;],
-    &#039;/api/v1/submit/html_string&#039;: [&#039;post&#039;, &#039;submit.html_string&#039;]
-    */
-  };
+        &#039;/api/v1/documents&#039;: [&#039;get&#039;, &#039;documents.all&#039;],
+
+
+        ///////////////////////
+        // REST API
+        &#039;/api/v1/submit/url&#039;: [&#039;post&#039;, &#039;submit.url&#039;],
+        &#039;/api/v1/submit/string&#039;: [&#039;post&#039;, &#039;submit.string&#039;],
+        &#039;/api/v1/submit/html_string&#039;: [&#039;post&#039;, &#039;submit.html_string&#039;]
+        */
+    };
 
 }());</textarea>
   </div>

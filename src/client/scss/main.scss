@@ -107,7 +107,16 @@ a, a:visited {
   color: $standout-color;
 }
 
+a.common, a.common:visited {
+  color: $main-color;
+}
 
+
+hr {
+  margin: 50px 0;
+  border: 0;
+  background: #f0f0f0;
+}
 
 a:hover, a:active {
   color: $standout-color-alt;

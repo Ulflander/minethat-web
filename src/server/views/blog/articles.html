@@ -1,0 +1,21 @@
+
+<%- partial('header-public', {data: {
+    title: 'All posts - Devlog - Minethat',
+    subtitle: 'Devlog'
+}}) %>
+
+<ul>
+<% for(var i = 0; i < data.articles.length; i += 1) { %>
+    <li>
+        <%= data.articles[i].date %> - 
+        <a href="<%= data.articles[i].url %>" title="<%= data.articles[i].title %>">
+            <%= data.articles[i].title %>
+        </a>
+    </li>
+<% } %>
+</ul>
+
+
+<%- partial('pre-footer-blog') %>
+
+<%- partial('footer-public') %>
