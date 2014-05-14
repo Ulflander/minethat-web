@@ -55,47 +55,23 @@
         '/api/v1/source': ['post', 'source.add'],
 
 
+        '/api/v1/document/:id': [
+            ['get', 'document.display'],
+            ['delete', 'document.remove']
+        ],
+
+        ///////////////////////
+        // REST API
+        '/api/v1/submit/url': ['post', 'submit.url'],
+        '/api/v1/submit/string': ['post', 'submit.string'],
+        '/api/v1/submit/html_string': ['post', 'submit.html_string'],
+
         ///////////////////////
         // PUBLIC
         '/': ['get', 'home'],
         '/blog': ['get', 'blog'],
         '/ajax/landing_subscribe': ['post', 'home.subscribe'],
         '/subscription': ['get', 'subscription']
-
-
-        /*
-        '/subscription': ['get', 'home.subscription'],
-        '/ajax/landing_subscribe': ['post', 'home.subscribe'],
-
-
-        ///////////////////////
-        // app
-        '/app/jobs': ['get', 'jobs.all'],
-        '/app/job/:id': ['get', 'jobs.one'],
-
-        '/app/documents': ['get', 'documents.all'],
-        '/app/document': ['get', 'documents.one'],
-
-
-        ///////////////////////
-        // admin
-
-
-        ///////////////////////
-        // REST API
-        '/api/v1/jobs': ['get', 'jobs.all'],
-        '/api/v1/job/:jobId': ['get', 'jobs.one'],
-
-
-        '/api/v1/documents': ['get', 'documents.all'],
-
-
-        ///////////////////////
-        // REST API
-        '/api/v1/submit/url': ['post', 'submit.url'],
-        '/api/v1/submit/string': ['post', 'submit.string'],
-        '/api/v1/submit/html_string': ['post', 'submit.html_string']
-        */
     };
 
 }());

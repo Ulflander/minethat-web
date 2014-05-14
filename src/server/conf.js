@@ -1,7 +1,7 @@
 /**
- * Initializes and exports configuration + logger.
+ * Initializes and self configuration + logger.
  */
-(function() {
+(function(self) {
     'use strict';
 
     var env = process.env.ENV,
@@ -44,7 +44,7 @@
      *
      * @param  {String} line Line to parse
      */
-    exports.parseLine = function(line) {
+    self.parseLine = function(line) {
         if (line.indexOf('#') !== 0 &&
             line.indexOf('=') > 0) {
 
@@ -60,14 +60,14 @@
      *
      * @param  {String} data Conf file content as string
      */
-    exports.parse = function(data) {
+    self.parse = function(data) {
         // Parse conf
         var arr = data.split('\n'),
             i,
             l = arr.length;
 
         for (i = 0; i < l; i += 1) {
-            exports.parseLine(arr[i]);
+            self.parseLine(arr[i]);
         }
 
     };
@@ -78,7 +78,7 @@
      * @param  {Function} callback Function to call when conf is loaded
      * @return {Object}            Configuration object reference
      */
-    exports.read = function(callback) {
+    self.read = function(callback) {
 
         // Set conf as loaded to avoid reloading it
         conf.loaded = true;
@@ -90,7 +90,7 @@
                 process.exit(1);
             }
 
-            exports.parse(data.toString());
+            self.parse(data.toString());
 
             // Finally set root path async
             fs.realpath(__dirname + '/../../', function(err, path) {
@@ -116,11 +116,11 @@
      * @param  {Function} callback Function to call when conf is loaded
      * @return {Object}            Configuration object reference
      */
-    exports.conf = function(callback) {
+    self.conf = function(callback) {
         if (!!conf.loaded) {
             return conf;
         }
 
-        return exports.read(callback);
+        return self.read(callback);
     };
-}());
+}(exports));

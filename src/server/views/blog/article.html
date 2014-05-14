@@ -1,19 +1,19 @@
 
-<%- partial('header-public', {data: {
+<%- partial('header-public', {
     title: data.title + ' - Devlog - Minethat',
     subtitle: 'Devlog - ' + data.date,
     summary: data.summary,
     url: data.url,
     type: 'article'
-}}) %>
+}) %>
 
 <%- data.content %>
 
-<%- partial('share-blog-article', {data: {
+<%- partial('share-blog-article', {
     title: 'Minethat devlog: ' + data.title,
     summary: data.summary,
     url: data.url
-}}) %>
+}) %>
 
 <%- partial('pre-footer-blog') %>
 

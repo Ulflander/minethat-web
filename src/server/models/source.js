@@ -29,6 +29,10 @@
                 },
                 last: {
                     type: Number
+                },
+                fake: {
+                    type: Boolean,
+                    'default': false
                 }
             }),
             Source = mongoose.model('Source', schema);

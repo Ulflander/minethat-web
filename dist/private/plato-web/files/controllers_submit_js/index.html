@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Plato - server.js</title>
+  <title>Plato - controllers/submit.js</title>
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="">
@@ -37,7 +37,7 @@
 
 <div class="jumbotron">
   <div class="container">
-    <h1>server.js</h1>
+    <h1>controllers/submit.js</h1>
   </div>
 </div>
 
@@ -45,11 +45,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
-      <p class="stat">66.95</p>
+      <p class="stat">68.10</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
-      <p class="stat">38</p>
+      <p class="stat">136</p>
     </div>
   </div>
   <div class="row historical">
@@ -63,11 +63,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
-      <p class="stat">9.83</p>
+      <p class="stat">24.59</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
-      <p class="stat">0.28</p>
+      <p class="stat">0.99</p>
     </div>
   </div>
 </div>
@@ -90,46 +90,141 @@
 
 <div class="container">
   <div class="row">
-    <textarea id="file-source" class="col-md-12">/**
- * Run web server.
- */
-(function() {
+    <textarea id="file-source" class="col-md-12">(function() {
     &#039;use strict&#039;;
 
-    var connect = require(&#039;connect&#039;),
-        sstatic = require(&#039;serve-static&#039;),
-        body = require(&#039;body-parser&#039;),
-        blog = require(&#039;./lib/blog.js&#039;),
-        initialize = require(&#039;./lib/init.js&#039;).initialize,
-        router = require(&#039;./routes/router.js&#039;).router,
-        _404 = require(&#039;./controllers/404.js&#039;),
-        app;
+    var amqp = require(&#039;amqp&#039;),
+        conf = require(&#039;../conf.js&#039;).conf(),
+        ready = false,
+        connection;
 
+    exports.init = function(callback) {
 
-    exports.run = function(conf) {
-        app = connect();
-        app.conf = conf;
-        app.logger = conf.logger;
+        connection = amqp.createConnection({
+            host: conf.RABBIT_HOST,
+            port: conf.RABBIT_PORT
+        });
 
-        // Discover and setup blog articles
-        blog.init(function() {
-            app.use(require(&#039;./lib/auth.js&#039;).auth);
-            app.use(sstatic(conf.WEB_SERVER_STATIC_PATH ||
-                    (__dirname + &#039;/../../dist&#039;)));
-            app.use(body({
-                limit: &#039;2mb&#039;
-            }));
-            app.use(initialize);
-            app.use(router());
-            app.use(_404.index);
+        connection.on(&#039;ready&#039;, function() {
+            console.log(&#039;[RabbitMQ] Connection established&#039;);
 
-            app.listen(conf.WEB_SERVER_PORT);
-            app.logger.log(&#039;Server started on &#039; +
-                conf.WEB_SERVER_HOST + &#039;:&#039; + conf.WEB_SERVER_PORT);
+            connection.queue(conf.RABBIT_EXTRACT_QUEUE, {
+                durable: true,
+                &#039;exclusive&#039;: false,
+                &#039;autoDelete&#039;: false
+            }, function(q) {
+                console.log(&#039;[RabbitMQ] Queue declared&#039;);
+                ready = true;
+
+                if (typeof callback === &#039;function&#039;) {
+                    callback();
+                }
+            });
+        });
+
+        connection.on(&#039;error&#039;, function() {
+            ready = false;
+            console.log(&#039;[RabbitMQ] Error&#039;, arguments);
         });
 
     };
 
+    exports.publish = function(jobId) {
+        if (!ready) {
+            setTimeout(function() {
+                exports.publish(jobId);
+            }, 100);
+            return;
+        }
+
+        console.log(&#039;[RabbitMQ] Submitted job &#039; + jobId);
+        connection.publish(&#039;extract&#039;, jobId);
+    };
+
+    exports.html_string = function(req, res, next) {
+
+        if (!req.body.content) {
+            return res.json({
+                    status: &#039;error&#039;,
+                    error: &#039;Missing &quot;content&quot; parameter&#039;
+                }, 500);
+        }
+
+        exports.submit(req, res, &#039;HTML_STRING&#039;, req.body.content);
+    };
+
+
+    exports.string = function(req, res, next) {
+        if (!req.body || !req.body.string) {
+            return res.json({
+                    status: &#039;error&#039;,
+                    error: &#039;Missing &quot;string&quot; parameter&#039;
+                }, 500);
+        }
+
+        exports.submit(req, res, &#039;STRING&#039;, req.body.string);
+    };
+
+
+    exports.url = function(req, res, next) {
+        if (!req.body || !req.body.url) {
+            return res.json({
+                    status: &#039;error&#039;,
+                    error: &#039;Missing &quot;url&quot; parameter&#039;
+                }, 500);
+        }
+
+        exports.submit(req, res, &#039;URL&#039;, req.body.url);
+    };
+
+    exports.submit = function(req, res, type, value) {
+
+        console.log(&#039;[API] Got request&#039;);
+
+        // Create job
+        var JobModel = req.model(&#039;Job&#039;),
+            job = new JobModel({
+                customerId: &#039;2c7f9a&#039;,
+                gateway: &#039;API&#039;,
+                status: &#039;VOID&#039;,
+                type: type,
+                value: value
+            });
+
+        if (!!req.body.meta) {
+            job.meta = req.body.meta;
+        }
+
+        if (!!req.body.target &amp;&amp; req.body.target === &#039;TRAIN&#039;) {
+            if (!req.body || !req.body.classes) {
+                return res.json({
+                    status: &#039;error&#039;,
+                    error: &#039;Missing &quot;classes&quot; parameter&#039;
+                }, 500);
+            }
+
+            job.target = &#039;TRAIN&#039;;
+            job.classes = req.body.classes;
+        }
+
+        job.save(function(err) {
+            if (!err) {
+                exports.publish(job._id);
+                return res.json({
+                    status: &#039;success&#039;,
+                    job: job._id
+                });
+            }
+
+
+            return res.json({
+                status: &#039;error&#039;,
+                error: &#039;DB error&#039;
+            }, 500);
+        });
+    };
+
+    exports.init();
 }());</textarea>
   </div>
 </div>

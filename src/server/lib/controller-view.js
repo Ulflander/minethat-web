@@ -141,12 +141,12 @@
                 }
                 return;
             }
-
+            console.log(obj.toObject());
             if (req.isAPI) {
-                res.json(obj);
+                res.json(obj());
             } else {
                 exports.view(req, res, template, {
-                    doc: obj,
+                    doc: obj.toObject(),
                     status: 'exists'
                 });
             }
@@ -281,7 +281,8 @@
         try {
             return ejs.render(templates[template], {
                 data: !!data ? data : {},
-                partial: exports.partial
+                partial: exports.partial,
+                env: conf.env
             });
         } catch (err) {
             conf.logger.error('Unable to render template', err);
@@ -330,7 +331,11 @@
      * @return {String} Template content
      */
     exports.partial = function(template, data) {
-        return ejs.render(templates['_partials/' + template + '.html'], data);
+        var d = {data: data};
+        d.env = conf.env;
+        d.partial = exports.partial;
+
+        return ejs.render(templates['_partials/' + template + '.html'], d);
     };
 
     /**
@@ -352,6 +357,7 @@
 
     /**
      * Return a function that will load partial and call callback.
+     *
      * @param  {String} template Template name
      * @return {Function}          Function that takes a callback in parameter
      * and that will load partial
@@ -365,6 +371,7 @@
 
     /**
      * Detect partials names in a template.
+     *
      * @param  {String} template Template content
      * @return {Array}          Array of partials names
      */

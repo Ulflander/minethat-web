@@ -37,7 +37,8 @@
     "body-parser": "^1.0.2",
     "async": "^0.8.0",
     "blindparser": "git://github.com/Minethat/node-blindparser.git",
-    "request": "^2.34.0"
+    "request": "^2.34.0",
+    "marked": "^0.3.2"
   },
   "devDependencies": {
     "gulp-clean": "~0.2.4",

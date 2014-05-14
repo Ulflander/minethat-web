@@ -1,9 +1,9 @@
 
 
 /**
- * Initializes web server: read configuration, then run server.js.
+ * Feed aggregation program.
  */
-(function() {
+(function(self) {
     'use strict';
 
     var logger,
@@ -13,13 +13,26 @@
         currSourcePage = 0,
         limitPerPage = 1;
 
+    // Require and read configuration,
+    // then initialize infinite loop
+    require('./conf.js').conf(function(conf) {
+        logger = conf.logger;
+        models = require('./lib/models.js');
+        model = models.model('Source');
+
+        setInterval(self.update, conf.env === 'local' ? 30000 : 10000);
+
+        self.update();
+    });
+
+
     /**
      * Read feed and create jobs for each aggregated article.
      *
      * @param  {Object}   source   Source
      * @param  {Function} callback Callback (mandatory)
      */
-    exports.aggregate = function(source, callback) {
+    self.aggregate = function(source, callback) {
         internet.feed(source.feed_url, function(err, feed) {
             var items = feed.items,
                 i,
@@ -49,8 +62,8 @@
      *
      * @param  {Object} source Source to aggregate
      */
-    exports.check = function(source) {
-        exports.aggregate(source, function(source) {
+    self.check = function(source) {
+        self.aggregate(source, function(source) {
             model.update({
                 _id: source._id
             }, {last: source.last},
@@ -69,7 +82,7 @@
     /**
      * Aggregate articles from a bunch of sources.
      */
-    exports.update = function() {
+    self.update = function() {
         model.find({}, {}, {skip: currSourcePage, limit: limitPerPage},
             function(err, objs) {
                 if (!!err) {
@@ -87,25 +100,12 @@
                 currSourcePage += 1;
 
                 for (i = 0; i < l; i += 1) {
-                    exports.check(objs[i]);
+                    self.check(objs[i]);
                 }
             });
     };
 
 
-    // Require and read configuration,
-    // then initialize infinite loop
-    require('./conf.js').conf(function(conf) {
-        logger = conf.logger;
-        models = require('./lib/models.js');
-        model = models.model('Source');
 
-        setInterval(function() {
-            exports.update();
-        }, 30000);
-
-        exports.update();
-    });
-
-}());
+}(exports));
 
