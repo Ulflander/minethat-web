@@ -29,5 +29,8 @@ help:
 start-server:
 	@export ENV=local && node src/server/index.js
 
+start-server-dev:
+	@export ENV=dev && node src/server/index.js
+
 .PHONY: \
 	default \

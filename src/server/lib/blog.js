@@ -13,6 +13,10 @@
      * Add route to article, read article and add it to controller.
      */
     exports.add = function(filename) {
+        if (filename.substring(0, 1) === '.' && conf.env !== 'local') {
+            return;
+        }
+
         var rootFilename = filename.split('.md').join('');
         routes.add('/blog/' + rootFilename + '.html', ['get', 'blog.article']);
 
