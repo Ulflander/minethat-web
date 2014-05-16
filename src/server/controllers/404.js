@@ -13,7 +13,7 @@
      */
     self.index = function(req, res, next) {
         req.logger.warn('Page not found: [' + req.method + '] ' + req.url);
-        cv.view(req, res, '404.html');
+        cv.view(req, res, '404.html', {}, 404);
     };
 
 }(exports));

@@ -297,10 +297,11 @@
      * @param  {Response} res      Connect response object
      * @param  {String} template Template filename
      * @param  {Object} data     Data to send to view
+     * @param  {Integer} code    HTTP status code to return
      */
-    exports.view = function(req, res, template, data) {
+    exports.view = function(req, res, template, data, code) {
         exports.renderView(template, data, function(html) {
-            res.html(html);
+            res.html(html, code);
         });
     };
 
