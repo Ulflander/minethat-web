@@ -31,94 +31,60 @@
             </section>
 
 
-
-            <section class="meta_col">
-
-                <ul class="statistics">
-                    <li class="main numeric">
-                        <div class="value">3</div>
-                        <span>minutes read</span>
-                    </li>
-                    <li class="numeric">
-                        <div class="value">7711</div>
-                        <span>Facebook shares</span>
-                    </li>
-                    <li class="numeric">
-                        <div class="value">644</div>
-                        <span>Twitter shares</span>
-                    </li>
-                    <li class="numeric">
-                        <div class="value">158</div>
-                        <span>LinkedIn shares</span>
-                    </li>
-                    <li class="numeric">
-                        <div class="value">587</div>
-                        <span>other shares</span>
-                    </li>
-                    <li class="main">
-                        <div class="p_bar">
-                            <span style="width: 82%"></span>
-                        </div>
-                        <span>High quality document</span>
-                    </li>
-                </ul>
-
-                <ul class="statistics">
-                    <li class="main">
-                        <div class="p_bar">
-                            <span style="width: 89%"></span>
-                        </div>
-                        <span>Very likely: analyze</span>
-                    </li>
-                    <li class="main">
-                        <div class="p_bar">
-                            <span style="width: 71%"></span>
-                        </div>
-                        <span>Likely: context</span>
-                    </li>
-                    <li class="main">
-                        <div class="p_bar">
-                            <span style="width: 35%"></span>
-                        </div>
-                        <span>Probably not: facts</span>
-                    </li>
-                </ul>
-            </section>
-
-
+            <% var doc = data.doc.toObject(), props = doc.properties %>
             <section class="content">
-                <h1>Ukraine dismisses Russian threats to intervene, continues ‘anti-terrorist’ campaign</h1>
+                <h1><%= props.meta.doc_title %></h1>
 
                 <div class="meta">
-                    By William Booth and Michael Birnbaum, The Washington Post<br />
-                    Updated: Friday, April 25, 3:25 PM
+                    <%= props.meta.doc_source_name %>
                 </div>
+
+                <% if (!!props.meta.doc_description) { %>
+                    <p><%= props.meta.doc_description %></p>
+                <% } %>
+
+
+                <% if (!!props.meta.doc_image) { %>
+                    <p>
+                        <img src="<%= props.meta.doc_image %>" />
+                    </p>
+                <% } %>
 
 
                 <ul class="statistics">
                     <li class="main numeric">
-                        <div class="value"><%= data.doc.properties.basic_stats.read_time_est %></div>
+                        <div class="value"><%= props.basic_stats.read_time_est %></div>
                         <span>minutes read</span>
                     </li>
-                    <li class="numeric">
-                        <div class="value">7711</div>
-                        <span>Facebook shares</span>
+
+                    <% if (!!props.social_stats) { %>
+                    <li class="main numeric">
+                        <div class="value"><%= props.social_stats.total %></div>
+                        <span>social interactions</span>
                     </li>
                     <li class="numeric">
-                        <div class="value">644</div>
+                        <div class="value"><%= props.social_stats.fb_total %></div>
+                        <span>Facebook interactions</span>
+                    </li>
+                    <li class="numeric">
+                        <div class="value"><%= props.social_stats.twitter %></div>
                         <span>Twitter shares</span>
                     </li>
                     <li class="numeric">
-                        <div class="value">158</div>
+                        <div class="value"><%= props.social_stats.linkedin %></div>
                         <span>LinkedIn shares</span>
                     </li>
                     <li class="numeric">
-                        <div class="value">587</div>
+                        <div class="value"><%= props.social_stats.reddit + props.social_stats.googleplus %></div>
                         <span>other shares</span>
                     </li>
+                    <% } else { %>
+                    <% } %>
+
+
                     <li class="main">
                         <div class="p_bar">
-                            <span style="width: 82%"></span>
+                            <span style="width: <%= props.basic_stats.quality_score %>%"></span>
                         </div>
                         <span>High quality document</span>
                     </li>

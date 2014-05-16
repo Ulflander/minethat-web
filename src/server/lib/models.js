@@ -9,14 +9,16 @@
         models = {},
         conf = require('../conf.js').conf(),
         logger = conf.logger,
-        mongoose = require('mongoose');
+        mongoose = require('mongoose'),
+        url = 'mongodb://' +
+            conf.MONGO_HOST + ':' +
+            conf.MONGO_PORT + '/' +
+            conf.MONGO_DB_PREFIX +
+            conf.env.toLowerCase();
 
     // Connect to DB
-    mongoose.connect('mongodb://' +
-        conf.MONGO_HOST + ':' +
-        conf.MONGO_PORT + '/' +
-        conf.MONGO_DB_PREFIX +
-        conf.env.toLowerCase());
+    mongoose.connect(url);
+    logger.info('Connecting to mongo on ' + url);
 
     /**
      * Load model.

@@ -12,6 +12,7 @@
         blog = require('./lib/blog.js'),
         initialize = require('./lib/init.js').initialize,
         router = require('./routes/router.js').router,
+        jobManager = require('./lib/job.js'),
         _404 = require('./controllers/404.js');
 
     /**
@@ -25,6 +26,8 @@
 
         app.conf = conf;
         app.logger = conf.logger;
+
+        jobManager.init();
 
         // Discover and setup blog articles
         blog.init(function() {

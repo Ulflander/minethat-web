@@ -143,10 +143,10 @@
             }
             console.log(obj.toObject());
             if (req.isAPI) {
-                res.json(obj());
+                res.json(obj.toObject());
             } else {
                 exports.view(req, res, template, {
-                    doc: obj.toObject(),
+                    doc: obj,
                     status: 'exists'
                 });
             }

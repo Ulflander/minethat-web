@@ -45,11 +45,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
-      <p class="stat">70.39</p>
+      <p class="stat">68.67</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
-      <p class="stat">105</p>
+      <p class="stat">132</p>
     </div>
   </div>
   <div class="row historical">
@@ -63,11 +63,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
-      <p class="stat">27.23</p>
+      <p class="stat">24.80</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
-      <p class="stat">0.56</p>
+      <p class="stat">0.80</p>
     </div>
   </div>
 </div>
@@ -91,17 +91,57 @@
 <div class="container">
   <div class="row">
     <textarea id="file-source" class="col-md-12">/**
- * Initializes web server: read configuration, then run server.js.
+ * Feed aggregation program.
  */
-(function() {
+(function(self) {
     &#039;use strict&#039;;
 
     var logger,
         models,
         model,
+        manager = require(&#039;./lib/job.js&#039;),
         internet = require(&#039;./lib/internet.js&#039;),
         currSourcePage = 0,
         limitPerPage = 1;
+
+    // Require and read configuration,
+    // then initialize infinite loop
+    require(&#039;./conf.js&#039;).conf(function(conf) {
+        logger = conf.logger;
+        models = require(&#039;./lib/models.js&#039;);
+        model = models.model(&#039;Source&#039;);
+
+        setInterval(self.update, conf.env === &#039;local&#039; ? 30000 : 10000);
+
+        self.update();
+    });
+
+
+    self.submit = function(source, feedItem) {
+
+        console.log(feedItem);
+
+        // Create job
+        var job = {
+                customerId: &#039;2c7f9a&#039;,
+                gateway: &#039;API&#039;,
+                status: &#039;VOID&#039;,
+                type: &#039;feed_url&#039;,
+                value: feedItem.link[0],
+                meta: {
+                    doc_title: feedItem.title[0],
+                    doc_published_date: feedItem.date,
+                    doc_description: feedItem.desc[0]
+                }
+            };
+
+        manager.makeup(job, function(err) {
+            if (!!err) {
+                logger.error(&#039;Unable to publish job&#039;, err);
+            }
+        });
+    };
+
 
     /**
      * Read feed and create jobs for each aggregated article.
@@ -109,7 +149,7 @@
      * @param  {Object}   source   Source
      * @param  {Function} callback Callback (mandatory)
      */
-    exports.aggregate = function(source, callback) {
+    self.aggregate = function(source, callback) {
         internet.feed(source.feed_url, function(err, feed) {
             var items = feed.items,
                 i,
@@ -118,7 +158,7 @@
 
             for (i = 0; i &lt; l; i += 1) {
                 if (items[i].date &gt; (source.last || 0)) {
-                    console.log(items[i].title);
+                    self.submit(source, items[i]);
 
                     if (items[i].date &gt; last) {
                         last = items[i].date;
@@ -139,8 +179,8 @@
      *
      * @param  {Object} source Source to aggregate
      */
-    exports.check = function(source) {
-        exports.aggregate(source, function(source) {
+    self.check = function(source) {
+        self.aggregate(source, function(source) {
             model.update({
                 _id: source._id
             }, {last: source.last},
@@ -159,7 +199,7 @@
     /**
      * Aggregate articles from a bunch of sources.
      */
-    exports.update = function() {
+    self.update = function() {
         model.find({}, {}, {skip: currSourcePage, limit: limitPerPage},
             function(err, objs) {
                 if (!!err) {
@@ -177,27 +217,14 @@
                 currSourcePage += 1;
 
                 for (i = 0; i &lt; l; i += 1) {
-                    exports.check(objs[i]);
+                    self.check(objs[i]);
                 }
             });
     };
 
 
-    // Require and read configuration,
-    // then initialize infinite loop
-    require(&#039;./conf.js&#039;).conf(function(conf) {
-        logger = conf.logger;
-        models = require(&#039;./lib/models.js&#039;);
-        model = models.model(&#039;Source&#039;);
 
-        setInterval(function() {
-            exports.update();
-        }, 30000);
-
-        exports.update();
-    });
-
-}());</textarea>
+}(exports));</textarea>
   </div>
 </div>
 

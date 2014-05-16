@@ -49,25 +49,26 @@
     padding-bottom: 20px; }
     .meta_col ul li {
       padding: 0; }
-  .meta_col .statistics {
-    border-bottom: 1px solid #fafafa;
-    padding: 0; }
-    .meta_col .statistics li {
-      display: inline-block;
-      margin-bottom: 30px; }
-      .meta_col .statistics li .value {
-        font-size: 1.4em;
-        color: #2d303b; }
-      .meta_col .statistics li span {
-        font-size: 0.7em; }
-    .meta_col .statistics .numeric {
-      text-align: center;
-      width: 49%; }
-    .meta_col .statistics .main {
-      display: block;
-      width: 100%; }
-      .meta_col .statistics .main .value {
-        font-size: 3.2em; }
+
+.statistics {
+  border-bottom: 1px solid #fafafa;
+  padding: 0; }
+  .statistics li {
+    display: inline-block;
+    margin-bottom: 30px; }
+    .statistics li .value {
+      font-size: 1.4em;
+      color: #2d303b; }
+    .statistics li span {
+      font-size: 0.7em; }
+  .statistics .numeric {
+    text-align: center;
+    width: 49%; }
+  .statistics .main {
+    display: block;
+    width: 100%; }
+    .statistics .main .value {
+      font-size: 3.2em; }
 
 .menu_col {
   position: fixed;

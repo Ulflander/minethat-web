@@ -1,6 +1,6 @@
 
 
-(function() {
+(function(self) {
     'use strict';
 
     var request = require('request'),
@@ -14,7 +14,7 @@
      * @param  {String}   url      URL to ping
      * @param  {Function} callback Callback
      */
-    exports.get = function(url, callback) {
+    self.get = function(url, callback) {
         request(url, function(error, response) {
             if (!error && response.statusCode === 200) {
                 callback(null, response.body, response.href);
@@ -30,8 +30,8 @@
      * @param  {String}   url      URL to ping
      * @param  {Function} callback Callback
      */
-    exports.feed = function(url, callback) {
-        exports.get(url, function(err, body, url) {
+    self.feed = function(url, callback) {
+        self.get(url, function(err, body, url) {
             if (!!err) {
                 callback(err);
                 return;
@@ -44,7 +44,7 @@
                         return;
                     }
 
-                    callback(null, feed);
+                    callback(null, feed, url);
                 });
             } catch (e) {
                 callback(e);
@@ -52,4 +52,4 @@
         });
     };
 
-}());
+}(exports));

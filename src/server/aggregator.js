@@ -9,21 +9,54 @@
     var logger,
         models,
         model,
+        manager,
         internet = require('./lib/internet.js'),
         currSourcePage = 0,
-        limitPerPage = 1;
+        limitPerPage = 5;
 
     // Require and read configuration,
     // then initialize infinite loop
     require('./conf.js').conf(function(conf) {
         logger = conf.logger;
         models = require('./lib/models.js');
+        manager = require('./lib/job.js');
         model = models.model('Source');
 
         setInterval(self.update, conf.env === 'local' ? 30000 : 10000);
 
         self.update();
     });
+
+
+    self.submit = function(source, feedItem) {
+
+        console.log(feedItem);
+
+        // Create job
+        var job = {
+                customerId: '2c7f9a',
+                gateway: 'API',
+                status: 'VOID',
+                type: 'feed_url',
+                value: feedItem.link[0],
+                meta: {
+                    doc_title: feedItem.title[0],
+                    doc_published_date: feedItem.date,
+                    doc_description: feedItem.desc[0],
+                    doc_source_name: source.name,
+                    doc_source_url: source.url,
+                    doc_source_feed_url: source.feed_url
+                }
+            };
+
+        manager.makeup(job, function(err) {
+            if (!!err) {
+                logger.error('Unable to publish job', err);
+            } else {
+                logger.info('Job published: ' + feedItem.title[0]);
+            }
+        });
+    };
 
 
     /**
@@ -41,7 +74,7 @@
 
             for (i = 0; i < l; i += 1) {
                 if (items[i].date > (source.last || 0)) {
-                    console.log(items[i].title);
+                    self.submit(source, items[i]);
 
                     if (items[i].date > last) {
                         last = items[i].date;

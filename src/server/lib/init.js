@@ -4,7 +4,7 @@
  * Initializes response and request objects with utilities.
  *
  */
-(function() {
+(function(self) {
     'use strict';
 
     var conf = require('../conf.js').conf(),
@@ -19,7 +19,7 @@
      * @param  {Request} req Connect request object
      * @param  {Response} res Connect response object
      */
-    exports.initialize = function(req, res, next) {
+    self.initialize = function(req, res, next) {
         var k;
 
         req.logger = conf.logger;
@@ -51,4 +51,4 @@
 
         next();
     };
-}());
+}(exports));
