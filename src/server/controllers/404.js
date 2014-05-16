@@ -15,16 +15,24 @@
      */
     self.index = function(req, res, next) {
         req.logger.warn('Page not found: [' + req.method + '] ' + req.url);
+        console.log(routes);
         var max = {
                 value: 1000,
                 url: null
             },
-            i,
-            l = routes.length;
+            distance,
+            k;
 
-        for (i = 0; i < l; i += 1) {
-            console.log(routes[i]);
-            console.log(lev(req.url, routes[i]));
+        for (k in routes) {
+            if (k.indexOf('/api') === 0) {
+                continue;
+            }
+
+            if (routes.hasOwnProperty(k)) {
+                distance = lev(req.url, k);
+                console.log(k);
+                console.log(lev(req.url, k));
+            }
         }
         cv.view(req, res, '404.html', max, 404);
     };
