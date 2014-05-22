@@ -3,7 +3,7 @@
     'use strict';
 
     var cv = require('../lib/controller-view.js'),
-        lev = require('../lib/levenshtein.js'),
+        /*lev = require('../lib/levenshtein.js'),*/
         routes = require('../routes/routes.js').routes;
 
     /**
@@ -19,21 +19,23 @@
         var max = {
                 value: 1000,
                 url: null
-            },
-            distance,
-            k;
+            };
 
+        /*
         for (k in routes) {
-            if (k.indexOf('/api') === 0) {
-                continue;
-            }
-
             if (routes.hasOwnProperty(k)) {
-                distance = lev(req.url, k);
-                console.log(k);
-                console.log(lev(req.url, k));
+                if (k.indexOf('/api') === 0) {
+                    continue;
+                }
+
+                if (routes.hasOwnProperty(k)) {
+                    distance = lev(req.url, k);
+                    console.log(k);
+                    console.log(distance);
+                }
             }
         }
+        */
         cv.view(req, res, '404.html', max, 404);
     };
 

@@ -18,7 +18,8 @@
         }
 
         var rootFilename = filename.split('.md').join('');
-        routes.add('/devlog/' + rootFilename + '.html', ['get', 'blog.article']);
+        routes.add('/devlog/' + rootFilename + '.html',
+            ['get', 'blog.article']);
 
         fs.readFile(conf.root + '/src/blog/' + filename, function(err, f) {
             if (!!err) {
