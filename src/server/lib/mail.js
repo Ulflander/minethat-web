@@ -43,7 +43,7 @@
             if (error) {
                 logger.error(error);
             }else {
-                logger.debug('Message sent: ' + response.message);
+                logger.debug('Message sent to ' + to + '/' + response.message);
             }
         });
     };
