@@ -33,6 +33,9 @@
             });
         }
 
+        logger.debug('Sending message to: ' +
+            to + ' (Subject: ' + subject + ')');
+
         smtp.sendMail({
             from: from || 'Xav from Minethat <xav@minethat.co>',
             to: to,
