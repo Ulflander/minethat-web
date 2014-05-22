@@ -1,0 +1,23 @@
+
+
+<%- partial('app-header') %>
+<%- partial('app-menu') %>
+
+
+<section class="content">
+
+<% for(var i=0; i < data.docs.length; i++) {
+    var props = data.docs[i].toObject().properties;
+    %>
+    <article data-item-id="<%= data.docs[i]._id %>">
+        <h4><a href="/app/doc/<%= data.docs[i]._id %>"><%- props.meta.doc_title %></a></h4>
+        <p><%- props.meta.doc_description %></p>
+    </article>
+<% } %>
+
+</section>
+
+<%- partial('app-footer') %>
+
+
+

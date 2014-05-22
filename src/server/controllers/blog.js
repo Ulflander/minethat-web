@@ -39,11 +39,11 @@
 
         for (k in articles) {
             if (articles.hasOwnProperty(k)) {
-                filename = k.split('/blog/').join('')
+                filename = k.split('/devlog/').join('')
                             .split('.html').join('')
                             .split('-');
                 list.push({
-                    url: '/blog/' + filename.join('-') + '.html',
+                    url: '/devlog/' + filename.join('-') + '.html',
                     date: filename.splice(0, 3).join('/'),
                     title: filename.join(' ')
                 });
@@ -65,7 +65,7 @@
      */
     exports.article = function(req, res, next) {
         // Split url and set data
-        var url = req.url.split('/blog/').join('')
+        var url = req.url.split('/devlog/').join('')
                         .split('.html').join('')
                         .split('-');
 

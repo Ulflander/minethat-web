@@ -4,6 +4,7 @@
     'use strict';
 
     var request = require('request'),
+        logger = require('../conf.js').conf().logger,
         parser = require('blindparser');
 
     /**
@@ -19,6 +20,8 @@
             if (!error && response.statusCode === 200) {
                 callback(null, response.body, response.href);
             } else {
+                logger.warn('URL ' + url + 'is invalid: '
+                    + error);
                 callback(error);
             }
         });
@@ -40,6 +43,8 @@
             try {
                 parser.parseString(body, {}, function(err, feed) {
                     if (!!err) {
+                        logger.warn('URL ' + url + ' feed is invalid: '
+                            + err);
                         callback(err);
                         return;
                     }

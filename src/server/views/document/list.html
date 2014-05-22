@@ -1,4 +1,7 @@
-
+<html>
+    <head>
+  <meta charset="utf-8">
+</head><body>
 <section class="table">
     <h3>Documents: <span class="count"><%= data.total %></span></h3>
     <a href="/app/jobs">Jobs</a>
@@ -11,7 +14,7 @@
         </thead>
         <% for(var i=0; i < data.docs.length; i++) {%>
             <tr data-item-id="<%= data.docs[i]._id %>">
-                <td><a href="/app/document/<%= data.docs[i]._id %>"><%= data.docs[i]._id %></a></td>
+                <td><a href="/app/doc/<%= data.docs[i]._id %>"><%= data.docs[i]._id %></a></td>
                 <td><a href="/api/v1/document/<%= data.docs[i]._id %>" data-action="delete">Delete</a></td>
                 <td><code><pre><%= data.docs[i] %></pre></code></td>
             </tr>
@@ -58,3 +61,5 @@
         });
     });
 </script>
+</body>
+</html>

@@ -18,7 +18,7 @@
         }
 
         var rootFilename = filename.split('.md').join('');
-        routes.add('/blog/' + rootFilename + '.html', ['get', 'blog.article']);
+        routes.add('/devlog/' + rootFilename + '.html', ['get', 'blog.article']);
 
         fs.readFile(conf.root + '/src/blog/' + filename, function(err, f) {
             if (!!err) {
@@ -34,7 +34,7 @@
                     return;
                 }
 
-                blog.add('/blog/' + rootFilename + '.html', data);
+                blog.add('/devlog/' + rootFilename + '.html', data);
             });
         });
 

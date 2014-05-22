@@ -32,7 +32,8 @@
         ],
 
         '/app/documents': ['get', 'document.index'],
-        '/app/document/:id': ['get', 'document.display'],
+        '/app/doc/:id': ['get', 'document.display'],
+        '/app/docs': ['get', 'document.search'],
 
 
 
@@ -69,7 +70,7 @@
         ///////////////////////
         // PUBLIC
         '/': ['get', 'home'],
-        '/blog': ['get', 'blog'],
+        '/devlog': ['get', 'blog'],
         '/ajax/landing_subscribe': ['post', 'home.subscribe'],
         '/subscription': ['get', 'subscription']
     };

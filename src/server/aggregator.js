@@ -24,7 +24,7 @@
 
         setInterval(self.update, conf.env === 'local' ? 30000 : 10000);
 
-        self.update();
+        manager.init(self.update);
     });
 
 

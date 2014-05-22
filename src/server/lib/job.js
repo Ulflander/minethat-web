@@ -27,6 +27,7 @@
 
                 if (typeof callback === 'function') {
                     callback();
+                    callback = null;
                 }
             });
         });

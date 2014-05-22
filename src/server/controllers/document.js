@@ -20,4 +20,10 @@
         cv.remove(req, res, 'Document');
     };
 
+
+    exports.search = function(req, res, next) {
+        cv.findAll(req, res, 'Document',
+            null, null, null, 'document/search.html');
+    };
+
 }());

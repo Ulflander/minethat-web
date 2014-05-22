@@ -1,97 +1,65 @@
-<html>
-    <head>
-  <meta charset="utf-8">
-
-        <link rel="stylesheet" href="/css/app.css">
-
-    </head>
-    <body>
-        <div class="wrapper">
 
 
+<%- partial('app-header') %>
+<%- partial('app-menu') %>
 
-            <section class="menu_col">
+<% var doc = data.doc.toObject(), props = doc.properties %>
+<section class="content">
+    <h1><%- props.meta.doc_title %></h1>
 
-                <header class="logo">
-                    <a href="/app">
-                        <img src="/img/logo-app.png" title="Welcome on Minethat!" />
-                    </a>
-                </header>
+    <div class="meta">
+        <%= props.meta.doc_source_name %>
+    </div>
 
-
-                <ul class="filters">
-                    <li><i class="blue fa fa-square"></i>Innovation</li>
-                    <li><i class=""></i>International issues</li>
-                    <li><i class="green fa fa-square"></i>Environment</li>
-                    <li><i class="red fa fa-square"></i>Startups</li>
-                    <li class="add"><i class="fa fa-plus"></i><a href="#">Add a filter</a></li>
-                </ul>
+    <% if (!!props.meta.doc_description) { %>
+        <p><%- props.meta.doc_description %></p>
+    <% } %>
 
 
-            </section>
+
+    <ul class="statistics">
+        <% if (!!props.basic_stats) { %>
+        <li class="main numeric">
+            <div class="value"><%= props.basic_stats.read_time_est %></div>
+            <span>minutes read</span>
+        </li>
+        <% } %>
+
+        <% if (!!props.social_stats) { %>
+        <li class="main numeric">
+            <div class="value"><%= props.social_stats.total %></div>
+            <span>social interactions</span>
+        </li>
+        <li class="numeric">
+            <div class="value"><%= props.social_stats.fb_total %></div>
+            <span>Facebook interactions</span>
+        </li>
+        <li class="numeric">
+            <div class="value"><%= props.social_stats.twitter %></div>
+            <span>Twitter shares</span>
+        </li>
+        <li class="numeric">
+            <div class="value"><%= props.social_stats.linkedin %></div>
+            <span>LinkedIn shares</span>
+        </li>
+        <li class="numeric">
+            <div class="value"><%= props.social_stats.reddit + props.social_stats.googleplus %></div>
+            <span>other shares</span>
+        </li>
+        <% } else { %>
+        <% } %>
 
 
-            <% var doc = data.doc.toObject(), props = doc.properties %>
-            <section class="content">
-                <h1><%= props.meta.doc_title %></h1>
+        <% if (!!props.basic_stats) { %>
+        <li class="main">
+            <div class="p_bar">
+                <span style="width: <%= props.basic_stats.quality_score %>%"></span>
+            </div>
+            <span>High quality document</span>
+        </li>
+        <% } %>
+    </ul>
 
-                <div class="meta">
-                    <%= props.meta.doc_source_name %>
-                </div>
+</section>
 
-                <% if (!!props.meta.doc_description) { %>
-                    <p><%= props.meta.doc_description %></p>
-                <% } %>
-
-
-                <% if (!!props.meta.doc_image) { %>
-                    <p>
-                        <img src="<%= props.meta.doc_image %>" />
-                    </p>
-                <% } %>
-
-
-                <ul class="statistics">
-                    <li class="main numeric">
-                        <div class="value"><%= props.basic_stats.read_time_est %></div>
-                        <span>minutes read</span>
-                    </li>
-
-                    <% if (!!props.social_stats) { %>
-                    <li class="main numeric">
-                        <div class="value"><%= props.social_stats.total %></div>
-                        <span>social interactions</span>
-                    </li>
-                    <li class="numeric">
-                        <div class="value"><%= props.social_stats.fb_total %></div>
-                        <span>Facebook interactions</span>
-                    </li>
-                    <li class="numeric">
-                        <div class="value"><%= props.social_stats.twitter %></div>
-                        <span>Twitter shares</span>
-                    </li>
-                    <li class="numeric">
-                        <div class="value"><%= props.social_stats.linkedin %></div>
-                        <span>LinkedIn shares</span>
-                    </li>
-                    <li class="numeric">
-                        <div class="value"><%= props.social_stats.reddit + props.social_stats.googleplus %></div>
-                        <span>other shares</span>
-                    </li>
-                    <% } else { %>
-                    <% } %>
-
-
-                    <li class="main">
-                        <div class="p_bar">
-                            <span style="width: <%= props.basic_stats.quality_score %>%"></span>
-                        </div>
-                        <span>High quality document</span>
-                    </li>
-                </ul>
-
-            </section>
-        </div>
-    </body>
-</html>
-
+<%- partial('app-footer') %>
