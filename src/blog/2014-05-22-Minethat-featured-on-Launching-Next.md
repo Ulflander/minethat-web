@@ -1,6 +1,6 @@
 # Minethat featured on Launching Next
 
-As our first post, we're proud to announce that Minethat has been featured on [Launching Next](launchingnext.com)!
+As our first post, we're proud to announce that Minethat has been featured on [Launching Next](http://launchingnext.com)!
 
 In the first day, it already led to a few signups and Twitter followers. Given the fact that Minethat is currently built for a niche market, it is a very good news, and a huge motivation.
 
