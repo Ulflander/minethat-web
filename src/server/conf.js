@@ -21,6 +21,7 @@
                 console.log(data.output);
             }
         }),
+        reading = false,
         conf = {
             loaded: false,
             logger: logger,
@@ -34,6 +35,8 @@
 
         process.exit(1);
     }
+
+
 
     // Set path
     path = __dirname + '/../../../conf/conf.' + env + '.sh';
@@ -49,9 +52,9 @@
             line.indexOf('=') > 0) {
 
             line = line.split('=');
-            conf[line[0]] = /^[0-9]+$/ig.test(line[1]) ?
+            conf[line[0].trim()] = /^[0-9]+$/ig.test(line[1]) ?
                     parseInt(line[1], 10) :
-                    line[1];
+                    line[1].trim();
         }
     };
 
@@ -81,33 +84,57 @@
     self.read = function(callback) {
 
         // Set conf as loaded to avoid reloading it
-        conf.loaded = true;
+        reading = true;
 
-        // Read file
-        fs.readFile(path, function(err, data) {
+        // Conf real path
+        fs.realpath(path, function(err, p) {
             if (!!err) {
-                logger.error('No way to load conf', err);
+                logger.error('No way to solve path ' + path, err);
                 process.exit(1);
             }
 
-            self.parse(data.toString());
+            logger.log('Loading configuration at ' + p);
 
-            // Finally set root path async
-            fs.realpath(__dirname + '/../../', function(err, path) {
+            // Read file
+            fs.readFile(p, function(err, data) {
                 if (!!err) {
-                    logger.error('No way to get root path', err);
+                    logger.error('No way to load conf', err);
                     process.exit(1);
                 }
-                conf.root = path;
 
-                // Call callback
-                if (typeof callback === 'function') {
-                    callback(conf);
-                }
+                self.parse(data.toString());
+
+                // Finally set root path async
+                fs.realpath(__dirname + '/../../', function(err, path) {
+                    if (!!err) {
+                        logger.error('No way to get root path', err);
+                        process.exit(1);
+                    }
+                    conf.root = path;
+                    reading = false;
+                    conf.loaded = true;
+
+                    logger.log('Configuration loaded ...');
+
+                    // Call callback
+                    if (typeof callback === 'function') {
+                        callback(conf);
+                    }
+                });
             });
-        });
 
+        });
         return conf;
+    };
+
+    self.wait = function(callback) {
+        setTimeout(function() {
+            if (!!conf.loaded) {
+                callback(conf);
+            } else {
+                self.wait(callback);
+            }
+        }, 15);
     };
 
     /**
@@ -117,10 +144,20 @@
      * @return {Object}            Configuration object reference
      */
     self.conf = function(callback) {
+
         if (!!conf.loaded) {
+            if (typeof callback === 'function') {
+                callback(conf);
+            }
             return conf;
+
+        } else if (!reading) {
+            return self.read(callback);
+
+        } else if (typeof callback === 'function') {
+            self.wait(callback);
         }
 
-        return self.read(callback);
+        return conf;
     };
 }(exports));

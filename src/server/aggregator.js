@@ -6,6 +6,7 @@
 (function(self) {
     'use strict';
 
+
     var logger,
         models,
         model,
@@ -17,6 +18,8 @@
     // Require and read configuration,
     // then initialize infinite loop
     require('./conf.js').conf(function(conf) {
+        console.log(conf);
+
         logger = conf.logger;
         models = require('./lib/models.js');
         manager = require('./lib/job.js');
@@ -24,6 +27,7 @@
 
         setInterval(self.update, conf.env === 'local' ? 30000 : 10000);
 
+        logger.log('Aggregator started...');
         manager.init(self.update);
     });
 
@@ -37,9 +41,10 @@
                 customerId: '2c7f9a',
                 gateway: 'API',
                 status: 'VOID',
-                type: 'feed_url',
+                type: 'FEED_URL',
                 value: feedItem.link[0],
                 meta: {
+
                     doc_title: feedItem.title[0],
                     doc_published_date: feedItem.date,
                     doc_description: feedItem.desc[0],
@@ -52,8 +57,6 @@
         manager.makeup(job, function(err) {
             if (!!err) {
                 logger.error('Unable to publish job', err);
-            } else {
-                logger.info('Job published: ' + feedItem.title[0]);
             }
         });
     };
@@ -67,6 +70,11 @@
      */
     self.aggregate = function(source, callback) {
         internet.feed(source.feed_url, function(err, feed) {
+            if (!!err) {
+                logger.error('Unable to retrieve feed items', err);
+                return;
+            }
+
             var items = feed.items,
                 i,
                 last = 0,

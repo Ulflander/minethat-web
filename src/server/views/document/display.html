@@ -5,60 +5,155 @@
 
 <% var doc = data.doc.toObject(), props = doc.properties %>
 <section class="content">
-    <h1><%- props.meta.doc_title %></h1>
-
-    <div class="meta">
-        <%= props.meta.doc_source_name %>
-    </div>
+    <h1><a href="<%= props.meta.doc_url %>" target="_blank"><%- props.meta.doc_title %></a></h1>
 
     <% if (!!props.meta.doc_description) { %>
         <p><%- props.meta.doc_description %></p>
     <% } %>
 
+    <section class="doc-sub-container">
+        <div class="left">
+            <h4>Source</h4>
+        </div>
+        <div class="right ">
+            <ul class="data">
+                <% if (!!props.meta.doc_source_name) { %>
+                <li class="main">
+                    <span class="value"><%= props.meta.doc_source_name %></span>
+                </li>
+                <% } %>
+
+                <% if (!!props.meta.doc_author) { %>
+                <li class="">
+                    <span class="key">Author(s)</span> <span class="value"><%= props.meta.doc_author %></span>
+                </li>
+                <% } %>
+
+                <% if (!!props.meta.doc_twitter_username) { %>
+                <li class="">
+                    <span class="key">Twitter</span> <span class="value">
+                        <a href="https://twitter.com/<%= props.meta.doc_twitter_username.replace('@', '') %>" target="_blank">
+                            <%= props.meta.doc_twitter_username %>
+                        </a></span>
+                </li>
+                <% } %>
+
+                <% if (!!props.meta.doc_published_date) { %>
+                <li class="">
+                    <span class="key">Published</span> <span class="value"><%= props.meta.doc_published_date %></span>
+                </li>
+                <% } else
+                if (!!props.meta.doc_date) { %>
+                <li class="">
+                    <span class="key">Date</span> <span class="value"><%= props.meta.doc_date %></span>
+                </li>
+                <% } %>
+
+                <% if (!!props.meta.doc_edited_date) { %>
+                <li class="">
+                    <span class="key">Edited</span> <span class="value"><%= props.meta.doc_edited_date %></span>
+                </li>
+                <% } %>
+
+            </ul>
+        </div>
+    </section>
 
 
-    <ul class="statistics">
-        <% if (!!props.basic_stats) { %>
-        <li class="main numeric">
-            <div class="value"><%= props.basic_stats.read_time_est %></div>
-            <span>minutes read</span>
-        </li>
-        <% } %>
-
-        <% if (!!props.social_stats) { %>
-        <li class="main numeric">
-            <div class="value"><%= props.social_stats.total %></div>
-            <span>social interactions</span>
-        </li>
-        <li class="numeric">
-            <div class="value"><%= props.social_stats.fb_total %></div>
-            <span>Facebook interactions</span>
-        </li>
-        <li class="numeric">
-            <div class="value"><%= props.social_stats.twitter %></div>
-            <span>Twitter shares</span>
-        </li>
-        <li class="numeric">
-            <div class="value"><%= props.social_stats.linkedin %></div>
-            <span>LinkedIn shares</span>
-        </li>
-        <li class="numeric">
-            <div class="value"><%= props.social_stats.reddit + props.social_stats.googleplus %></div>
-            <span>other shares</span>
-        </li>
-        <% } else { %>
-        <% } %>
+    <section class="doc-sub-container">
+        <div class="left">
+            <h4>Metrics</h4>
+        </div>
+        <div class="right">
+            <ul class="statistics">
 
 
-        <% if (!!props.basic_stats) { %>
-        <li class="main">
-            <div class="p_bar">
-                <span style="width: <%= props.basic_stats.quality_score %>%"></span>
-            </div>
-            <span>High quality document</span>
-        </li>
-        <% } %>
-    </ul>
+                <% if (!!props.basic_stats) { %>
+                <li class="main numeric">
+                    <div class="value"><%= props.basic_stats.read_time_est %></div>
+                    <span>minutes read</span>
+                </li>
+                <% } %>
+
+                <% if (!!props.social_stats) { %>
+                <li class="main numeric">
+                    <div class="value"><%= props.social_stats.total %></div>
+                    <span>social interactions</span>
+                </li>
+                <% } %>
+
+                <% if (!!props.basic_stats) { %>
+                <li class="main numeric">
+                    <div class="value"><%= props.basic_stats.quality_score %>%</div>
+                    <span>quality score</span>
+                </li>
+
+                <li class="main numeric">
+                    <div class="value">~<%= Math.ceil(props.basic_stats.total_tokens/100)*100 %></div>
+                    <span>words</span>
+                </li>
+                <% } %>
+            </ul>
+        </div>
+    </section>
+
+
+
+    <section class="doc-sub-container">
+        <div class="left">
+            <h4>Key entities</h4>
+        </div>
+        <div class="right entities">
+            <% for (var k in doc.entities) {
+                function compare(a,b) {
+                    if (a.confidence < b.confidence)
+                        return -1;
+                    if (a.confidence > b.confidence)
+                        return 1;
+                    return 0;
+                }
+
+                var entity = doc.entities[k];
+
+                var id = entity.id,
+                    type = id.substring(0, id.indexOf(':')),
+                    value = id.substring(id.indexOf(':') + 1)
+                        .replace('http://dbpedia.org/resource', 'http://en.wikipedia.org/wiki');
+
+                    if (type == 'RDF') { %>
+                        <span class="entity"><a href="<%= value %>" target="_blank">
+
+                            <% if (entity.class === 'http://schema.org/Person') { %>
+                                <i class="fa fa-user"></i>
+                            <% } else if (entity.class === 'http://schema.org/Place') { %>
+                                <i class="fa fa-map-marker"></i>
+                            <% } else if (entity.class === 'http://schema.org/Organization') { %>
+                                <i class="fa fa-university"></i>
+                            <% } %>
+
+                            <%= entity.label %>
+                        </a></span>
+                    <% } %>
+            <% } %>
+        </div>
+    </section>
+
+
+
+
+
+    <section class="doc-sub-container">
+        <div class="left">
+            <h4>Keywords</h4>
+        </div>
+        <div class="right keywords">
+            <% for (var k in props.keywords) { %>
+                <span class="keyword"><%= props.keywords[k] %></span>
+            <% } %>
+        </div>
+    </section>
+
+
 
 </section>
 

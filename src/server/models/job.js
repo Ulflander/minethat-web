@@ -22,10 +22,12 @@
                 index: true
             },
             meta: {
-                url: String,
-                title: String,
-                author: String,
-                organization: String
+                doc_title: String,
+                doc_published_date: Number,
+                doc_description: String,
+                doc_source_name: String,
+                doc_source_url: String,
+                doc_source_feed_url: String
             },
             email: String,
             target: {

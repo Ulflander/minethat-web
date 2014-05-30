@@ -19,13 +19,17 @@
 .grey {
   color: #ccc; }
 
+/*
+    GLOBAL
+ */
 .wrapper {
   position: relative; }
 
 .content {
   padding-top: 70px;
   width: 600px;
-  margin: 0 auto; }
+  margin: 0 auto;
+  color: #3F3F3F; }
   .content h1, .content h2, .content h3 {
     margin-bottom: 40px;
     font-weight: 200;
@@ -35,41 +39,81 @@
     margin: 40px 0;
     line-height: 1.6; }
 
-.meta_col {
-  position: fixed;
-  width: 210px;
-  padding: 70px 20px 0 20px;
-  height: 100%;
-  right: 0;
-  background: #fff;
-  box-shadow: 0px 0px 70px #eee; }
-  .meta_col ul {
-    list-style: none;
-    margin: 20px 0 0 0;
-    padding-bottom: 20px; }
-    .meta_col ul li {
-      padding: 0; }
+h1 a, h1 a:visited {
+  color: #3F3F3F;
+  text-decoration: none; }
 
-.statistics {
-  border-bottom: 1px solid #fafafa;
-  padding: 0; }
-  .statistics li {
-    display: inline-block;
-    margin-bottom: 30px; }
-    .statistics li .value {
-      font-size: 1.4em;
-      color: #2d303b; }
-    .statistics li span {
-      font-size: 0.7em; }
-  .statistics .numeric {
-    text-align: center;
-    width: 49%; }
-  .statistics .main {
-    display: block;
-    width: 100%; }
-    .statistics .main .value {
+/*
+    CONTAINERS
+ */
+.doc-sub-container {
+  margin-bottom: 10px; }
+  .doc-sub-container .left {
+    width: 140px;
+    float: left; }
+    .doc-sub-container .left h4 {
+      text-transform: uppercase;
+      font-weight: 200;
+      margin: 0;
+      text-align: right;
+      color: #ddd;
+      font-size: 12px; }
+  .doc-sub-container .right {
+    border-left: 1px solid #ddd;
+    padding-left: 10px;
+    margin-left: 150px; }
+  .doc-sub-container .statistics {
+    padding: 0;
+    margin: 0 0 10px 0; }
+    .doc-sub-container .statistics li {
+      display: inline-block;
+      margin-bottom: 30px; }
+      .doc-sub-container .statistics li .value {
+        font-size: 1.4em;
+        color: #2d303b; }
+      .doc-sub-container .statistics li span {
+        font-size: 0.7em; }
+    .doc-sub-container .statistics .numeric {
+      text-align: center;
+      width: 49%; }
+    .doc-sub-container .statistics .main .value {
       font-size: 3.2em; }
+  .doc-sub-container .data {
+    list-style: none; }
+    .doc-sub-container .data li {
+      margin-bottom: 5px; }
+    .doc-sub-container .data .key {
+      text-transform: uppercase;
+      margin-right: 0;
+      color: #ddd;
+      width: 120px;
+      display: inline-block;
+      font-size: 12px;
+      float: left;
+      padding-top: 3px; }
+    .doc-sub-container .data .value {
+      display: block;
+      margin-left: 120px; }
+    .doc-sub-container .data .main {
+      margin-bottom: 10px; }
+      .doc-sub-container .data .main .value {
+        margin: 0;
+        font-weight: 400;
+        float: none; }
+  .doc-sub-container .entity, .doc-sub-container .keyword {
+    background: #fafafa;
+    padding: 3px 7px;
+    margin: 0 5px;
+    border-radius: 2px;
+    white-space: nowrap; }
+  .doc-sub-container .entities, .doc-sub-container .keywords {
+    line-height: 2; }
 
+/*
+
+    MENU
+
+ */
 .menu_col {
   position: fixed;
   width: 250px;

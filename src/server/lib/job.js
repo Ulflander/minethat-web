@@ -15,7 +15,7 @@
         });
 
         connection.on('ready', function() {
-            console.log('[RabbitMQ] Connection established');
+            conf.logger.log('[RabbitMQ] Connection established');
 
             connection.queue(conf.RABBIT_EXTRACT_QUEUE, {
                 durable: true,
@@ -65,7 +65,7 @@
             return;
         }
 
-        console.log('[RabbitMQ] Submitted job ' + jobId);
+        conf.logger.log('[RabbitMQ] Submitted job ' + jobId);
         connection.publish('extract', jobId);
     };
 

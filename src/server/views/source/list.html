@@ -9,15 +9,17 @@
         <thead>
             <tr>
                 <th>Id</th>
+                <th>Edit</th>
+                <th>Delete</th>
                 <th>Raw</th>
             </tr>
         </thead>
         <% for(var i=0; i < data.docs.length; i++) {%>
             <tr data-item-id="<%= data.docs[i]._id %>">
                 <td><%= data.docs[i]._id %></td>
-                <td><code><pre><%= data.docs[i] %></pre></code></td>
                 <td><a href="/app/source/<%= data.docs[i]._id %>">Edit</a></td>
                 <td><a href="/api/v1/source/<%= data.docs[i]._id %>" data-action="delete">Delete</a></td>
+                <td><code><pre><%= data.docs[i] %></pre></code></td>
             </tr>
         <% } %>
 
