@@ -42,7 +42,7 @@
                 filename = k.split('/devlog/').join('')
                             .split('.html').join('')
                             .split('-');
-                list.push({
+                list.unshift({
                     url: '/devlog/' + filename.join('-') + '.html',
                     date: filename.splice(0, 3).join('/'),
                     title: filename.join(' ')

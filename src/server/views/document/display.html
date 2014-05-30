@@ -1,64 +1,244 @@
 
+<% var doc = data.doc.toObject(), props = doc.properties %>
 
-<%- partial('app-header') %>
+<%- partial('app-header', {
+    title: props.meta.doc_title
+}) %>
 <%- partial('app-menu') %>
 
-<% var doc = data.doc.toObject(), props = doc.properties %>
 <section class="content">
-    <h1><%- props.meta.doc_title %></h1>
 
-    <div class="meta">
-        <%= props.meta.doc_source_name %>
-    </div>
+    <header>
+        <h1><a href="<%= props.meta.doc_url %>" target="_blank"><%- props.meta.doc_title %></a></h1>
 
-    <% if (!!props.meta.doc_description) { %>
-        <p><%- props.meta.doc_description %></p>
-    <% } %>
-
-
-
-    <ul class="statistics">
-        <% if (!!props.basic_stats) { %>
-        <li class="main numeric">
-            <div class="value"><%= props.basic_stats.read_time_est %></div>
-            <span>minutes read</span>
-        </li>
+        <% if (!!props.meta.doc_description) { %>
+            <p><%- props.meta.doc_description %></p>
         <% } %>
+    </header>
 
-        <% if (!!props.social_stats) { %>
-        <li class="main numeric">
-            <div class="value"><%= props.social_stats.total %></div>
-            <span>social interactions</span>
-        </li>
-        <li class="numeric">
-            <div class="value"><%= props.social_stats.fb_total %></div>
-            <span>Facebook interactions</span>
-        </li>
-        <li class="numeric">
-            <div class="value"><%= props.social_stats.twitter %></div>
-            <span>Twitter shares</span>
-        </li>
-        <li class="numeric">
-            <div class="value"><%= props.social_stats.linkedin %></div>
-            <span>LinkedIn shares</span>
-        </li>
-        <li class="numeric">
-            <div class="value"><%= props.social_stats.reddit + props.social_stats.googleplus %></div>
-            <span>other shares</span>
-        </li>
-        <% } else { %>
-        <% } %>
+    <section class="doc-sub-container">
+        <div class="left">
+            <h4>Source</h4>
+        </div>
+        <div class="right ">
+            <ul class="data">
+                <% if (!!props.meta.doc_source_name) { %>
+                <li class="main">
+                    <span class="value"><%= props.meta.doc_source_name %></span>
+                </li>
+                <% } %>
+
+                <% if (!!props.meta.doc_author) { %>
+                <li class="">
+                    <span class="key">Author(s)</span> <span class="value"><%= props.meta.doc_author %></span>
+                </li>
+                <% } %>
+
+                <% if (!!props.meta.doc_twitter_username) { %>
+                <li class="">
+                    <span class="key">Twitter</span> <span class="value">
+                        <a href="https://twitter.com/<%= props.meta.doc_twitter_username.replace('@', '') %>" target="_blank">
+                            <%= props.meta.doc_twitter_username %>
+                        </a></span>
+                </li>
+                <% } %>
+
+                <% if (!!props.meta.doc_published_date) { %>
+                <li class="">
+                    <span class="key">Published</span> <span class="value"><%= utils.tsToReadable(props.meta.doc_published_date) %></span>
+                </li>
+                <% } else
+                if (!!props.meta.doc_date) { %>
+                <li class="">
+                    <span class="key">Date</span> <span class="value"><%= utils.tsToReadable(props.meta.doc_date) %></span>
+                </li>
+                <% } %>
+
+                <% if (!!props.meta.doc_edited_date) { %>
+                <li class="">
+                    <span class="key">Edited</span> <span class="value"><%= utils.tsToReadable(props.meta.doc_edited_date) %></span>
+                </li>
+                <% } %>
+
+            </ul>
+        </div>
+    </section>
+
+    <%- partial('nod-module', {
+        props: props
+    }) %>
 
 
-        <% if (!!props.basic_stats) { %>
-        <li class="main">
-            <div class="p_bar">
-                <span style="width: <%= props.basic_stats.quality_score %>%"></span>
-            </div>
-            <span>High quality document</span>
-        </li>
-        <% } %>
-    </ul>
+    <section class="doc-sub-container">
+        <div class="left">
+            <h4>Metrics</h4>
+        </div>
+        <div class="right clearfix">
+            <ul class="statistics">
+
+
+                <% if (!!props.basic_stats) { %>
+                <li class="main numeric">
+                    <div class="value"><%= props.basic_stats.read_time_est %></div>
+                    <span>minutes read</span>
+                </li>
+                <% } %>
+
+                <% if (!!props.social_stats) { %>
+                <li class="main numeric">
+                    <div class="value"><%= props.social_stats.total %></div>
+                    <span>social interactions</span>
+                </li>
+                <% } %>
+
+                <% if (!!props.basic_stats) { %>
+                <li class="main numeric">
+                    <div class="value"><%= props.basic_stats.quality_score %>%</div>
+                    <span>quality score</span>
+                </li>
+
+                <li class="main numeric">
+                    <div class="value">~<%= Math.ceil(props.basic_stats.total_tokens/100)*100 %></div>
+                    <span>words</span>
+                </li>
+                <% } %>
+            </ul>
+        </div>
+    </section>
+
+
+
+    <section class="doc-sub-container">
+        <div class="left">
+            <h4>Key entities</h4>
+        </div>
+        <div class="right entities clearfix">
+            <% for (var k in doc.entities) {
+                function compare(a,b) {
+                    if (a.confidence < b.confidence)
+                        return -1;
+                    if (a.confidence > b.confidence)
+                        return 1;
+                    return 0;
+                }
+
+                var entity = doc.entities[k];
+
+                var id = entity.id,
+                    type = id.substring(0, id.indexOf(':')),
+                    value = id.substring(id.indexOf(':') + 1)
+                        .replace('http://dbpedia.org/resource', 'http://en.wikipedia.org/wiki');
+
+                    if (type == 'RDF') { %>
+                        <span class="entity"><a href="<%= value %>" target="_blank">
+
+                            <% if (entity.class === 'http://schema.org/Person') { %>
+                                <i class="fa fa-user"></i>
+                            <% } else if (entity.class === 'http://schema.org/Place') { %>
+                                <i class="fa fa-map-marker"></i>
+                            <% } else if (entity.class === 'http://schema.org/Organization') { %>
+                                <i class="fa fa-university"></i>
+                            <% } %>
+
+                            <%= entity.label %>
+                        </a></span>
+                    <% } %>
+            <% } %>
+        </div>
+    </section>
+
+
+
+
+
+    <section class="doc-sub-container">
+        <div class="left">
+            <h4>Keywords</h4>
+        </div>
+        <div class="right keywords clearfix">
+            <% for (var k in props.keywords) { %>
+                <span class="keyword"><%= props.keywords[k] %></span>
+            <% } %>
+        </div>
+    </section>
+
+
+
+    <section class="doc-sub-container">
+        <div class="left">
+            <h4>Metadata</h4>
+        </div>
+        <div class="right clearfix">
+            <ul class="statistics">
+
+
+                <% if (!!props.basic_stats) { %>
+                    <% if (!!props.basic_stats.avg_entity_frequency) { %>
+                    <li class="numeric">
+                        <div class="value"><%= props.basic_stats.avg_entity_frequency.toFixed(2) %></div>
+                        <span>average entity frequency</span>
+                    </li>
+                    <% } %>
+
+
+                    <% if (!!props.basic_stats.avg_token_frequency) { %>
+                    <li class="numeric">
+                        <div class="value"><%= props.basic_stats.avg_token_frequency.toFixed(2) %></div>
+                        <span>average token frequency</span>
+                    </li>
+                    <% } %>
+                <% } %>
+
+
+            </ul>
+            <ul class="data">
+
+                <% if (!!props.status) { %>
+                <li class="">
+                    <span class="key">Document status</span> <span class="value"><%= props.status %></span>
+                </li>
+                <% } %>
+
+                <% if (!!props.meta.doc_type) { %>
+                <li class="">
+                    <span class="key">Document type</span> <span class="value"><%= props.meta.doc_type %></span>
+                </li>
+                <% } %>
+
+                <% if (!!props.meta.job_type) { %>
+                <li class="">
+                    <span class="key">Job type</span> <span class="value"><%= props.meta.job_type %></span>
+                </li>
+                <% } %>
+
+                <% if (!!props.meta.job_duration_ms) { %>
+                <li class="">
+                    <span class="key">Job duration</span> <span class="value"><%= props.meta.job_duration_ms %>ms</span>
+                </li>
+                <% } %>
+
+                <% if (!!props.meta.job_processors_applied) { %>
+                <li class="">
+                    <span class="key">Processors</span> <span class="value"><%= props.meta.job_processors_applied %> processors</span>
+                </li>
+                <% } %>
+
+                <% if (!!props.meta.extractor) { %>
+                <li class="">
+                    <span class="key">Extractor</span> <span class="value"><%= props.meta.extractor %></span>
+                </li>
+                <% } %>
+
+                <% if (!!props.meta.boilerpipe_extractor) { %>
+                <li class="">
+                    <span class="key">Boilerpipe algorythm</span> <span class="value"><%= props.meta.boilerpipe_extractor %></span>
+                </li>
+                <% } %>
+            </ul>
+        </div>
+    </section>
+
+
 
 </section>
 

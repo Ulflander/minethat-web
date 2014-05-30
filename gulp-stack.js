@@ -26,6 +26,18 @@
             ]
         },
 
+        chrome: {
+            css: [
+                'css/fonts.css',
+                'css/normalize.css',
+                'css/font-awesome.min.css',
+                'css/anim.css',
+                'css-gen/main.css',
+                'css-gen/basic-form.css',
+                'css-gen/table.css'
+            ]
+        },
+
         app: {
             css: [
                 'css/fonts.css',
@@ -45,11 +57,13 @@
 
     exports.get = function(stack, type) {
         if (!exports.stacks[stack]) {
-            new Error('Stack ' + stack + ' does not exists.');
+            console.warn('Stack ' + stack + ' does not exists.');
+            return null;
         }
         if (!exports.stacks[stack][type]) {
-            new Error('Stack ' + stack + ' type ' +
+            console.warn('Stack ' + stack + ' type ' +
                      type + ' does not exists.');
+            return null;
         }
         var arr = [], i, root;
 

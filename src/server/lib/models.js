@@ -79,7 +79,8 @@
      */
     exports.findAll = function(req, model, conds, fields, options, callback) {
 
-        var page = !!req.query ? parseInt(req.query.page, 10) || 1 : 1;
+        var page = !!req.query ? parseInt(req.query.page, 10) || 1 : 1,
+            itemsPerPage = !!options ? options.limit || ITEMS_PER_PAGE : ITEMS_PER_PAGE;
 
         if (typeof model === 'string') {
             model = exports.model(model);
@@ -119,11 +120,12 @@
      */
     exports.page = function(page, options) {
         var res,
-            k;
+            k,
+            itemsPerPage = !!options ? options.limit || ITEMS_PER_PAGE : ITEMS_PER_PAGE;
 
         res = {
-            skip: ITEMS_PER_PAGE * (page - 1),
-            limit: ITEMS_PER_PAGE
+            skip: itemsPerPage * (page - 1),
+            limit: itemsPerPage
         };
 
         if (!!options) {

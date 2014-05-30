@@ -7,6 +7,7 @@
 (function() {
     'use strict';
 
+
     // Require and read configuration
     require('./conf.js').conf(function(conf) {
         // Run web server

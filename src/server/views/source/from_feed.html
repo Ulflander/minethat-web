@@ -1,8 +1,13 @@
 
 
-<section class="form">
+<%- partial('app-header', {
+    title: 'Setup source from feed URL'
+}) %>
+<%- partial('app-menu') %>
+
+<section class="content">
     <h3>Setup a source from a feed</h3>
-    <a href="/app/sources">Sources</a>
+
     <% if (!!data.error) { %>
         <div class="server-error">
             <%= data.error.message %>
@@ -29,3 +34,5 @@
         </div>
     </form>
 </section>
+
+<%- partial('app-footer') %>

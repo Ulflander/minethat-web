@@ -1,8 +1,13 @@
 
 
-<section class="form">
-    <h3>Add a source</h3>
-    <a href="/app/sources">Sources</a>
+<%- partial('app-header', {
+    title: 'Setup source from feed URL'
+}) %>
+<%- partial('app-menu') %>
+
+<section class="content">
+    <h3><%= data.status === 'exists' ? 'Edit source' : 'Add source' %></h3>
+
     <% if (!!data.error) { %>
         <div class="server-error">
             <%= data.error.message %>
@@ -16,7 +21,7 @@
 
         <div class="input-wrap">
             <label for="url">Source URL</label>
-            <input class="input" type="text" name="url" placeholder="http://example.com/feed.xml" value="<%= data.doc.url || '' %>" />
+            <input class="input" type="text" name="url" placeholder="http://example.com" value="<%= data.doc.url || '' %>" />
         </div>
 
 
@@ -36,8 +41,19 @@
 
         </div>
 
+        <div class="input-wrap">
+            <label for="type">Feed quality</label>
+            <select name="quality">
+                <option <%= data.doc.quality == 'NONE' ? 'selected=selected' : '' %> value="NONE">Feed text unusable</option>
+                <option <%= data.doc.quality == 'NORMAL' ? 'selected=selected' : '' %> value="NORMAL">Feed text is short description</option>
+                <option <%= data.doc.quality == 'FULL' ? 'selected=selected' : '' %> value="FULL">Feed contains full text</option>
+            </select>
+
+        </div>
+
         <div class="input-wrap cta">
             <input type="submit" value="<%= data.status === 'exists' ? 'Edit source' : 'Add source' %>" class="button" />
         </div>
     </form>
 </section>
+<%- partial('app-footer') %>

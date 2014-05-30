@@ -1,20 +1,39 @@
 
 
-<%- partial('app-header') %>
+<%- partial('app-header', {
+    title: 'Article wall'
+}) %>
 <%- partial('app-menu') %>
 
 
-<section class="content">
+<section class="content list">
 
 <% for(var i=0; i < data.docs.length; i++) {
     var props = data.docs[i].toObject().properties;
     %>
     <article data-item-id="<%= data.docs[i]._id %>">
         <h4><a href="/app/doc/<%= data.docs[i]._id %>"><%- props.meta.doc_title %></a></h4>
-        <p><%- props.meta.doc_description %></p>
+        <ul class="meta">
+            <% if (!!props.meta.doc_source_name) { %>
+            <li><%= props.meta.doc_source_name %></li>
+            <% } %>
+            <li><%- partial('nod-classification', {props: props}) %></li>
+        </ul>
     </article>
 <% } %>
 
+
+<% if (data.hasNext || data.hasPrevious) { %>
+    <div class="paginate">
+
+        <% if (data.hasPrevious) { %>
+            <a class="previous" href="?page=<%= data.page - 1 %>">Previous</a>
+        <% } %>
+        <% if (data.hasNext) { %>
+            <a class="next" href="?page=<%= data.page + 1 %>">Next</a>
+        <% } %>
+    </div>
+<% } %>
 </section>
 
 <%- partial('app-footer') %>

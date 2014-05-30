@@ -36,6 +36,7 @@
         '/app/docs': ['get', 'document.search'],
 
 
+        '/app/jobs': ['get', 'job.index'],
 
         ///////////////////////
         // ADMINISTRATION
@@ -60,6 +61,10 @@
             ['get', 'document.display'],
             ['delete', 'document.remove']
         ],
+
+
+        '/api/v1/job/:id': ['delete', 'job.remove'],
+
 
         ///////////////////////
         // REST API

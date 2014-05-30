@@ -4,7 +4,7 @@
 
     var routes = require('./routes.js').routes,
         controllers = {},
-        heads = {},
+        //heads = {},
         urlrouter = require('urlrouter');
 
 

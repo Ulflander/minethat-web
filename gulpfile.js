@@ -156,8 +156,13 @@
     });
 
     gulp.task('build-css', ['sass'], function(cb) {
+        var stack;
         for (var k in stacks.stacks) {
-            gulp.src(stacks.get(k, 'css'))
+            stack = stacks.get(k, 'css');
+            if (!stack) {
+                continue;
+            }
+            gulp.src(stack)
                 .pipe(cssmin())
                 .pipe(concat(k + '.css'))
                 .pipe(gulp.dest('dist/css/'))
@@ -168,8 +173,13 @@
     });
 
     gulp.task('build-js', ['qa-js', 'qa-js-validation'], function(cb) {
+        var stack;
         for (var k in stacks.stacks) {
-            gulp.src(stacks.get(k, 'js'))
+            stack = stacks.get(k, 'js');
+            if (!stack) {
+                continue;
+            }
+            gulp.src(stack)
                 .pipe(concat(k + '.js'))
                 .pipe(gulp.dest('dist/js/'))
                 .pipe(uglify())

@@ -23,6 +23,10 @@
                     type: String,
                     'default': 'CONTENT' // SPAM, FAKE, CONTENT
                 },
+                quality: {
+                    type: String,
+                    'default': 'NORMAL' // NONE, NORMAL, FULL
+                },
                 customer_id: {
                     type: String,
                     index: true
