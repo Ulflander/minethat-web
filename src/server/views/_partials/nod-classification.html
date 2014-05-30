@@ -1,0 +1,40 @@
+<%
+    var classe = 'Unknown',
+        entFrequency,
+        numTokens,
+
+        FACTS_MAX_TOKEN = 300,
+        DETAILS_MAX_TOKEN = 800,
+
+        LOW_ENT_FREQ = 1.3,
+        MEDIUM_ENT_FREQ = 1.7;
+
+    if (!!data.props.basic_stats) {
+        entFrequency = data.props.basic_stats.avg_entity_frequency;
+        numTokens = data.props.basic_stats.total_tokens;
+
+
+        if (entFrequency < LOW_ENT_FREQ) {
+            classe = 'Facts';
+        } else if (entFrequency < MEDIUM_ENT_FREQ) {
+            classe = 'Details';
+        } else {
+            classe = 'Context';
+        }
+
+        if (numTokens < FACTS_MAX_TOKEN) {
+            if (classe === 'Details') {
+                classe = 'Facts';
+            } else if (classe === 'Context') {
+                classe = 'Facts';
+            }
+        } else if (numTokens < DETAILS_MAX_TOKEN) {
+            if (classe === 'Details') {
+                classe = 'Facts';
+            } else if (classe === 'Context') {
+                classe = 'Details';
+            }
+        }
+    }
+
+%><%= classe %>

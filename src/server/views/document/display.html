@@ -242,4 +242,31 @@
 
 </section>
 
+<script type="text/javascript" src="/js/app.js"></script>
+<script type="text/javascript">
+    $(function(){
+        $('[data-action=delete]').each(function(i, el) {
+            console.log(arguments);
+            $(el).on('click', function(e) {
+                e.preventDefault();
+                var xhr = new XMLHttpRequest();
+
+                xhr.open("DELETE", $(el).attr('href') , true);
+                xhr.setRequestHeader("Content-Type", "application/json");
+
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState == 4) {
+                        var resp = JSON.parse(xhr.responseText);
+                        alert(resp.status);
+                        if (resp.status === 'success') {
+                            $(el).parent('tr').remove();
+                        }
+                    }
+                };
+
+                xhr.send();
+            });
+        });
+    });
+</script>
 <%- partial('app-footer') %>
