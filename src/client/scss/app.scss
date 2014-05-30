@@ -44,7 +44,7 @@ $fourth-color: #fff;
 
 .content {
     padding-top: 70px;
-    width: 600px;
+    width: 700px;
     margin: 0 auto;
     color: $main-color;
 
@@ -59,6 +59,10 @@ $fourth-color: #fff;
         margin: 40px 0;
         line-height: 1.6;
     }
+
+    header {
+        margin-left: 150px;
+    }
 }
 
 h1 a, h1 a:visited {
@@ -72,8 +76,9 @@ h1 a, h1 a:visited {
  */
 
 .doc-sub-container {
-
+    width: 100%;
     margin-bottom: 10px;
+    display: block;
 
     .left {
         width: 140px;
@@ -174,6 +179,52 @@ h1 a, h1 a:visited {
 
 }
 
+
+
+/*
+
+    LLIST PAGES
+ */
+.content {
+
+    ul.list {
+        padding: 0;
+        margin-left: 0;
+        list-style: none;
+
+        li {
+            margin-bottom: 15px;
+        }
+    }
+
+    article {
+
+        h4 {
+            margin-bottom: 0;
+        }
+
+        .meta {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+
+            li {
+                display: inline-block;
+                margin-right: 10px;
+                font-size: 14px;
+            }
+        }
+    }
+
+    .paginate {
+        padding: 20px 30px;
+        margin-bottom: 30px;
+
+        .next {
+            float: right;
+        }
+    }
+}
 
 
 /*

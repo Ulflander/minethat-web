@@ -1,15 +1,20 @@
 
+<% var doc = data.doc.toObject(), props = doc.properties %>
 
-<%- partial('app-header') %>
+<%- partial('app-header', {
+    title: props.meta.doc_title
+}) %>
 <%- partial('app-menu') %>
 
-<% var doc = data.doc.toObject(), props = doc.properties %>
 <section class="content">
-    <h1><a href="<%= props.meta.doc_url %>" target="_blank"><%- props.meta.doc_title %></a></h1>
 
-    <% if (!!props.meta.doc_description) { %>
-        <p><%- props.meta.doc_description %></p>
-    <% } %>
+    <header>
+        <h1><a href="<%= props.meta.doc_url %>" target="_blank"><%- props.meta.doc_title %></a></h1>
+
+        <% if (!!props.meta.doc_description) { %>
+            <p><%- props.meta.doc_description %></p>
+        <% } %>
+    </header>
 
     <section class="doc-sub-container">
         <div class="left">
@@ -40,18 +45,18 @@
 
                 <% if (!!props.meta.doc_published_date) { %>
                 <li class="">
-                    <span class="key">Published</span> <span class="value"><%= props.meta.doc_published_date %></span>
+                    <span class="key">Published</span> <span class="value"><%= utils.tsToReadable(props.meta.doc_published_date) %></span>
                 </li>
                 <% } else
                 if (!!props.meta.doc_date) { %>
                 <li class="">
-                    <span class="key">Date</span> <span class="value"><%= props.meta.doc_date %></span>
+                    <span class="key">Date</span> <span class="value"><%= utils.tsToReadable(props.meta.doc_date) %></span>
                 </li>
                 <% } %>
 
                 <% if (!!props.meta.doc_edited_date) { %>
                 <li class="">
-                    <span class="key">Edited</span> <span class="value"><%= props.meta.doc_edited_date %></span>
+                    <span class="key">Edited</span> <span class="value"><%= utils.tsToReadable(props.meta.doc_edited_date) %></span>
                 </li>
                 <% } %>
 
@@ -59,12 +64,16 @@
         </div>
     </section>
 
+    <%- partial('nod-module', {
+        props: props
+    }) %>
+
 
     <section class="doc-sub-container">
         <div class="left">
             <h4>Metrics</h4>
         </div>
-        <div class="right">
+        <div class="right clearfix">
             <ul class="statistics">
 
 
@@ -103,7 +112,7 @@
         <div class="left">
             <h4>Key entities</h4>
         </div>
-        <div class="right entities">
+        <div class="right entities clearfix">
             <% for (var k in doc.entities) {
                 function compare(a,b) {
                     if (a.confidence < b.confidence)
@@ -146,10 +155,86 @@
         <div class="left">
             <h4>Keywords</h4>
         </div>
-        <div class="right keywords">
+        <div class="right keywords clearfix">
             <% for (var k in props.keywords) { %>
                 <span class="keyword"><%= props.keywords[k] %></span>
             <% } %>
+        </div>
+    </section>
+
+
+
+    <section class="doc-sub-container">
+        <div class="left">
+            <h4>Metadata</h4>
+        </div>
+        <div class="right clearfix">
+            <ul class="statistics">
+
+
+                <% if (!!props.basic_stats) { %>
+                    <% if (!!props.basic_stats.avg_entity_frequency) { %>
+                    <li class="numeric">
+                        <div class="value"><%= props.basic_stats.avg_entity_frequency.toFixed(2) %></div>
+                        <span>average entity frequency</span>
+                    </li>
+                    <% } %>
+
+
+                    <% if (!!props.basic_stats.avg_token_frequency) { %>
+                    <li class="numeric">
+                        <div class="value"><%= props.basic_stats.avg_token_frequency.toFixed(2) %></div>
+                        <span>average token frequency</span>
+                    </li>
+                    <% } %>
+                <% } %>
+
+
+            </ul>
+            <ul class="data">
+
+                <% if (!!props.status) { %>
+                <li class="">
+                    <span class="key">Document status</span> <span class="value"><%= props.status %></span>
+                </li>
+                <% } %>
+
+                <% if (!!props.meta.doc_type) { %>
+                <li class="">
+                    <span class="key">Document type</span> <span class="value"><%= props.meta.doc_type %></span>
+                </li>
+                <% } %>
+
+                <% if (!!props.meta.job_type) { %>
+                <li class="">
+                    <span class="key">Job type</span> <span class="value"><%= props.meta.job_type %></span>
+                </li>
+                <% } %>
+
+                <% if (!!props.meta.job_duration_ms) { %>
+                <li class="">
+                    <span class="key">Job duration</span> <span class="value"><%= props.meta.job_duration_ms %>ms</span>
+                </li>
+                <% } %>
+
+                <% if (!!props.meta.job_processors_applied) { %>
+                <li class="">
+                    <span class="key">Processors</span> <span class="value"><%= props.meta.job_processors_applied %> processors</span>
+                </li>
+                <% } %>
+
+                <% if (!!props.meta.extractor) { %>
+                <li class="">
+                    <span class="key">Extractor</span> <span class="value"><%= props.meta.extractor %></span>
+                </li>
+                <% } %>
+
+                <% if (!!props.meta.boilerpipe_extractor) { %>
+                <li class="">
+                    <span class="key">Boilerpipe algorythm</span> <span class="value"><%= props.meta.boilerpipe_extractor %></span>
+                </li>
+                <% } %>
+            </ul>
         </div>
     </section>
 

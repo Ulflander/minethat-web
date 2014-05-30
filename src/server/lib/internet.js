@@ -16,15 +16,20 @@
      * @param  {Function} callback Callback
      */
     self.get = function(url, callback) {
-        request(url, function(error, response) {
-            if (!error && response.statusCode === 200) {
-                callback(null, response.body, response.href);
-            } else {
-                logger.warn('URL ' + url + 'is invalid: '
-                    + error);
-                callback(error);
-            }
-        });
+        try {
+            request(url, function(error, response) {
+                if (!error && response.statusCode === 200) {
+                    callback(null, response.body, response.href);
+                } else {
+                    logger.warn('URL ' + url + 'is invalid: '
+                        + error);
+                    callback(error);
+                }
+            });
+        } catch (e) {
+            logger.warn('URL ' + url + 'is invalid', e);
+            callback(e);
+        }
     };
 
     /**

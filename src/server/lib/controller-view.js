@@ -13,7 +13,40 @@
         async = require('async'),
         conf = require('../conf.js').conf(),
         partialRe = /<%-\s+partial\s*\(\s*['"]([a-zA-Z0-9\\\-_]+)['"]/ig,
-        templates = {};
+        templates = {},
+
+        /**
+         * List of methods useful for views. Available through `utils` keyword
+         * in views.
+         *
+         * @type {Object}
+         */
+        utils = {
+
+            leadingZero: function (num) {
+                if (num < 10) {
+                    return '0' + num;
+                }
+
+                return '' + num;
+            },
+
+            /**
+             * Convert an UNIX timestamp to a readable datetime.
+             *
+             * @param  {Number} ts Timestamp to convert
+             * @return {String}    Readable datetime
+             */
+            tsToReadable: function (ts) {
+                var d = new Date(ts);
+                return '' + (d.getMonth() + 1) + '/' +
+                        d.getDate() + '/' +
+                        d.getUTCFullYear() + ', ' +
+                        utils.leadingZero(d.getHours()) + ':' +
+                        utils.leadingZero(d.getMinutes());
+            }
+        };
+
 
 
     /**
@@ -282,7 +315,8 @@
             return ejs.render(templates[template], {
                 data: !!data ? data : {},
                 partial: exports.partial,
-                env: conf.env
+                env: conf.env,
+                utils: utils
             });
         } catch (err) {
             conf.logger.error('Unable to render template', err);
@@ -335,6 +369,7 @@
         var d = {data: data};
         d.env = conf.env;
         d.partial = exports.partial;
+        d.utils = utils;
 
         return ejs.render(templates['_partials/' + template + '.html'], d);
     };

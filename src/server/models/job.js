@@ -27,7 +27,8 @@
                 doc_description: String,
                 doc_source_name: String,
                 doc_source_url: String,
-                doc_source_feed_url: String
+                doc_source_feed_url: String,
+                doc_description_quality: String
             },
             email: String,
             target: {

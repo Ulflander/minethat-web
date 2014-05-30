@@ -44,7 +44,7 @@
                 type: 'FEED_URL',
                 value: feedItem.link[0],
                 meta: {
-
+                    doc_description_quality: source.quality,
                     doc_title: feedItem.title[0],
                     doc_published_date: feedItem.date,
                     doc_description: feedItem.desc[0],

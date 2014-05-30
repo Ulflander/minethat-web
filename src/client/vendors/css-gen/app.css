@@ -27,7 +27,7 @@
 
 .content {
   padding-top: 70px;
-  width: 600px;
+  width: 700px;
   margin: 0 auto;
   color: #3F3F3F; }
   .content h1, .content h2, .content h3 {
@@ -38,6 +38,8 @@
     font-size: 1.1em;
     margin: 40px 0;
     line-height: 1.6; }
+  .content header {
+    margin-left: 150px; }
 
 h1 a, h1 a:visited {
   color: #3F3F3F;
@@ -47,7 +49,9 @@ h1 a, h1 a:visited {
     CONTAINERS
  */
 .doc-sub-container {
-  margin-bottom: 10px; }
+  width: 100%;
+  margin-bottom: 10px;
+  display: block; }
   .doc-sub-container .left {
     width: 140px;
     float: left; }
@@ -108,6 +112,32 @@ h1 a, h1 a:visited {
     white-space: nowrap; }
   .doc-sub-container .entities, .doc-sub-container .keywords {
     line-height: 2; }
+
+/*
+
+    LLIST PAGES
+ */
+.content ul.list {
+  padding: 0;
+  margin-left: 0;
+  list-style: none; }
+  .content ul.list li {
+    margin-bottom: 15px; }
+.content article h4 {
+  margin-bottom: 0; }
+.content article .meta {
+  margin: 0;
+  padding: 0;
+  list-style: none; }
+  .content article .meta li {
+    display: inline-block;
+    margin-right: 10px;
+    font-size: 14px; }
+.content .paginate {
+  padding: 20px 30px;
+  margin-bottom: 30px; }
+  .content .paginate .next {
+    float: right; }
 
 /*
 

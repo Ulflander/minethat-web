@@ -1,40 +1,31 @@
 
-<section class="table">
+
+<%- partial('app-header', {
+    title: 'Sources'
+}) %>
+<%- partial('app-menu') %>
+
+<section class="content">
     <h3>Sources: <span class="count"><%= data.total %></span></h3>
-    <a href="/app/jobs">Jobs</a>
-    <a href="/app/documents">Documents</a>
-    <a href="/app/source/new">New source</a>
-    <a href="/app/source/generate">Setup source from feed</a>
-    <table class="sources">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Edit</th>
-                <th>Delete</th>
-                <th>Raw</th>
-            </tr>
-        </thead>
-        <% for(var i=0; i < data.docs.length; i++) {%>
-            <tr data-item-id="<%= data.docs[i]._id %>">
-                <td><%= data.docs[i]._id %></td>
-                <td><a href="/app/source/<%= data.docs[i]._id %>">Edit</a></td>
-                <td><a href="/api/v1/source/<%= data.docs[i]._id %>" data-action="delete">Delete</a></td>
-                <td><code><pre><%= data.docs[i] %></pre></code></td>
-            </tr>
-        <% } %>
 
-        <% if (data.hasNext || data.hasPrevious) { %>
-            <div class="paginate">
+    <a href="/app/source/new">Create source</a>
+    <a href="/app/source/generate">Setup source from feed URL</a>
 
-                <% if (data.hasPrevious) { %>
-                    <a class="previous" href="?page=<%= data.page - 1 %>">Previous</a>
-                <% } %>
-                <% if (data.hasNext) { %>
-                    <a class="next" href="?page=<%= data.page + 1 %>">Next</a>
-                <% } %>
-            </div>
+
+    <ul class="list">
+        <% for(var i=0; i < data.docs.length; i++) {  var source = data.docs[i].toObject() %>
+            <li data-item-id="<%= source._id %>">
+                <a href="/app/source/<%= source._id %>"><strong><%= source.name %></strong></a>
+                <a href="<%= source.url %>" target="_blank"><i class="fa fa-external-link"></i></a>
+                <a href="<%= source.feed_url %>" target="_blank"><i class="fa fa-rss-square"></i></a><br />
+
+                <span>Latest aggregation: <%= !!source.last ? utils.tsToReadable(source.last) : 'Never' %></span>
+
+                <span><a href="/api/v1/source/<%= data.docs[i]._id %>" data-action="delete">Delete</a></span>
+            </li>
         <% } %>
-    </table>
+    </ul>
+
 </section>
 
 <script type="text/javascript" src="/js/app.js"></script>
@@ -64,3 +55,6 @@
         });
     });
 </script>
+
+
+<%- partial('app-footer') %>
