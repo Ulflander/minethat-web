@@ -133,7 +133,7 @@
                 filename = k.split(&#039;/devlog/&#039;).join(&#039;&#039;)
                             .split(&#039;.html&#039;).join(&#039;&#039;)
                             .split(&#039;-&#039;);
-                list.push({
+                list.unshift({
                     url: &#039;/devlog/&#039; + filename.join(&#039;-&#039;) + &#039;.html&#039;,
                     date: filename.splice(0, 3).join(&#039;/&#039;),
                     title: filename.join(&#039; &#039;)

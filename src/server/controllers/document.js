@@ -6,7 +6,10 @@
 
     exports.index = function(req, res, next) {
         cv.findAll(req, res, 'Document',
-            null, null, {sort: {'properties.meta.doc_aggregated_date': -1}, limit: 50},
+            null, null, {
+                sort: {'properties.meta.doc_aggregated_date': -1}, 
+                limit: 50
+            },
             'document/list.html');
     };
 
@@ -24,7 +27,10 @@
 
     exports.search = function(req, res, next) {
         cv.findAll(req, res, 'Document',
-            null, null, {sort: {'properties.meta.doc_aggregated_date': -1}}, 'document/search.html');
+            null, null, {
+                sort: {'properties.meta.doc_aggregated_date': -1}
+            }, 
+            'document/search.html');
     };
 
 }());

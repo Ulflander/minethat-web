@@ -45,11 +45,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
-      <p class="stat">68.90</p>
+      <p class="stat">68.11</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
-      <p class="stat">136</p>
+      <p class="stat">140</p>
     </div>
   </div>
   <div class="row historical">
@@ -63,11 +63,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
-      <p class="stat">31.50</p>
+      <p class="stat">32.95</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
-      <p class="stat">0.72</p>
+      <p class="stat">0.77</p>
     </div>
   </div>
 </div>
@@ -171,7 +171,9 @@
      */
     exports.findAll = function(req, model, conds, fields, options, callback) {
 
-        var page = !!req.query ? parseInt(req.query.page, 10) || 1 : 1;
+        var page = !!req.query ? parseInt(req.query.page, 10) || 1 : 1,
+            itemsPerPage = !!options ? options.limit || ITEMS_PER_PAGE :
+                ITEMS_PER_PAGE;
 
         if (typeof model === &#039;string&#039;) {
             model = exports.model(model);
@@ -192,9 +194,9 @@
                         callback(err, {
                             docs: objs,
                             total: count,
-                            limit: ITEMS_PER_PAGE,
+                            limit: itemsPerPage,
                             page: page,
-                            hasNext: ITEMS_PER_PAGE * page &lt; count,
+                            hasNext: itemsPerPage * page &lt; count,
                             hasPrevious: page &gt; 1
                         });
                     }
@@ -211,11 +213,13 @@
      */
     exports.page = function(page, options) {
         var res,
-            k;
+            k,
+            itemsPerPage = !!options ? options.limit || ITEMS_PER_PAGE : 
+                ITEMS_PER_PAGE;
 
         res = {
-            skip: ITEMS_PER_PAGE * (page - 1),
-            limit: ITEMS_PER_PAGE
+            skip: itemsPerPage * (page - 1),
+            limit: itemsPerPage
         };
 
         if (!!options) {

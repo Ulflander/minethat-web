@@ -28,7 +28,7 @@
                     return '0' + num;
                 }
 
-                return '' + num;
+                return num;
             },
 
             /**
@@ -39,7 +39,7 @@
              */
             tsToReadable: function (ts) {
                 var d = new Date(ts);
-                return '' + (d.getMonth() + 1) + '/' +
+                return (d.getMonth() + 1) + '/' +
                         d.getDate() + '/' +
                         d.getUTCFullYear() + ', ' +
                         utils.leadingZero(d.getHours()) + ':' +

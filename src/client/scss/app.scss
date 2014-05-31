@@ -50,7 +50,7 @@ $fourth-color: #fff;
 
     h1, h2, h3 {
         margin-bottom: 40px;
-        font-weight: 200;
+        font-weight: 100;
         font-size: 2.6em;
     }
 
@@ -86,7 +86,7 @@ h1 a, h1 a:visited {
 
         h4 {
             text-transform: uppercase;
-            font-weight: 200;
+            font-weight: 100;
             margin: 0;
             text-align: right;
             color: $third-color;
@@ -159,7 +159,7 @@ h1 a, h1 a:visited {
 
             .value {
                 margin: 0;
-                font-weight: 400;
+                font-weight: 300;
                 float: none;
             }
         }

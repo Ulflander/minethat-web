@@ -13,13 +13,13 @@
         <meta property="og:title" content="Minethat" />
         <meta property="og:type" content="profile" />
         <meta property="og:url" content="http://minethat.com/" />
-        <meta property="og:image" content="http://minethat.com/img/logo.png" />
+        <meta property="og:image" content="http://minethat.com/img/logo-square.png" />
         <meta property="og:description" content="We believe in quality content and linked data to better inform readers: Minethat is an actionnable text-mining API for publishers, journalists and curators." />
 
         <meta name="twitter:site" content="@min3that">
         <meta name="twitter:title" content="Minethat">
         <meta name="twitter:description" content="We believe in quality content and linked data to better inform readers: Minethat is an actionnable text-mining API for publishers, journalists and curators.">
-        <meta name="twitter:image" content="http://minethat.com/img/logo.png">
+        <meta name="twitter:image" content="http://minethat.com/img/logo-square.png">
 
         <link rel="stylesheet" href="css/landing.css">
 
@@ -35,11 +35,11 @@
             </header>
             <section>
 
-                <p>We envision a future of news made of quality content and linked data, to better inform readers.</p>
+                <p>The future of news should be made of quality content and linked data, to better inform readers.</p>
 
-                <p>That's why we're creating <span itemprop="name">Minethat</span>, an actionnable text-mining web service for publishers, journalists and curators.</p>
+                <p><span itemprop="name">Minethat</span> automatically gathers content that is of best quality and interest in a simple, actionnable interface.</p>
 
-                <p>Our aim is to create a graph representation of news, and to use that graph to provide superior investigation and recommendation tools.</p>
+                <p>As a publisher, journalist or curator, you will get a curation tool that will save you hours of research and web browsing.</p>
 
                 <p>With Minethat you will</p>
 
@@ -75,8 +75,8 @@
                     <p><strong>You're in!</strong></p>
                     <p>Thanks! You should receive a confirmation email very soon. While we're here, would you mind to share Minethat?</p>
                     <ul>
-                        <li><a target="_blank" title="Share on Twitter" href="https://twitter.com/home?status=Text-mining%20for%20publishers%20and%20journalists%20should%20be%20simple%20and%20actionable:%20introducing%20@Min3that%20http://minethat.co"><i class="fa fa-twitter"></i><span>Share on Twitter</span></a></li>
-                        <li><a target="_blank" title="Share on LinkedIn" href="https://www.linkedin.com/shareArticle?mini=true&url=http://minethat.co&title=Minethat:%20actionable%20text-mining%20for%20publishers%20and%20journalists&summary=We%20envision%20a%20future%20of%20news%20made%20of%20linked%20data%20and%20quality%20content.%20That's%20why%20we're%20creating%20Minethat,%20a%20new%20kind%20of%20text-mining%20web%20service%20for%20publishers,%20journalists%20and%20curators.&source="><i class="fa fa-linkedin"></i><span>Share on LinkedIn</span></a></li>
+                        <li><a class="share" target="_blank" title="Share on Twitter" href="https://twitter.com/home?status=Text-mining%20for%20publishers%20and%20journalists%20should%20be%20simple%20and%20actionable:%20introducing%20@Min3that%20http://minethat.co"><i class="fa fa-twitter"></i><span>Share on Twitter</span></a></li>
+                        <li><a class="share" target="_blank" title="Share on LinkedIn" href="https://www.linkedin.com/shareArticle?mini=true&url=http://minethat.co&title=Minethat:%20actionable%20text-mining%20for%20publishers%20and%20journalists&summary=We%20envision%20a%20future%20of%20news%20made%20of%20linked%20data%20and%20quality%20content.%20That's%20why%20we're%20creating%20Minethat,%20a%20new%20kind%20of%20text-mining%20web%20service%20for%20publishers,%20journalists%20and%20curators.&source="><i class="fa fa-linkedin"></i><span>Share on LinkedIn</span></a></li>
                     </ul>
                 </div>
 
@@ -86,8 +86,8 @@
                     <li itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">
                         Carefully crafted in <span itemprop="addressLocality">Paris</span>, <span itemprop="addressCountry">Europe</span> by <a href="http://laumonier.co">Xav</a>
                     </li>
-                    <li><a href="https://www.twitter.com/Min3that" title="I tweet about various stuff: UX, code, startuping, future of news..." target="_blank"><span>Follow us</span></a></li>
-                    <li><a href="/devlog"></i><span>Devlog</span></a></li>
+                    <li><a href="https://www.twitter.com/Min3that" title="Follow us for daily updates!" target="_blank"><span>Follow us</span></a></li>
+                    <li><a href="/devlog" title="Read our devlog"></i><span>Devlog</span></a></li>
                     <li><a href="mailto:xav@laumonier.co"></i><span>Contact us</span></a></li>
                     <li>© Minethat 2014</li>
                 </ul>
@@ -105,6 +105,9 @@
           ga('send', 'pageview');
           ga('send', 'event', 'landing', 'init');
 
+          $('.share').on('click', function() {
+            ga('send', 'event', 'landing', 'share');
+          });
         </script>
         <% } %>
     </body>

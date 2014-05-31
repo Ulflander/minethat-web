@@ -151,10 +151,13 @@
             }
             return conf;
 
-        } else if (!reading) {
-            return self.read(callback);
+        }
 
-        } else if (typeof callback === 'function') {
+        if (!reading) {
+            return self.read(callback);
+        }
+
+        if (typeof callback === 'function') {
             self.wait(callback);
         }
 

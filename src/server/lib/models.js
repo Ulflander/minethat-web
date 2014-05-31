@@ -80,7 +80,8 @@
     exports.findAll = function(req, model, conds, fields, options, callback) {
 
         var page = !!req.query ? parseInt(req.query.page, 10) || 1 : 1,
-            itemsPerPage = !!options ? options.limit || ITEMS_PER_PAGE : ITEMS_PER_PAGE;
+            itemsPerPage = !!options ? options.limit || ITEMS_PER_PAGE :
+                ITEMS_PER_PAGE;
 
         if (typeof model === 'string') {
             model = exports.model(model);
@@ -101,9 +102,9 @@
                         callback(err, {
                             docs: objs,
                             total: count,
-                            limit: ITEMS_PER_PAGE,
+                            limit: itemsPerPage,
                             page: page,
-                            hasNext: ITEMS_PER_PAGE * page < count,
+                            hasNext: itemsPerPage * page < count,
                             hasPrevious: page > 1
                         });
                     }
@@ -121,7 +122,8 @@
     exports.page = function(page, options) {
         var res,
             k,
-            itemsPerPage = !!options ? options.limit || ITEMS_PER_PAGE : ITEMS_PER_PAGE;
+            itemsPerPage = !!options ? options.limit || ITEMS_PER_PAGE : 
+                ITEMS_PER_PAGE;
 
         res = {
             skip: itemsPerPage * (page - 1),
