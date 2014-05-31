@@ -33,8 +33,7 @@
                 'css/font-awesome.min.css',
                 'css/anim.css',
                 'css-gen/main.css',
-                'css-gen/basic-form.css',
-                'css-gen/table.css'
+                'css-gen/basic-form.css'
             ]
         },
 

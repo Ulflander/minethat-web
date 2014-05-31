@@ -23,7 +23,6 @@ $error-color: #ec4000;
 }
 
 .input-wrap {
-
     margin-bottom: 20px;
     position:relative;
 
@@ -37,6 +36,14 @@ $error-color: #ec4000;
         border-radius: 2px;
     }
 
+    input[type=text], input[type=password], textarea {
+        margin-top: 10px;
+    }
+
+    .little {
+        margin-top: 10px;
+        font-size: 0.8em;
+    }
 }
 
 .input-wrap.center {

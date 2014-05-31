@@ -23,6 +23,11 @@
     top: 0px; }
   .input-wrap .error {
     border-radius: 2px; }
+  .input-wrap input[type=text], .input-wrap input[type=password], .input-wrap textarea {
+    margin-top: 10px; }
+  .input-wrap .little {
+    margin-top: 10px;
+    font-size: 0.8em; }
 
 .input-wrap.center {
   text-align: center; }
