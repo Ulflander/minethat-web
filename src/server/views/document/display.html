@@ -130,8 +130,7 @@
                         .replace('http://dbpedia.org/resource', 'http://en.wikipedia.org/wiki');
 
                     if (type == 'RDF') { %>
-                        <span class="entity"><a href="<%= value %>" target="_blank">
-
+                        <span class="entity">
                             <% if (entity.class === 'http://schema.org/Person') { %>
                                 <i class="fa fa-user"></i>
                             <% } else if (entity.class === 'http://schema.org/Place') { %>
@@ -140,8 +139,9 @@
                                 <i class="fa fa-university"></i>
                             <% } %>
 
+                        <a href="<%= value %>" target="_blank">
                             <%= entity.label %>
-                        </a></span>
+                        </a> (<%= entity.citations %>)</span>
                     <% } %>
             <% } %>
         </div>
@@ -151,16 +151,22 @@
 
 
 
+    <% if (!!props.keywords && !!props.keywords.main) { %>
     <section class="doc-sub-container">
         <div class="left">
             <h4>Keywords</h4>
         </div>
         <div class="right keywords clearfix">
-            <% for (var k in props.keywords) { %>
-                <span class="keyword"><%= props.keywords[k] %></span>
+            <%
+            var keywords = props.keywords.main,
+                i,
+                l = keywords.length;
+            for (i = 0; i < l; i += 1) { %>
+                <span class="keyword"><%= keywords[i] %></span>
             <% } %>
         </div>
     </section>
+    <% } %>
 
 
 
