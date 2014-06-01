@@ -17,17 +17,23 @@
      */
     self.get = function(url, callback) {
         try {
-            request(url, function(error, response) {
-                if (!error && response.statusCode === 200) {
-                    callback(null, response.body, response.href);
+
+            request({
+                url: url,
+                followAllRedirects: true
+            }, function(error, response) {
+
+                if (!error && response.statusCode >= 200 &&
+                    response.statusCode < 300) {
+                    callback(null, response.body);
                 } else {
-                    logger.warn('URL ' + url + 'is invalid: '
-                        + error);
+                    logger.warn('URL is invalid: '
+                        + error, response.statusCode, url);
                     callback(error);
                 }
             });
         } catch (e) {
-            logger.warn('URL ' + url + 'is invalid', e);
+            logger.warn('URL is invalid', url, e);
             callback(e);
         }
     };
@@ -39,7 +45,7 @@
      * @param  {Function} callback Callback
      */
     self.feed = function(url, callback) {
-        self.get(url, function(err, body, url) {
+        self.get(url, function(err, body) {
             if (!!err) {
                 callback(err);
                 return;

@@ -95,7 +95,7 @@
 
         resource.save(function(err) {
             var data = {
-                status: !!err ? 'success' : 'error',
+                status: !err ? 'success' : 'error',
                 doc: resource.toObject()
             };
 

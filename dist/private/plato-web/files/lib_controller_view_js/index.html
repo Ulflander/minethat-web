@@ -67,7 +67,7 @@
     </div>
     <div class="col-md-6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
-      <p class="stat">2.54</p>
+      <p class="stat">2.53</p>
     </div>
   </div>
 </div>
@@ -185,7 +185,7 @@
 
         resource.save(function(err) {
             var data = {
-                status: !!err ? &#039;success&#039; : &#039;error&#039;,
+                status: !err ? &#039;success&#039; : &#039;error&#039;,
                 doc: resource.toObject()
             };
 

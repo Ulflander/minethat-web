@@ -45,11 +45,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
-      <p class="stat">73.56</p>
+      <p class="stat">68.84</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
-      <p class="stat">94</p>
+      <p class="stat">121</p>
     </div>
   </div>
   <div class="row historical">
@@ -63,11 +63,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
-      <p class="stat">21.86</p>
+      <p class="stat">24.34</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
-      <p class="stat">0.61</p>
+      <p class="stat">0.83</p>
     </div>
   </div>
 </div>
@@ -108,19 +108,46 @@
 
     exports.from_feed = function(req, res, next) {
         if (req.method === &#039;GET&#039;) {
-            cv.view(req, res, &#039;source/from_feed.html&#039;);
+            if (req.isAPI === false) {
+                cv.view(req, res, &#039;source/from_feed.html&#039;);
+            } else {
+                res.json({
+                    status: &#039;error&#039;,
+                    error: &#039;Unauthorized method&#039;
+                }, 401);
+            }
             return;
         }
 
-        internet.feed(req.body.feed_url, function(err, feed) {
-            if (!!err || !feed) {
-                cv.view(req, res, &#039;source/from_feed.html&#039;, {
-                    error: &#039;Invalid feed&#039;
-                });
+        internet.feed(req.body.feed_url, function(err, feed, url) {
+            if (!!err || !feed || !url) {
+                if (req.isAPI === false) {
+                    cv.view(req, res, &#039;source/from_feed.html&#039;, {
+                        error: &#039;Invalid feed&#039;
+                    });
+                } else {
+                    res.json({
+                        status: &#039;error&#039;,
+                        error: &#039;Invalid feed&#039;
+                    }, 422);
+                }
                 return;
             }
+
+            var source_url;
+
+            // Solve URL
+            if (typeof feed.metadata.url === &#039;string&#039;) {
+                source_url = feed.metadata.url;
+            } else if (Array.isArray(feed.metadata.url)) {
+                source_url = feed.metadata.url[0].href;
+            } else {
+                req.logger.warn(&#039;Unable to detect site url for feed&#039;,
+                    feed.metadata);
+            }
+
             req.body.name = feed.metadata.title;
-            req.body.url = feed.metadata.url;
+            req.body.url = source_url;
             exports.add(req, res, next);
         });
     };

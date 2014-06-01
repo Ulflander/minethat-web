@@ -49,13 +49,13 @@
         // REST API
         '/api/v1/sources': ['get', 'source.index'],
         '/api/v1/sources/check': ['post', 'source.check'],
+        '/api/v1/sources/import': ['post', 'source.from_feed'],
         '/api/v1/source/:id': [
             ['get', 'source.display'],
             ['post', 'source.edit'],
             ['delete', 'source.remove']
         ],
         '/api/v1/source': ['post', 'source.add'],
-
 
         '/api/v1/document/:id': [
             ['get', 'document.display'],

@@ -9,7 +9,8 @@
 <section class="content list">
 
 <% for(var i=0; i < data.docs.length; i++) {
-    var props = data.docs[i].toObject().properties;
+    var obj = data.docs[i].toObject(),
+        props = obj.properties;
     %>
     <article data-item-id="<%= data.docs[i]._id %>">
         <h4><a href="/app/doc/<%= data.docs[i]._id %>"><%- props.meta.doc_title %></a></h4>
@@ -18,6 +19,8 @@
             <li><%= props.meta.doc_source_name %></li>
             <% } %>
             <li><%- partial('nod-classification', {props: props}) %></li>
+            <li><%= obj.status %></li>
+            </li><span><a href="/api/v1/document/<%= obj._id %>" data-action="delete">Delete</a></span></li>
         </ul>
     </article>
 <% } %>
@@ -35,6 +38,33 @@
     </div>
 <% } %>
 </section>
+
+<script type="text/javascript">
+    $(function(){
+        $('[data-action=delete]').each(function(i, el) {
+            console.log(arguments);
+            $(el).on('click', function(e) {
+                e.preventDefault();
+                var xhr = new XMLHttpRequest();
+
+                xhr.open("DELETE", $(el).attr('href') , true);
+                xhr.setRequestHeader("Content-Type", "application/json");
+
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState == 4) {
+                        var resp = JSON.parse(xhr.responseText);
+                        alert(resp.status);
+                        if (resp.status === 'success') {
+                            $(el).parent('tr').remove();
+                        }
+                    }
+                };
+
+                xhr.send();
+            });
+        });
+    });
+</script>
 
 <%- partial('app-footer') %>
 
