@@ -57,11 +57,14 @@
         ],
         '/api/v1/source': ['post', 'source.add'],
 
+
         '/api/v1/document/:id': [
             ['get', 'document.display'],
             ['delete', 'document.remove']
         ],
-
+        '/api/v1/documents/recent': [
+            ['get', 'document.recent']
+        ],
 
         '/api/v1/job/:id': ['delete', 'job.remove'],
 

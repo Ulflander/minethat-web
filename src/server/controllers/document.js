@@ -13,6 +13,18 @@
             'document/list.html');
     };
 
+    exports.recent = function(req, res, next) {
+        if (!req.isAPI) {
+            return next();
+        }
+
+        cv.findAll(req, res, 'Document',
+            null, null, {
+                sort: {'properties.meta.doc_aggregated_date': -1}, 
+                limit: 5
+            });
+    };
+
     exports.display = function(req, res, next) {
         cv.find(req, res, 'Document', 'document/display.html');
     };
