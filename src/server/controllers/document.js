@@ -39,7 +39,7 @@
 
     exports.search = function(req, res, next) {
         cv.findAll(req, res, 'Document',
-            null, null, {
+            {'status': 'MINED'}, null, {
                 sort: {'properties.meta.doc_aggregated_date': -1}
             },
             'document/search.html');

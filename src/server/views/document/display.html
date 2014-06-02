@@ -113,36 +113,60 @@
             <h4>Key entities</h4>
         </div>
         <div class="right entities clearfix">
-            <% for (var k in doc.entities) {
-                function compare(a,b) {
-                    if (a.confidence < b.confidence)
-                        return -1;
-                    if (a.confidence > b.confidence)
-                        return 1;
-                    return 0;
-                }
+            <%
+            function compare(a,b) {
+                if (a.citations > b.citations)
+                    return -1;
+                if (a.citations < b.citations)
+                    return 1;
+                if (a.confidence > b.confidence)
+                    return -1;
+                if (a.confidence < b.confidence)
+                    return 1;
+                return 0;
+            }
 
-                var entity = doc.entities[k];
+            var i,
+                entities = doc.entities,
+                l = entities.length;
+
+            entities.sort(compare);
+
+            for (i = 0; i < l; i += 1) {
+
+                var entity = doc.entities[i];
 
                 var id = entity.id,
-                    type = id.substring(0, id.indexOf(':')),
+                    source = id.substring(0, id.indexOf(':')),
                     value = id.substring(id.indexOf(':') + 1)
-                        .replace('http://dbpedia.org/resource', 'http://en.wikipedia.org/wiki');
+                        .replace('http://dbpedia.org/resource', 'http://en.wikipedia.org/wiki'); %>
 
-                    if (type == 'RDF') { %>
-                        <span class="entity">
-                            <% if (entity.class === 'http://schema.org/Person') { %>
-                                <i class="fa fa-user"></i>
-                            <% } else if (entity.class === 'http://schema.org/Place') { %>
-                                <i class="fa fa-map-marker"></i>
-                            <% } else if (entity.class === 'http://schema.org/Organization') { %>
-                                <i class="fa fa-university"></i>
-                            <% } %>
-
-                        <a href="<%= value %>" target="_blank">
-                            <%= entity.label %>
-                        </a> (<%= entity.citations %>)</span>
+                <span class="entity">
+                    <% if (entity.class === 'http://schema.org/Person') { %>
+                        <i class="fa fa-user"></i>
+                    <% } else if (entity.class === 'http://schema.org/Place') { %>
+                        <i class="fa fa-map-marker"></i>
+                    <% } else if (entity.class === 'http://schema.org/Organization') { %>
+                        <i class="fa fa-university"></i>
+                    <% } else if (entity.type === 'DATETIME') { %>
+                        <i class="fa fa-calendar"></i>
+                    <% } else if (entity.type === 'DATE') { %>
+                        <i class="fa fa-clock-o"></i>
+                    <% } else if (entity.type === 'MONEY_AMOUNT') { %>
+                        <i class="fa fa-money"></i>
+                    <% } else if (entity.type === 'TWITTER_USERNAME') { %>
+                        <i class="fa fa-twitter"></i>
                     <% } %>
+
+                    <% if (source == 'RDF') { %>
+                    <a href="<%= value %>" target="_blank"><%= entity.label %></a>
+                    <% } else if (entity.type == 'TWITTER_USERNAME') { %>
+                    <a href="http://twitter.com/<%= value.substring(1) %>" target="_blank"><%= entity.label %></a>
+                    <% } else { %>
+                    <%= entity.label %>
+                    <% } %> (<%= entity.citations %>, <%= parseFloat(entity.confidence).toFixed(2) %>, <%= entity.surface %>)
+
+                </span>
             <% } %>
         </div>
     </section>
@@ -245,6 +269,15 @@
     </section>
 
 
+    <section class="doc-sub-container">
+        <div class="left">
+            <h4>Raw</h4>
+        </div>
+        <div class="right keywords clearfix">
+            <pre style="font-size: 10px;"><code><%- data.doc %>
+            </code></pre>
+        </div>
+    </section>
 
 </section>
 

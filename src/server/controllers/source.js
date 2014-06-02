@@ -45,11 +45,18 @@
 
             var source_url;
 
+            console.log(feed.metadata);
+
             // Solve URL
             if (typeof feed.metadata.url === 'string') {
                 source_url = feed.metadata.url;
             } else if (Array.isArray(feed.metadata.url)) {
-                source_url = feed.metadata.url[0].href;
+                var u = feed.metadata.url[0];
+                if (typeof u === 'string') {
+                    source_url = u;
+                } else if (!!u.href) {
+                    source_url = u.href;
+                }
             } else {
                 req.logger.warn('Unable to detect site url for feed',
                     feed.metadata);

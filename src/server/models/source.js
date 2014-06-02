@@ -66,12 +66,16 @@
             });
 
             // Validate feed URL
-            internet.feed(this.feed_url, function(err, body, url) {
-                if (!!err) {
-                    self.invalidate('url', 'Feed URL is invalid');
-                }
-                cb(err);
-            });
+            if (!!this.feed_url) {
+                internet.feed(this.feed_url, function(err, body, url) {
+                    if (!!err) {
+                        self.invalidate('url', 'Feed URL is invalid');
+                    }
+                    cb(err);
+                });
+            } else {
+                cb();
+            }
         });
 
         return Source;
