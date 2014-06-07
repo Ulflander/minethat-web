@@ -33,7 +33,10 @@
 
         '/app/documents': ['get', 'document.index'],
         '/app/doc/:id': ['get', 'document.display'],
-        '/app/docs': ['get', 'document.search'],
+        '/app/docs': [
+            ['get', 'document.search'],
+            ['post', 'document.search']
+        ],
 
 
         '/app/jobs': ['get', 'job.index'],

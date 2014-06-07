@@ -28,7 +28,8 @@
                     callback(null, response.body);
                 } else {
                     logger.warn('URL is invalid: '
-                        + error, !!response ? response.statusCode : response, url);
+                        + error, !!response ? response.statusCode :
+                        response, url);
                     callback(error);
                 }
             });

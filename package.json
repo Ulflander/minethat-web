@@ -38,7 +38,8 @@
     "blindparser": "git://github.com/Minethat/node-blindparser.git",
     "request": "^2.34.0",
     "marked": "^0.3.2",
-    "date-utils": "^1.2.15"
+    "date-utils": "^1.2.15",
+    "twitter": "^0.2.9"
   },
   "devDependencies": {
     "gulp-clean": "~0.2.4",

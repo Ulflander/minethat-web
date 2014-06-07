@@ -43,7 +43,8 @@
                 return;
             }
 
-            var source_url;
+            var source_url,
+                u;
 
             console.log(feed.metadata);
 
@@ -51,7 +52,7 @@
             if (typeof feed.metadata.url === 'string') {
                 source_url = feed.metadata.url;
             } else if (Array.isArray(feed.metadata.url)) {
-                var u = feed.metadata.url[0];
+                u = feed.metadata.url[0];
                 if (typeof u === 'string') {
                     source_url = u;
                 } else if (!!u.href) {

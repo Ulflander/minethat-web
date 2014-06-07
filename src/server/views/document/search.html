@@ -8,6 +8,14 @@
 
 <section class="content list">
 
+    <form method="post">
+        <div class="input-wrap">
+            <input type="text" name="keywords" />
+            <input type="submit" value="Search" />
+            <span class="count"><%= data.total %> documents</span>
+        </div>
+    </form>
+
 <% for(var i=0; i < data.docs.length; i++) {
     var obj = data.docs[i].toObject(),
         props = obj.properties;
@@ -42,7 +50,6 @@
 <script type="text/javascript">
     $(function(){
         $('[data-action=delete]').each(function(i, el) {
-            console.log(arguments);
             $(el).on('click', function(e) {
                 e.preventDefault();
                 var xhr = new XMLHttpRequest();

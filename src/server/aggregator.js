@@ -1,4 +1,11 @@
-
+var util = require('util'),
+    Twitter = require('twitter');
+var twit = new Twitter({
+    consumer_key: 'WO30xPwtmdSOzOmoJ5ruAdeHH',
+    consumer_secret: 'IH6UltER7AQsA9Y3vUCDGJxi3AKS4NbzcXDICwBGergu3wJKvm',
+    access_token_key: '58438762-2U1PaQyuvH9DIxcNU40rKxzjmz1klqYSzOlTY8tVk',
+    access_token_secret: 'ZGZF2dsQLshYautCNjuxbO7lM6gzRYJVEISDBrc07Kxep'
+});
 
 /**
  * Feed aggregation program.

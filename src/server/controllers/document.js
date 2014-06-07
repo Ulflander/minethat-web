@@ -17,7 +17,6 @@
         if (!req.isAPI) {
             return next();
         }
-
         cv.findAll(req, res, 'Document',
             {'status': 'MINED'}, 'properties.meta', {
                 sort: {'properties.meta.doc_aggregated_date': -1},
@@ -38,8 +37,19 @@
 
 
     exports.search = function(req, res, next) {
+        var conditions = {status: 'MINED'};
+
+        res._data = {
+            search: null
+        };
+
+        if (req.method === 'POST') {
+            conditions['properties.keywords.main'] = req.body.keywords;
+        }
+        console.log(conditions);
+
         cv.findAll(req, res, 'Document',
-            {'status': 'MINED'}, null, {
+            conditions, null, {
                 sort: {'properties.meta.doc_aggregated_date': -1}
             },
             'document/search.html');

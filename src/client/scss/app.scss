@@ -43,9 +43,12 @@ $fourth-color: #fff;
 }
 
 .content {
-    padding-top: 70px;
-    width: 700px;
-    margin: 0 auto;
+    position: fixed;
+    left: 250px;
+    right: 0;
+    height: 100%;
+    padding: 20px;
+    overflow: auto;
     color: $main-color;
 
     h1, h2, h3 {
@@ -198,6 +201,13 @@ h1 a, h1 a:visited {
     }
 
     article {
+
+        border: 1px solid #eee;
+        border-radius: 4px;
+        width: 260px;
+        height: 280px;
+        margin: 0 20px 20px 0;
+        float: left;
 
         h4 {
             margin-bottom: 0;
