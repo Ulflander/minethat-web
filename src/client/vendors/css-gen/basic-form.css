@@ -58,7 +58,7 @@
   border-radius: 2px;
   border: 0;
   padding: 12px 20px;
-  font-weight: 100;
+  font-weight: 300;
   text-decoration: none; }
 
 .button:hover, .button:focus {
@@ -70,7 +70,7 @@
   text-shadow: 1px 1px #085290; }
   .cta .button .main {
     font-size: 26px;
-    font-weight: 300; }
+    font-weight: 400; }
   .cta .button .secondary {
     margin-top: 5px;
     font-size: 12px; }

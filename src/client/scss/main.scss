@@ -3,17 +3,15 @@
 @font-face {
   font-family: 'Roboto Slab';
   font-style: normal;
-  font-weight: 100;
-  src: local('Roboto Slab Thin'), local('RobotoSlab-Thin'), url(http://themes.googleusercontent.com/static/fonts/robotoslab/v3/MEz38VLIFL-t46JUtkIEgHX5hwtdXDKn9ybEnuS73H4.woff) format('woff');
+  font-weight: 300;
+  src: local('Roboto Slab Light'), local('RobotoSlab-Light'), url(http://themes.googleusercontent.com/static/fonts/robotoslab/v3/dazS1PrQQuCxC3iOAJFEJfR_54zmj3SbGZQh3vCOwvY.woff) format('woff');
 }
 @font-face {
   font-family: 'Roboto Slab';
   font-style: normal;
-  font-weight: 300;
-  src: local('Roboto Slab Regular'), local('RobotoSlab-Regular'), url(http://themes.googleusercontent.com/static/fonts/robotoslab/v3/y7lebkjgREBJK96VQi37ZqfTCPadK0KLfdEfFtGWCYw.woff) format('woff');
+  font-weight: 400;
+  src: local('Roboto Slab Regular'), local('RobotoSlab-Regular'), url(http://themes.googleusercontent.com/static/fonts/robotoslab/v3/y7lebkjgREBJK96VQi37ZrrIa-7acMAeDBVuclsi6Gc.woff) format('woff');
 }
-
-
 
 
 html, button, input, select, textarea {
@@ -99,7 +97,7 @@ $error-color: #ec4000;
 
 body {
   color: $main-color;
-  font-weight: 100;
+  font-weight: 300;
 }
 
 
@@ -112,11 +110,11 @@ textarea {
 }
 
 strong {
-  font-weight: 300 ;
+  font-weight: 400 ;
 }
 
 h1 {
-  font-weight: 300;
+  font-weight: 400;
 }
 
 a, a:visited {
