@@ -174,7 +174,7 @@
                 }
                 return;
             }
-            console.log(obj.toObject());
+
             if (req.isAPI) {
                 res.json(obj.toObject());
             } else {

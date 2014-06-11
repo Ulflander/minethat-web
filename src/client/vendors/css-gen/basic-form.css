@@ -76,6 +76,13 @@
     font-size: 12px; }
 .cta .button:hover, .cta .button:focus {
   background: #116cb9; }
+.cta .button.green {
+  background: #129d36; }
+.cta .button.green:hover, .cta .button.green:focus {
+  background: #188333; }
+
+.button.little {
+  padding: 6px 10px; }
 
 /**
  * Progress bar

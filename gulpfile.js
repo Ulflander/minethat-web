@@ -182,8 +182,8 @@
             gulp.src(stack)
                 .pipe(concat(k + '.js'))
                 .pipe(gulp.dest('dist/js/'))
-                .pipe(uglify())
-                .pipe(gulp.dest('dist/js/'))
+                //.pipe(uglify())
+                //.pipe(gulp.dest('dist/js/'))
                 .pipe(filesize());
         }
 
@@ -212,6 +212,7 @@
     gulp.task('watch', function() {
         WATCHING = true;
         gulp.watch('src/client/js/*.js', ['qa-js-validation', 'build-js']);
+        gulp.watch('src/client/js/**/*.js', ['qa-js-validation', 'build-js']);
         gulp.watch('src/client/vendors/js/*.js', ['qa-js-validation', 'build-js']);
 
         gulp.watch('src/client/scss/*', ['sass', 'build-css']);

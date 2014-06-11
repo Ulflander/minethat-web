@@ -25,7 +25,6 @@ var twit = new Twitter({
     // Require and read configuration,
     // then initialize infinite loop
     require('./conf.js').conf(function(conf) {
-        console.log(conf);
 
         logger = conf.logger;
         models = require('./lib/models.js');
@@ -40,8 +39,6 @@ var twit = new Twitter({
 
 
     self.submit = function(source, feedItem) {
-
-        console.log(feedItem);
 
         // Create job
         var job = {

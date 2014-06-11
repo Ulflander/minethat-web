@@ -1,0 +1,59 @@
+
+
+<%- partial('app-header', {
+    title: 'Create a new filter'
+}) %>
+<%- partial('app-menu') %>
+
+<section class="content filters">
+
+
+    <section class="filter-settings">
+        <form method="post">
+            <div class="input-wrap header">
+                <input type="text" class="color" name="color" />
+                <input type="text" class="input" name="name" placeholder="Your filter name" />
+            </div>
+
+            <h4>Entities</h4>
+            <div id="entities">
+                <div class="input-wrap">
+                    <input class="input selectized" name="entities" type="text" placeholder="Type an entity name..." />
+                </div>
+            </div>
+
+            <h4>Keywords</h4>
+            <div id="keywords">
+                <div class="input-wrap">
+                    <input class="input selectized" name="keywords" type="text" placeholder="Type a keyword..." />
+                </div>
+            </div>
+
+            <h4>Metrics <span class="cta">
+                <a class="button little green tooltip" href="#" data-bind="addMetric" title="Add a new metric"><i class="fa fa-plus"></i></a></span>
+            </h4>
+            <div id="metrics">
+
+            </div>
+
+            <div class="input-wrap cta">
+                <button class="button green" data-bind="estimate">Estimate</button>
+                <input class="button" type="submit" value="Create filter" data-bind="submit" />
+            </div>
+        </form>
+    </section>
+
+
+
+    <section class="filter-result list" id="estimation">
+        <div class="blank-state">
+            <div class="icon"><i class="fa fa-filter"></i></div>
+            <div class="text">No article yet, define your filter!</div>
+        </div>
+    </section>
+    <p>
+        Estimation result: <span class="count"><%= data.total || 0 %> documents</span>
+    </p>
+</section>
+
+<%- partial('edit-filter') %>

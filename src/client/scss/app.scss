@@ -68,6 +68,29 @@ $fourth-color: #fff;
     }
 }
 
+.content.filters {
+    overflow: none;
+    padding: 0;
+
+    .filter-settings {
+        position: absolute;
+        overflow: auto;
+        width: 400px;
+        height: 100%;
+        background: #e2e4ee;
+        padding: 20px;
+    }
+
+    .filter-result {
+        position: absolute;
+        overflow: auto;
+        left: 440px;
+        right: 0;
+        height: 100%;
+        padding: 20px;
+    }
+}
+
 h1 a, h1 a:visited {
     color: $main-color;
     text-decoration: none;

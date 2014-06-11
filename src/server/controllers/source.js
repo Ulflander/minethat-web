@@ -101,7 +101,6 @@
                         }, 500);
                         return;
                     }
-                    console.log(objs);
                     if (objs.total === 0) {
                         res.json({
                             status: 'success'

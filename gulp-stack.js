@@ -43,13 +43,26 @@
                 'css/normalize.css',
                 'css/font-awesome.min.css',
                 'css/anim.css',
+                'css/selectize.css',
+                'css/tooltipster.css',
+                'css/spectrum.css',
                 'css-gen/main.css',
                 'css-gen/basic-form.css',
                 'css-gen/table.css',
-                'css-gen/app.css'
+                'css-gen/app.css',
+                'css-gen/filter.css'
             ],
             js: [
-                'vendors/js/*.js'
+                'vendors/js/modernizr-2.6.2.min.js',
+                'vendors/js/jquery-1.10.2.min.js',
+                'vendors/js/hunk.js',
+                'vendors/js/eye.js',
+                'vendors/js/utils.js',
+                'vendors/js/selectize.js',
+                'vendors/js/jquery.tooltipster.min.js',
+                'vendors/js/spectrum.js',
+                'js/app/**/*.js',
+                'js/app/*.js'
             ]
         }
     };

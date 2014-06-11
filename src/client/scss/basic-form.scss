@@ -117,7 +117,18 @@ $error-color: #ec4000;
         background: $standout-color-alt;
     }
 
+    .button.green {
+        background: #129d36;
+    }
 
+    .button.green:hover, .button.green:focus {
+        background: #188333;
+    }
+
+}
+
+.button.little {
+    padding: 6px 10px;
 }
 
 

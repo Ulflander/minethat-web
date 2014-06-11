@@ -1,0 +1,16 @@
+
+<h3>Estimation: <span class="count"><%= data.total %> documents</span></h3>
+
+
+<% for(var i=0; i < data.docs.length; i++) {
+    var obj = data.docs[i].toObject();
+    %>
+
+    <%- partial('app-article-card', {
+        doc: obj,
+        props: obj.properties
+    }) %>
+
+<% } %>
+
+

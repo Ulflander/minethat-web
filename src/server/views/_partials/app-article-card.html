@@ -1,0 +1,10 @@
+
+<article data-item-id="<%= data.doc._id %>">
+<h4><a href="/app/doc/<%= data.doc._id %>"><%- data.props.meta.doc_title %></a></h4>
+<ul class="meta">
+    <% if (!!data.props.meta.doc_source_name) { %>
+    <li><%= data.props.meta.doc_source_name %></li>
+    <% } %>
+    </li><span><a href="/api/v1/document/<%= data.doc._id %>" data-action="delete">Delete</a></span></li>
+</ul>
+</article>

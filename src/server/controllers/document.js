@@ -28,6 +28,16 @@
         cv.find(req, res, 'Document', 'document/display.html');
     };
 
+    exports.export = function(req, res, next) {
+        cv.findAll(req, res, 'Document',
+            {'status': 'MINED'}, null, {
+                sort: {'properties.meta.doc_aggregated_date': -1},
+                limit: 100
+            });
+
+    };
+
+
     /**
      * Only available through API.
      */
@@ -46,7 +56,6 @@
         if (req.method === 'POST') {
             conditions['properties.keywords.main'] = req.body.keywords;
         }
-        console.log(conditions);
 
         cv.findAll(req, res, 'Document',
             conditions, null, {

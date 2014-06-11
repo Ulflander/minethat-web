@@ -38,6 +38,11 @@
             ['post', 'document.search']
         ],
 
+        '/app/filters/new': [
+            ['get', 'filter.create'],
+            ['post', 'filter.create']
+        ],
+        '/app/filters/estimate': ['post', 'filter.estimate'],
 
         '/app/jobs': ['get', 'job.index'],
 
@@ -67,6 +72,9 @@
         ],
         '/api/v1/documents/recent': [
             ['get', 'document.recent']
+        ],
+        '/api/v1/documents/export': [
+            ['get', 'document.export']
         ],
 
         '/api/v1/job/:id': ['delete', 'job.remove'],
