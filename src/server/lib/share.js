@@ -3,11 +3,11 @@
 
     var slack = require('./share/slack.js').slack;
 
-    exports.share = function(document, account, callback) {
+    exports.share = function(document, comment, account, callback) {
 
         switch (account.type) {
             case 'slack':
-                slack(document, account, callback);
+                slack(document, comment, account, callback);
                 return;
         }
 
