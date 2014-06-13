@@ -34,6 +34,10 @@
                 last: {
                     type: Number
                 },
+                successive_errors: {
+                    type: Number,
+                    'default': 0
+                },
                 fake: {
                     type: Boolean,
                     'default': false

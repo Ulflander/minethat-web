@@ -3,7 +3,9 @@
     'use strict';
 
     filter.color = function() {
-        $('[name=color]').spectrum();
+        $('[name=color]').spectrum({
+            preferredFormat: "hex",
+        });
     };
 
 }(hunk('filter')));

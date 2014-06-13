@@ -3,7 +3,9 @@
 <%- partial('app-header', {
     title: 'Setup source from feed URL'
 }) %>
-<%- partial('app-menu') %>
+<%- partial('app-menu', {
+    customer_filters: data.customer_filters
+}) %>
 
 <section class="content">
     <h3><%= data.status === 'exists' ? 'Edit source' : 'Add source' %></h3>
@@ -58,5 +60,11 @@
             <input type="submit" value="<%= data.status === 'exists' ? 'Edit source' : 'Add source' %>" class="button" />
         </div>
     </form>
+
+    <div>
+        <pre><code>
+            <%- data.doc.last_error %>
+        </code></pre>
+    </div>
 </section>
 <%- partial('app-footer') %>

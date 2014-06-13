@@ -4,7 +4,9 @@
 <%- partial('app-header', {
     title: props.meta.doc_title
 }) %>
-<%- partial('app-menu') %>
+<%- partial('app-menu', {
+    customer_filters: data.customer_filters
+}) %>
 
 <section class="content">
 

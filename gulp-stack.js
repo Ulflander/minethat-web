@@ -42,6 +42,7 @@
                 'css/fonts.css',
                 'css/normalize.css',
                 'css/font-awesome.min.css',
+                'css/morris.css',
                 'css/anim.css',
                 'css/selectize.css',
                 'css/tooltipster.css',
@@ -55,6 +56,8 @@
             js: [
                 'vendors/js/modernizr-2.6.2.min.js',
                 'vendors/js/jquery-1.10.2.min.js',
+                'vendors/js/raphael-2.1.2.min.js',
+                'vendors/js/morris.min.js',
                 'vendors/js/hunk.js',
                 'vendors/js/eye.js',
                 'vendors/js/utils.js',

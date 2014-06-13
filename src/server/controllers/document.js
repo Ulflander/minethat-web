@@ -28,7 +28,7 @@
         cv.find(req, res, 'Document', 'document/display.html');
     };
 
-    exports.export = function(req, res, next) {
+    exports.export_bunch = function(req, res, next) {
         cv.findAll(req, res, 'Document',
             {'status': 'MINED'}, null, {
                 sort: {'properties.meta.doc_aggregated_date': -1},

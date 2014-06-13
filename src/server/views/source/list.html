@@ -3,7 +3,9 @@
 <%- partial('app-header', {
     title: 'Sources'
 }) %>
-<%- partial('app-menu') %>
+<%- partial('app-menu', {
+    customer_filters: data.customer_filters
+}) %>
 
 <section class="content">
     <h3>Sources: <span class="count"><%= data.total %></span></h3>
@@ -19,13 +21,25 @@
                 <a href="<%= source.url %>" target="_blank"><i class="fa fa-external-link"></i></a>
                 <a href="<%= source.feed_url %>" target="_blank"><i class="fa fa-rss-square"></i></a><br />
 
-                <span>Latest aggregation: <%= !!source.last ? utils.tsToReadable(source.last) : 'Never' %></span>
+                <span><i class="fa fa-clock-o"></i> <%= !!source.last ? utils.tsToReadable(source.last) : 'Never' %></span>
+                <span><i class="fa fa-warning"></i> <%= !!source.successive_errors ? source.successive_errors : 0 %></span>
 
                 <span><a href="/api/v1/source/<%= data.docs[i]._id %>" data-action="delete">Delete</a></span>
             </li>
         <% } %>
     </ul>
 
+        <% if (data.hasNext || data.hasPrevious) { %>
+            <div class="paginate">
+
+                <% if (data.hasPrevious) { %>
+                    <a class="previous" href="?page=<%= data.page - 1 %>">Previous</a>
+                <% } %>
+                <% if (data.hasNext) { %>
+                    <a class="next" href="?page=<%= data.page + 1 %>">Next</a>
+                <% } %>
+            </div>
+        <% } %>
 </section>
 
 <script type="text/javascript">

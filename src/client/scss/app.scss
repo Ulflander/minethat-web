@@ -126,39 +126,6 @@ h1 a, h1 a:visited {
         margin-left: 150px;
     }
 
-
-    .statistics {
-        padding: 0;
-        margin: 0 0 10px 0;
-
-        li {
-            display: inline-block;
-            margin-bottom: 30px;
-
-            .value {
-                font-size: 1.4em;
-                color: #2d303b;
-            }
-
-            span {
-                font-size: 0.7em;
-            }
-        }
-
-        .numeric {
-            text-align: center;
-            width: 49%;
-        }
-
-        .main {
-
-
-            .value {
-                font-size: 3.2em;
-            }
-        }
-    }
-
     .data {
         list-style: none;
 
@@ -203,6 +170,39 @@ h1 a, h1 a:visited {
         line-height: 2;
     }
 
+}
+
+
+.statistics {
+    padding: 0;
+    margin: 0 0 10px 0;
+
+    li {
+        display: inline-block;
+        margin-bottom: 30px;
+
+        .value {
+            font-size: 1.4em;
+            color: #2d303b;
+        }
+
+        span {
+            font-size: 0.7em;
+        }
+    }
+
+    .numeric {
+        text-align: center;
+        width: 49%;
+    }
+
+    .main {
+
+
+        .value {
+            font-size: 3.2em;
+        }
+    }
 }
 
 

@@ -87,22 +87,6 @@ h1 a, h1 a:visited {
     border-left: 1px solid #ddd;
     padding-left: 10px;
     margin-left: 150px; }
-  .doc-sub-container .statistics {
-    padding: 0;
-    margin: 0 0 10px 0; }
-    .doc-sub-container .statistics li {
-      display: inline-block;
-      margin-bottom: 30px; }
-      .doc-sub-container .statistics li .value {
-        font-size: 1.4em;
-        color: #2d303b; }
-      .doc-sub-container .statistics li span {
-        font-size: 0.7em; }
-    .doc-sub-container .statistics .numeric {
-      text-align: center;
-      width: 49%; }
-    .doc-sub-container .statistics .main .value {
-      font-size: 3.2em; }
   .doc-sub-container .data {
     list-style: none; }
     .doc-sub-container .data li {
@@ -133,6 +117,23 @@ h1 a, h1 a:visited {
     white-space: nowrap; }
   .doc-sub-container .entities, .doc-sub-container .keywords {
     line-height: 2; }
+
+.statistics {
+  padding: 0;
+  margin: 0 0 10px 0; }
+  .statistics li {
+    display: inline-block;
+    margin-bottom: 30px; }
+    .statistics li .value {
+      font-size: 1.4em;
+      color: #2d303b; }
+    .statistics li span {
+      font-size: 0.7em; }
+  .statistics .numeric {
+    text-align: center;
+    width: 49%; }
+  .statistics .main .value {
+    font-size: 3.2em; }
 
 /*
 

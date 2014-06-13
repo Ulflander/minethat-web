@@ -1,5 +1,25 @@
 
-<h3>Estimation: <span class="count"><%= data.total %> documents</span></h3>
+
+<ul class="statistics">
+
+    <li class="main numeric">
+        <div class="value"><%= data.total %></div>
+        <span>total articles</span>
+    </li>
+
+    <% if (!!data.count_per_week) { %>
+    <li class="main numeric">
+        <div class="value"><%= data.avg_per_week %></div>
+        <span>average article per week</span>
+    </li>
+
+    <li class="full graph" style="height: 300px; width: 100% !important;">
+        <div class="value" id="graph" style="height: 300px; width: 100% !important;"></div>
+        <span>last four weeks volume</span>
+    </li>
+    <% } %>
+</ul>
+
 
 
 <% for(var i=0; i < data.docs.length; i++) {
@@ -14,3 +34,25 @@
 <% } %>
 
 
+<% if (!!data.count_per_week) { %>
+    <script type="text/javascript">
+        new Morris.Line({
+          // ID of the element in which to draw the chart.
+          element: 'graph',
+          // Chart data records -- each entry in this array corresponds to a point on
+          // the chart.
+          data: <%- JSON.stringify(data.count_per_week) %>,
+          // The name of the data record attribute that contains x-values.
+          xkey: 'week',
+          // A list of names of data record attributes that contain y-values.
+          ykeys: ['value'],
+          // Labels for the ykeys -- will be displayed when you hover over the
+          // chart.
+          labels: ['Total article'],
+
+          resize: true,
+
+          parseTime: false
+        });
+    </script>
+<% } %>

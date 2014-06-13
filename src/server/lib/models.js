@@ -79,7 +79,7 @@
      */
     exports.findAll = function(req, model, conds, fields, options, callback) {
 
-        var page = !!req.query ? parseInt(req.query.page, 10) || 1 : 1,
+        var page = !!req && !!req.query ? parseInt(req.query.page, 10) || 1 : 1,
             itemsPerPage = !!options ? options.limit || ITEMS_PER_PAGE :
                 ITEMS_PER_PAGE;
 
@@ -122,7 +122,7 @@
     exports.page = function(page, options) {
         var res,
             k,
-            itemsPerPage = !!options ? options.limit || ITEMS_PER_PAGE : 
+            itemsPerPage = !!options ? options.limit || ITEMS_PER_PAGE :
                 ITEMS_PER_PAGE;
 
         res = {

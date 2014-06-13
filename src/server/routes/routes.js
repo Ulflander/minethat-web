@@ -31,6 +31,8 @@
             ['post', 'source.edit']
         ],
 
+
+
         '/app/documents': ['get', 'document.index'],
         '/app/doc/:id': ['get', 'document.display'],
         '/app/docs': [
@@ -38,13 +40,20 @@
             ['post', 'document.search']
         ],
 
-        '/app/filters/new': [
+
+
+        '/app/filter/new': [
             ['get', 'filter.create'],
             ['post', 'filter.create']
         ],
         '/app/filters/estimate': ['post', 'filter.estimate'],
+        '/app/filter/wall/:id': ['get', 'filter.wall'],
+        '/app/filter/:id': [
+            ['get', 'filter.edit'],
+            ['post', 'filter.edit']
+        ],
 
-        '/app/jobs': ['get', 'job.index'],
+
 
         ///////////////////////
         // ADMINISTRATION
@@ -52,6 +61,8 @@
         '/admin/subscribers.csv': ['get', 'subscriber.csv'],
         '/admin/subscriber/:id': ['get', 'subscriber.display'],
 
+
+        '/app/jobs': ['get', 'job.index'],
 
         ///////////////////////
         // REST API
@@ -66,6 +77,15 @@
         '/api/v1/source': ['post', 'source.add'],
 
 
+
+        '/api/v1/filters/:id': [
+            ['get', 'filter.edit'],
+            ['post', 'filter.edit'],
+            ['delete', 'filter.remove']
+        ],
+
+
+
         '/api/v1/document/:id': [
             ['get', 'document.display'],
             ['delete', 'document.remove']
@@ -74,7 +94,7 @@
             ['get', 'document.recent']
         ],
         '/api/v1/documents/export': [
-            ['get', 'document.export']
+            ['get', 'document.export_bunch']
         ],
 
         '/api/v1/job/:id': ['delete', 'job.remove'],

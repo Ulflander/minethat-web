@@ -3,7 +3,9 @@
 <%- partial('app-header', {
     title: 'Article wall'
 }) %>
-<%- partial('app-menu') %>
+<%- partial('app-menu', {
+    customer_filters: data.customer_filters
+}) %>
 
 
 <section class="content list">
@@ -17,20 +19,12 @@
     </form>
 
 <% for(var i=0; i < data.docs.length; i++) {
-    var obj = data.docs[i].toObject(),
-        props = obj.properties;
+    var obj = data.docs[i].toObject();
     %>
-    <article data-item-id="<%= data.docs[i]._id %>">
-        <h4><a href="/app/doc/<%= data.docs[i]._id %>"><%- props.meta.doc_title %></a></h4>
-        <ul class="meta">
-            <% if (!!props.meta.doc_source_name) { %>
-            <li><%= props.meta.doc_source_name %></li>
-            <% } %>
-            <li><%- partial('nod-classification', {props: props}) %></li>
-            <li><%= obj.status %></li>
-            </li><span><a href="/api/v1/document/<%= obj._id %>" data-action="delete">Delete</a></span></li>
-        </ul>
-    </article>
+    <%- partial('app-article-card', {
+        doc: obj,
+        props: obj.properties
+    }) %>
 <% } %>
 
 

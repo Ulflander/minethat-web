@@ -10,13 +10,23 @@
 
     <ul class="filters">
         <li class="add"><i class="fa fa-home"></i><a href="/app/docs">Wall</a></li>
+
+        <% if (typeof data !== 'undefined') { for (var i = 0; i < data.customer_filters.length; i += 1) {
+
+            var filter = data.customer_filters[i].toObject() %>
+            <li>
+                <i class="blue fa fa-square", style="color: <%= filter.color %>"></i>
+                <a href="/app/filter/wall/<%= filter._id %>"><%= filter.name %></a>
+                <span class="edit"><a href="/app/filter/<%= filter._id %>"><i class="fa fa-gear"></i></a></span>
+            </li>
+        <% } } %>
         <!--
         <li><i class="blue fa fa-square"></i>Innovation</li>
         <li><i class=""></i>International issues</li>
         <li><i class="green fa fa-square"></i>Environment</li>
         <li><i class="red fa fa-square"></i>Startups</li>
     -->
-        <li class="add"><i class="fa fa-filter"></i><a href="/app/filters/new">New vertical</a></li>
+        <li class="add"><i class="fa fa-filter"></i><a href="/app/filter/new">New vertical</a></li>
 
         <li class="add"><i class="fa fa-database"></i><a href="/app/sources">Sources</a></li>
     </ul>

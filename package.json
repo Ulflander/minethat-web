@@ -40,7 +40,11 @@
     "marked": "^0.3.2",
     "date-utils": "^1.2.15",
     "twitter": "^0.2.9",
-    "raven": "^0.6.3"
+    "raven": "^0.6.3",
+    "moment": "^2.7.0",
+    "ortoo-feedparser": "^0.11.0",
+    "html-entities": "^1.0.10",
+    "node.extend": "^1.0.10"
   },
   "devDependencies": {
     "gulp-clean": "~0.2.4",

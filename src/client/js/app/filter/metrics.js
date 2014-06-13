@@ -40,11 +40,7 @@
         'properties.basic_stats.read_time_est.min': 'Min. read time in minutes',
         'properties.basic_stats.read_time_est.max': 'Max. read time in minutes',
         'properties.basic_stats.total_paragraphs.min': 'Min. amount of paragraphs',
-        'properties.basic_stats.total_paragraphs.max': 'Max. amount of paragraphs',
-
-        'properties.meta.doc_source_name.in': 'Source(s)',
-
-        'properties.meta.main_language': 'Main language'
+        'properties.basic_stats.total_paragraphs.max': 'Max. amount of paragraphs'
     };
 
 }(hunk('filter')));
