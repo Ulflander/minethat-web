@@ -5948,6 +5948,10 @@ if (!$.easing.easeout) {
             e.preventDefault();
             hunk.filter[$(this).attr('data-bind')]();
         });
+
+        if ($('[name=keywords]').val() != '') {
+            filter.estimate();
+        }
     };
 
     filter.gather = function() {
@@ -5975,6 +5979,8 @@ if (!$.easing.easeout) {
     };
 
     filter.remove = function() {
+        $('#estimation').html(hunk.tpl.render('tpl-loading-state'));
+
         $.ajax({
             method: 'DELETE',
             contentType: 'application/json',
@@ -5986,6 +5992,8 @@ if (!$.easing.easeout) {
     };
 
     filter.submit = function() {
+        $('#estimation').html(hunk.tpl.render('tpl-loading-state'));
+
         $.ajax({
             method: 'POST',
             data: JSON.stringify(filter.gather()),
@@ -5998,6 +6006,8 @@ if (!$.easing.easeout) {
     };
 
     filter.estimate = function() {
+        $('#estimation').html(hunk.tpl.render('tpl-loading-state'));
+
         $.ajax({
             method: 'POST',
             data: JSON.stringify(filter.gather()),
@@ -6060,3 +6070,39 @@ if (!$.easing.easeout) {
     };
 
 }(hunk('filter')));
+
+
+(function(tpl) {
+    'use strict';
+
+    var tpls = {};
+
+    tpl.render = function(id, vars) {
+        var t;
+        if (!tpls[id]) {
+            t = $('#'+id);
+            if (t.length === 0) {
+                return '';
+            }
+
+            tpls[id] = t.val();
+        }
+
+        return tpl.replaceVars(tpls[id], vars);
+    };
+
+    tpl.replaceVars = function(template, vars) {
+        if (typeof vars !== 'object') {
+            return template;
+        }
+
+        var k;
+        for (k in vars) {
+            if (vars.hasOwnProperty(k)) {
+                template = template.replace(new RegExp('{{' + k + '}}', 'ig'),
+                                            vars[k]);
+            }
+        }
+        return template;
+    };
+}(hunk('tpl')));

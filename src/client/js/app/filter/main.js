@@ -19,6 +19,10 @@
             e.preventDefault();
             hunk.filter[$(this).attr('data-bind')]();
         });
+
+        if ($('[name=keywords]').val() != '') {
+            filter.estimate();
+        }
     };
 
     filter.gather = function() {
@@ -46,6 +50,8 @@
     };
 
     filter.remove = function() {
+        $('#estimation').html(hunk.tpl.render('tpl-loading-state'));
+
         $.ajax({
             method: 'DELETE',
             contentType: 'application/json',
@@ -57,6 +63,8 @@
     };
 
     filter.submit = function() {
+        $('#estimation').html(hunk.tpl.render('tpl-loading-state'));
+
         $.ajax({
             method: 'POST',
             data: JSON.stringify(filter.gather()),
@@ -69,6 +77,8 @@
     };
 
     filter.estimate = function() {
+        $('#estimation').html(hunk.tpl.render('tpl-loading-state'));
+
         $.ajax({
             method: 'POST',
             data: JSON.stringify(filter.gather()),

@@ -48,6 +48,8 @@ $fourth-color: #fff;
     right: 0;
     height: 100%;
     padding: 20px;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
     overflow: auto;
     color: $main-color;
 
@@ -75,10 +77,12 @@ $fourth-color: #fff;
     .filter-settings {
         position: absolute;
         overflow: auto;
-        width: 400px;
+        width: 440px;
         height: 100%;
-        background: #e2e4ee;
+        background: #f2f2f4;
         padding: 20px;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
     }
 
     .filter-result {
@@ -88,8 +92,61 @@ $fourth-color: #fff;
         right: 0;
         height: 100%;
         padding: 20px;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
     }
 }
+
+
+.blank-state {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    margin: 50px;
+    border-radius: 2px;
+
+}
+.blank-state>div {
+    margin: auto;
+    height: 300px;
+    width: 350px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+
+    .icon, .text {
+        width: 100%;
+        text-align: center;
+        text-shadow: 1px 1px 0 #fff;
+    }
+    .icon {
+        color: #f2f2f4;
+        font-size: 244px;
+        margin-bottom: 20px;
+    }
+    .text {
+        font-size: 24px;
+        color: #ddddde;
+    }
+}
+
+.blank-state.loading {
+    background: none;
+    .icon {
+        font-size: 34px;
+    }
+}
+.blank-state.loading>div {
+    height: 34px;
+}
+
+
 
 h1 a, h1 a:visited {
     color: $main-color;
