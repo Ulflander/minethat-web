@@ -1,9 +1,12 @@
 
 <section class="menu_col">
 
-    <header class="logo">
-        <a href="/app">
+    <header class="me">
+        <a href="/app" class="logo">
             <img src="/img/logo-app.png" title="Welcome on Minethat!" />
+        </a>
+        <a href="/app/profile" class="profile tooltip" title="Edit your settings">
+            <img src="/img/profile_image.png" />
         </a>
     </header>
 
@@ -20,16 +23,11 @@
                 <span class="edit"><a href="/app/filter/<%= filter._id %>"><i class="fa fa-gear"></i></a></span>
             </li>
         <% } } %>
-        <!--
-        <li><i class="blue fa fa-square"></i>Innovation</li>
-        <li><i class=""></i>International issues</li>
-        <li><i class="green fa fa-square"></i>Environment</li>
-        <li><i class="red fa fa-square"></i>Startups</li>
-    -->
+
         <li class="add"><i class="fa fa-filter"></i><a href="/app/filter/new">New vertical</a></li>
 
         <li class="add"><i class="fa fa-sign-in"></i><a href="/app/sources">Sources</a></li>
-        <li class="add"><i class="fa fa-sign-out"></i><a href="/app/destinations">Destinations</a></li>
+        <li class="add"><i class="fa fa-sign-out"></i><a href="/app/targets">Targets</a></li>
     </ul>
 
 

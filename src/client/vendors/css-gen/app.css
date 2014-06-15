@@ -277,7 +277,36 @@ h1 a, h1 a:visited {
   box-shadow: inset -30px 0px 30px #161923;
   color: #fff; }
   .menu_col header {
-    text-align: center; }
+    position: relative;
+    text-align: center;
+    height: 200px; }
+    .menu_col header .profile {
+      z-index: 2;
+      width: 150px;
+      position: absolute;
+      top: 20px;
+      left: 45px;
+      overflow: hidden;
+      border-radius: 75px;
+      box-shadow: 0px 0px 5px #161923; }
+      .menu_col header .profile img {
+        width: 150px;
+        height: 150px;
+        border-radius: 75px; }
+    .menu_col header .logo {
+      z-index: 10;
+      position: absolute;
+      width: 30px;
+      height: 30px;
+      border-radius: 15px;
+      background: #2d303b;
+      box-shadow: 0px 0px 5px #161923;
+      top: 25px;
+      left: 50px; }
+      .menu_col header .logo img {
+        width: 30px;
+        height: 30px;
+        border-radius: 15px; }
   .menu_col ul {
     margin-top: 30px;
     list-style: none; }
