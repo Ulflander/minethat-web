@@ -22,6 +22,7 @@
     self.initialize = function(req, res, next) {
         var k;
 
+        res.global = {};
         req.logger = conf.logger;
         req.query = qs.parse(req._parsedUrl.query);
 
@@ -47,6 +48,18 @@
                     res[k] = responder[k];
                 }
             }
+        }
+
+
+        if (req._parsedUrl.href.indexOf('/app') === 0) {
+
+            req.findAll(null, 'Filter', null, null, null,
+                function(err, filters) {
+                    res.global.customer_filters = filters.docs;
+                    next();
+                });
+
+            return;
         }
 
         next();

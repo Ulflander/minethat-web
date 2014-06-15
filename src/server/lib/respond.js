@@ -57,9 +57,14 @@
      * @param  {String} content      Content
      */
     exports.respond = function(code, content_type, content) {
-        this.writeHead(code, {
-            'Content-type': content_type
-        });
+
+        try {
+            this.writeHead(code, {
+                'Content-type': content_type
+            });
+        } catch (e) {
+            console.error('Headers cant be set');
+        }
 
         this.end(content);
     };

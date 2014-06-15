@@ -44,7 +44,9 @@
                         d.getUTCFullYear() + ', ' +
                         utils.leadingZero(d.getHours()) + ':' +
                         utils.leadingZero(d.getMinutes());
-            }
+            },
+
+            moment: require('moment')
         };
 
 
@@ -160,6 +162,7 @@
     exports.find = function(req, res, model, template) {
         req.find(model, req.params.id, function(err, obj) {
             if (!!err) {
+                req.logger.warn('Error caught while querying db', err);
                 return res.error(500);
             }
 
@@ -199,12 +202,14 @@
             exports.find(req, res, model, template);
             return;
         }
+
         var Model = req.model(model);
         Model.update({
             _id: req.params.id
         }, req.body, function(err, numberAffected, rawResponse) {
 
             if (!!err) {
+                req.logger.warn('Error caught while querying db', err);
                 return res.error(500);
             }
 
@@ -334,6 +339,20 @@
      * @param  {Integer} code    HTTP status code to return
      */
     exports.view = function(req, res, template, data, code) {
+        var k;
+
+        if (!data) {
+            data = {};
+        }
+
+        if (!!res.global) {
+            for (k in res.global) {
+                if (res.global.hasOwnProperty(k)) {
+                    data[k] = res.global[k];
+                }
+            }
+        }
+
         exports.renderView(template, data, function(html) {
             res.html(html, code);
         });

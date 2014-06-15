@@ -1,0 +1,67 @@
+
+
+<%- partial('app-header', {
+    title: 'Article wall'
+}) %>
+<%- partial('app-menu', {
+    customer_filters: data.customer_filters
+}) %>
+
+
+<section class="content list">
+    <div>
+        <span class="count"><%= data.total %> documents</span>
+    </div>
+<% for(var i=0; i < data.docs.length; i++) {
+    var obj = data.docs[i].toObject();
+    %>
+    <%- partial('app-article-card', {
+        doc: obj,
+        props: obj.properties
+    }) %>
+<% } %>
+
+
+<% if (data.hasNext || data.hasPrevious) { %>
+    <div class="paginate">
+
+        <% if (data.hasPrevious) { %>
+            <a class="previous" href="?page=<%= data.page - 1 %>">Previous</a>
+        <% } %>
+        <% if (data.hasNext) { %>
+            <a class="next" href="?page=<%= data.page + 1 %>">Next</a>
+        <% } %>
+    </div>
+<% } %>
+</section>
+
+<script type="text/javascript">
+    $(function(){
+        $('[data-action=delete]').each(function(i, el) {
+            $(el).on('click', function(e) {
+                e.preventDefault();
+                var xhr = new XMLHttpRequest();
+
+                xhr.open("DELETE", $(el).attr('href') , true);
+                xhr.setRequestHeader("Content-Type", "application/json");
+
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState == 4) {
+                        var resp = JSON.parse(xhr.responseText);
+                        alert(resp.status);
+                        if (resp.status === 'success') {
+                            $(el).parent('tr').remove();
+                        }
+                    }
+                };
+
+                xhr.send();
+            });
+        });
+    });
+</script>
+
+<%- partial('app-footer') %>
+
+
+

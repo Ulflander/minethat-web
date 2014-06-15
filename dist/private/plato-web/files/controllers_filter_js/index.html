@@ -45,11 +45,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
-      <p class="stat">75.59</p>
+      <p class="stat">68.16</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
-      <p class="stat">52</p>
+      <p class="stat">135</p>
     </div>
   </div>
   <div class="row historical">
@@ -63,11 +63,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
-      <p class="stat">11.57</p>
+      <p class="stat">36.30</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
-      <p class="stat">0.17</p>
+      <p class="stat">0.94</p>
     </div>
   </div>
 </div>
@@ -93,7 +93,10 @@
     <textarea id="file-source" class="col-md-12">(function() {
     &#039;use strict&#039;;
 
-    var cv = require(&#039;../lib/controller-view.js&#039;);
+    var cv = require(&#039;../lib/controller-view.js&#039;),
+        futils = require(&#039;../lib/filter-utils&#039;),
+
+        ONE_WEEK = 1000 * 60 * 60 * 24 * 7;
 
     /**
      * Create a new filter
@@ -107,6 +110,27 @@
             cv.view(req, res, &#039;filter/edit.html&#039;);
             return;
         }
+
+        req.body = futils.toFilterModel(req.body);
+
+        console.log(req.body);
+
+        cv.create(req, res, &#039;Filter&#039;, &#039;filter/edit.html&#039;, &#039;/app/filters/:id&#039;);
+    };
+
+    /**
+     * Edit a filter
+     *
+     * @param  {Object}   req  Connect request object
+     * @param  {Object}   res  Connect response object
+     * @param  {Function} next Callback
+     */
+    exports.edit = function(req, res, next) {
+        if (req.method === &#039;POST&#039;) {
+            req.body = futils.toFilterModel(req.body);
+        }
+
+        cv.edit(req, res, &#039;Filter&#039;, &#039;filter/edit.html&#039;);
     };
 
     /**
@@ -117,28 +141,87 @@
      * @param  {Function} next Callback
      */
     exports.estimate = function(req, res, next) {
-        cv.findAll(req, res, &#039;Document&#039;,
-            exports.toCondition(req.body), null, {
-                sort: {&#039;properties.meta.doc_aggregated_date&#039;: -1}
-            },
-            &#039;filter/estimation.html&#039;);
+        var conds = futils.toCondition(req.body);
+
+        exports.countWeeks(req, conds, [], function(err, counts) {
+            var i, l = counts.length, t = 0;
+            if (!err) {
+                for (i = 0; i &lt; l; i += 1) {
+                    t += counts[i].value;
+                }
+                res.global.avg_per_week = (t / l).toFixed(0);
+                res.global.count_per_week = counts;
+            } else {
+                req.logger.warn(&#039;Unable to get counts per week&#039;, err);
+            }
+
+            delete conds[&#039;properties.meta.doc_published_date&#039;];
+            cv.findAll(req, res, &#039;Document&#039;,
+                conds, null, {
+                    sort: {&#039;properties.meta.doc_published_date&#039;: -1}
+                },
+                &#039;filter/estimation.html&#039;);
+        });
+    };
+
+    /**
+     * Estimate reach of a filter.
+     *
+     * @param  {Object}   req  Connect request object
+     * @param  {Object}   res  Connect response object
+     * @param  {Function} next Callback
+     */
+    exports.wall = function(req, res, next) {
+        req.find(&#039;Filter&#039;, req.params.id, function(err, obj) {
+            if (!!err || !obj) {
+                if (!!err) {
+                    console.error(&#039;Unable to find filter&#039;, err);
+                }
+                return next();
+            }
+
+            cv.findAll(req, res, &#039;Document&#039;,
+                futils.toCondition(obj.fields), null, {
+                    sort: {&#039;properties.meta.published_date&#039;: -1}
+                },
+                &#039;filter/wall.html&#039;);
+        });
+    };
+
+    /**
+     * Only available through API.
+     */
+    exports.remove = function(req, res, next) {
+        cv.remove(req, res, &#039;Filter&#039;);
     };
 
 
-    /**
-     * Convert a filter to mongo conditions.
-     *
-     * @param  {Object} filter Filter description
-     * @return {Object}        Mongo conditions
-     */
-    exports.toCondition = function(filter) {
-        var c = {};
+    exports.countWeeks = function(req, conds, weeks, callback) {
+        var l = weeks.length,
+            start = Date.now() - l * ONE_WEEK,
+            end = Date.now() - (l + 1) * ONE_WEEK;
 
-        if (!!filter.keywords) {
-            c[&#039;properties.keywords.main&#039;] = filter.keywords;
+        if (l === 4) {
+            callback(null, weeks.reverse());
+            return;
         }
 
-        return c;
+        conds[&#039;properties.meta.doc_published_date&#039;] = {
+            $gt: end,
+            $lte: start
+        };
+
+        req.model(&#039;Document&#039;).count(conds, function(err, count) {
+            if (!!err) {
+                return callback(err);
+            }
+
+            weeks[l] = {
+                week: l === 0 ? &#039;Last week&#039; : &#039;Week - &#039; + l,
+                value: count
+            };
+            exports.countWeeks(req, conds, weeks, callback);
+        });
     };
 
 }());</textarea>

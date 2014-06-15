@@ -23,6 +23,7 @@
             },
             meta: {
                 doc_title: String,
+                doc_source_id: String,
                 doc_published_date: Number,
                 doc_description: String,
                 doc_source_name: String,

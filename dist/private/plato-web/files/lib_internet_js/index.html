@@ -45,11 +45,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
-      <p class="stat">71.25</p>
+      <p class="stat">68.67</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
-      <p class="stat">70</p>
+      <p class="stat">94</p>
     </div>
   </div>
   <div class="row historical">
@@ -63,11 +63,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
-      <p class="stat">24.73</p>
+      <p class="stat">25.16</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
-      <p class="stat">0.31</p>
+      <p class="stat">0.48</p>
     </div>
   </div>
 </div>
@@ -95,7 +95,8 @@
 
     var request = require(&#039;request&#039;),
         logger = require(&#039;../conf.js&#039;).conf().logger,
-        parser = require(&#039;blindparser&#039;);
+        feedparser = require(&#039;ortoo-feedparser&#039;),
+        blindparser = require(&#039;blindparser&#039;);
 
     /**
      * Get an URL.
@@ -105,12 +106,12 @@
      * @param  {String}   url      URL to ping
      * @param  {Function} callback Callback
      */
-    self.get = function(url, callback) {
+    self.get = function(url, callback, headers) {
         try {
-
             request({
                 url: url,
-                followAllRedirects: true
+                followAllRedirects: true,
+                headers: headers || {}
             }, function(error, response) {
 
                 if (!error &amp;&amp; response.statusCode &gt;= 200 &amp;&amp;
@@ -134,8 +135,20 @@
      *
      * @param  {String}   url      URL to ping
      * @param  {Function} callback Callback
+     * @param {String} lastModified Last modified date
      */
-    self.feed = function(url, callback) {
+    self.feed = function(url, callback, lastModified) {
+
+        var headers = {
+            &#039;Accept&#039;: &#039;text/xml,application/xml,application/rss+xml&#039;,
+            &#039;Accept-Language&#039;: &#039;*&#039;,
+            &#039;User-Agent&#039;: &#039;Minethat 1.0&#039;
+        };
+
+        if (!!lastModified) {
+            headers[&#039;If-Modified-Since&#039;] = lastModified;
+        }
+
         self.get(url, function(err, body) {
             if (!!err) {
                 callback(err);
@@ -143,7 +156,7 @@
             }
 
             try {
-                parser.parseString(body, {}, function(err, feed) {
+                blindparser.parseString(body, {}, function(err, feed) {
                     if (!!err) {
                         logger.warn(&#039;URL &#039; + url + &#039; feed is invalid: &#039;
                             + err);
@@ -154,9 +167,20 @@
                     callback(null, feed, url);
                 });
             } catch (e) {
-                callback(e);
+                logger.log(&#039;Fallback to feedparser...&#039;);
+                feedparser.parseString(body, {}, function(err, meta, articles){
+                    if (!!err) {
+                        callback(err);
+                    }
+
+                    callback(null, {
+                        meta: meta,
+                        items: articles
+                    }, url);
+                });
+
             }
-        });
+        }, headers);
     };
 
 }(exports));</textarea>

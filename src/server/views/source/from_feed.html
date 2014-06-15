@@ -3,7 +3,9 @@
 <%- partial('app-header', {
     title: 'Setup source from feed URL'
 }) %>
-<%- partial('app-menu') %>
+<%- partial('app-menu', {
+    customer_filters: data.customer_filters
+}) %>
 
 <section class="content">
     <h3>Setup a source from a feed</h3>

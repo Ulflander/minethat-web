@@ -31,6 +31,8 @@
   right: 0;
   height: 100%;
   padding: 20px;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
   overflow: auto;
   color: #3F3F3F; }
   .content h1, .content h2, .content h3 {
@@ -50,17 +52,61 @@
   .content.filters .filter-settings {
     position: absolute;
     overflow: auto;
-    width: 400px;
+    width: 440px;
     height: 100%;
-    background: #e2e4ee;
-    padding: 20px; }
+    background: #f2f2f4;
+    padding: 20px;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box; }
   .content.filters .filter-result {
     position: absolute;
     overflow: auto;
     left: 440px;
     right: 0;
     height: 100%;
-    padding: 20px; }
+    padding: 20px;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box; }
+
+.blank-state {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  margin: 50px;
+  border-radius: 2px; }
+
+.blank-state > div {
+  margin: auto;
+  height: 300px;
+  width: 350px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0; }
+  .blank-state > div .icon, .blank-state > div .text {
+    width: 100%;
+    text-align: center;
+    text-shadow: 1px 1px 0 #fff; }
+  .blank-state > div .icon {
+    color: #f2f2f4;
+    font-size: 244px;
+    margin-bottom: 20px; }
+  .blank-state > div .text {
+    font-size: 24px;
+    color: #ddddde; }
+
+.blank-state.loading {
+  background: none; }
+  .blank-state.loading .icon {
+    font-size: 34px; }
+
+.blank-state.loading > div {
+  height: 34px; }
 
 h1 a, h1 a:visited {
   color: #3F3F3F;
@@ -87,22 +133,6 @@ h1 a, h1 a:visited {
     border-left: 1px solid #ddd;
     padding-left: 10px;
     margin-left: 150px; }
-  .doc-sub-container .statistics {
-    padding: 0;
-    margin: 0 0 10px 0; }
-    .doc-sub-container .statistics li {
-      display: inline-block;
-      margin-bottom: 30px; }
-      .doc-sub-container .statistics li .value {
-        font-size: 1.4em;
-        color: #2d303b; }
-      .doc-sub-container .statistics li span {
-        font-size: 0.7em; }
-    .doc-sub-container .statistics .numeric {
-      text-align: center;
-      width: 49%; }
-    .doc-sub-container .statistics .main .value {
-      font-size: 3.2em; }
   .doc-sub-container .data {
     list-style: none; }
     .doc-sub-container .data li {
@@ -134,6 +164,23 @@ h1 a, h1 a:visited {
   .doc-sub-container .entities, .doc-sub-container .keywords {
     line-height: 2; }
 
+.statistics {
+  padding: 0;
+  margin: 0 0 10px 0; }
+  .statistics li {
+    display: inline-block;
+    margin-bottom: 30px; }
+    .statistics li .value {
+      font-size: 1.4em;
+      color: #2d303b; }
+    .statistics li span {
+      font-size: 0.7em; }
+  .statistics .numeric {
+    text-align: center;
+    width: 49%; }
+  .statistics .main .value {
+    font-size: 3.2em; }
+
 /*
 
     LLIST PAGES
@@ -144,23 +191,72 @@ h1 a, h1 a:visited {
   list-style: none; }
   .content ul.list li {
     margin-bottom: 15px; }
+.content a {
+  color: #2d303b;
+  text-decoration: none;
+  font-weight: 400; }
+.content a:hover, .content a:visited, .content a:active {
+  color: #2d303b; }
 .content article {
-  border: 1px solid #eee;
+  position: relative;
   border-radius: 4px;
-  width: 260px;
-  height: 280px;
+  width: 300px;
+  height: 320px;
   margin: 0 20px 20px 0;
-  float: left; }
+  float: left;
+  background: #f2f2f4;
+  border: 1px solid #f2f2f4; }
+  .content article .fa-bookmark {
+    position: absolute;
+    top: -4px;
+    right: 10px;
+    font-size: 24px;
+    color: #a00;
+    text-shadow: 1px 1px 0 #fff; }
   .content article h4 {
-    margin-bottom: 0; }
+    vertical-align: middle;
+    height: 80px;
+    margin: 0;
+    padding: 10px; }
+  .content article .img {
+    width: 100%;
+    height: 140px;
+    background-repeat: no-repeat;
+    background-position: center center;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    border-radius: 2px 2px 0 0; }
   .content article .meta {
     margin: 0;
-    padding: 0;
+    padding: 0 10px;
     list-style: none; }
     .content article .meta li {
       display: inline-block;
       margin-right: 10px;
       font-size: 14px; }
+  .content article .actions {
+    position: absolute;
+    bottom: 0;
+    width: 100%; }
+    .content article .actions ul {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      width: 49%;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box; }
+      .content article .actions ul li {
+        display: inline-block;
+        font-size: 20px; }
+    .content article .actions .left {
+      float: left;
+      padding: 0 0 5px 10px; }
+    .content article .actions .right {
+      float: right;
+      text-align: right;
+      padding: 0 10px 5px 0; }
 .content .paginate {
   padding: 20px 30px;
   margin-bottom: 30px; }

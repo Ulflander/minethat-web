@@ -3,16 +3,18 @@
 <%- partial('app-header', {
     title: 'Create a new filter'
 }) %>
-<%- partial('app-menu') %>
+<%- partial('app-menu', {
+    customer_filters: data.customer_filters
+}) %>
 
 <section class="content filters">
 
 
     <section class="filter-settings">
-        <form method="post">
+        <form method="post" data-url="/app/filter/<%= !!data.doc ? data.doc._id : 'new' %>" id="filter-form">
             <div class="input-wrap header">
-                <input type="text" class="color" name="color" />
-                <input type="text" class="input" name="name" placeholder="Your filter name" />
+                <input type="text" class="color" name="color" value="<%= !!data.doc ? data.doc.color : '' %>" />
+                <input type="text" class="input" name="name" placeholder="Your filter name" value="<%= !!data.doc ? data.doc.name : '' %>" />
             </div>
 
             <h4>Entities</h4>
@@ -25,7 +27,8 @@
             <h4>Keywords</h4>
             <div id="keywords">
                 <div class="input-wrap">
-                    <input class="input selectized" name="keywords" type="text" placeholder="Type a keyword..." />
+                    <input class="input selectized" name="keywords" type="text" placeholder="Type a keyword..."
+                     value="<%= !!data.doc && !!data.doc.fields ? data.doc.fields.keywords : '' %>" />
                 </div>
             </div>
 
@@ -37,6 +40,9 @@
             </div>
 
             <div class="input-wrap cta">
+                <% if (!!data.doc) { %>
+                <a href="/api/v1/filters/<%= data.doc._id %>" data-bind="remove" id="filter-remove">Delete</a>
+                <% } %>
                 <button class="button green" data-bind="estimate">Estimate</button>
                 <input class="button" type="submit" value="Create filter" data-bind="submit" />
             </div>
@@ -47,8 +53,10 @@
 
     <section class="filter-result list" id="estimation">
         <div class="blank-state">
-            <div class="icon"><i class="fa fa-filter"></i></div>
-            <div class="text">No article yet, define your filter!</div>
+            <div>
+                <div class="icon"><i class="fa fa-filter"></i></div>
+                <div class="text">Add some filters on the left panel to start your vertical</div>
+            </div>
         </div>
     </section>
     <p>
@@ -56,4 +64,4 @@
     </p>
 </section>
 
-<%- partial('edit-filter') %>
+<%- partial('app-footer') %>

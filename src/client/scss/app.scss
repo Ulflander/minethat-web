@@ -2,6 +2,8 @@ $main-color: #3F3F3F;
 $second-color: #cdcdcd;
 $third-color: #ddd;
 $fourth-color: #fff;
+$main-blue: #2d303b;
+$main-color: #3F3F3F;
 
 
 
@@ -48,6 +50,8 @@ $fourth-color: #fff;
     right: 0;
     height: 100%;
     padding: 20px;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
     overflow: auto;
     color: $main-color;
 
@@ -75,10 +79,12 @@ $fourth-color: #fff;
     .filter-settings {
         position: absolute;
         overflow: auto;
-        width: 400px;
+        width: 440px;
         height: 100%;
-        background: #e2e4ee;
+        background: #f2f2f4;
         padding: 20px;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
     }
 
     .filter-result {
@@ -88,8 +94,61 @@ $fourth-color: #fff;
         right: 0;
         height: 100%;
         padding: 20px;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
     }
 }
+
+
+.blank-state {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    margin: 50px;
+    border-radius: 2px;
+
+}
+.blank-state>div {
+    margin: auto;
+    height: 300px;
+    width: 350px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+
+    .icon, .text {
+        width: 100%;
+        text-align: center;
+        text-shadow: 1px 1px 0 #fff;
+    }
+    .icon {
+        color: #f2f2f4;
+        font-size: 244px;
+        margin-bottom: 20px;
+    }
+    .text {
+        font-size: 24px;
+        color: #ddddde;
+    }
+}
+
+.blank-state.loading {
+    background: none;
+    .icon {
+        font-size: 34px;
+    }
+}
+.blank-state.loading>div {
+    height: 34px;
+}
+
+
 
 h1 a, h1 a:visited {
     color: $main-color;
@@ -124,39 +183,6 @@ h1 a, h1 a:visited {
         border-left: 1px solid $third-color;
         padding-left: 10px;
         margin-left: 150px;
-    }
-
-
-    .statistics {
-        padding: 0;
-        margin: 0 0 10px 0;
-
-        li {
-            display: inline-block;
-            margin-bottom: 30px;
-
-            .value {
-                font-size: 1.4em;
-                color: #2d303b;
-            }
-
-            span {
-                font-size: 0.7em;
-            }
-        }
-
-        .numeric {
-            text-align: center;
-            width: 49%;
-        }
-
-        .main {
-
-
-            .value {
-                font-size: 3.2em;
-            }
-        }
     }
 
     .data {
@@ -206,6 +232,39 @@ h1 a, h1 a:visited {
 }
 
 
+.statistics {
+    padding: 0;
+    margin: 0 0 10px 0;
+
+    li {
+        display: inline-block;
+        margin-bottom: 30px;
+
+        .value {
+            font-size: 1.4em;
+            color: #2d303b;
+        }
+
+        span {
+            font-size: 0.7em;
+        }
+    }
+
+    .numeric {
+        text-align: center;
+        width: 49%;
+    }
+
+    .main {
+
+
+        .value {
+            font-size: 3.2em;
+        }
+    }
+}
+
+
 
 /*
 
@@ -223,28 +282,95 @@ h1 a, h1 a:visited {
         }
     }
 
-    article {
+    a {
+        color: $main-blue;
+        text-decoration: none;
+        font-weight: 400;
+    }
 
-        border: 1px solid #eee;
+    a:hover, a:visited, a:active {
+        color: $main-blue;
+    }
+
+    article {
+        position: relative;
         border-radius: 4px;
-        width: 260px;
-        height: 280px;
+        width: 300px;
+        height: 320px;
         margin: 0 20px 20px 0;
         float: left;
+        background: #f2f2f4;
+        border: 1px solid #f2f2f4;
+
+        .fa-bookmark {
+            position: absolute;
+            top: -4px;
+            right: 10px;
+            font-size: 24px;
+            color: #a00;
+            text-shadow: 1px 1px 0 #fff;
+        }
 
         h4 {
-            margin-bottom: 0;
+            vertical-align: middle;
+            height: 80px;
+            margin: 0;
+            padding: 10px;
+
+        }
+
+        .img {
+            width: 100%;
+            height: 140px;
+            background-repeat: no-repeat;
+            background-position: center center;
+            -webkit-background-size: cover;
+            -moz-background-size: cover;
+            -o-background-size: cover;
+            background-size: cover;
+            border-radius: 2px 2px 0 0;
         }
 
         .meta {
             margin: 0;
-            padding: 0;
+            padding: 0 10px;
             list-style: none;
 
             li {
                 display: inline-block;
                 margin-right: 10px;
                 font-size: 14px;
+            }
+        }
+
+        .actions {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+
+            ul {
+                margin: 0;
+                padding: 0;
+                list-style: none;
+                width: 49%;
+                -moz-box-sizing: border-box;
+                box-sizing: border-box;
+
+                li {
+                    display: inline-block;
+                    font-size: 20px;
+                }
+            }
+
+            .left {
+                float: left;
+                padding: 0 0 5px 10px;
+            }
+
+            .right {
+                float: right;
+                text-align: right;
+                padding: 0 10px 5px 0;
             }
         }
     }
@@ -270,7 +396,7 @@ h1 a, h1 a:visited {
     position: fixed;
     width: 250px;
     height: 100%;
-    background: #2d303b;
+    background: $main-blue;
     z-index: 1000;
     box-shadow: inset -30px 0px 30px #161923;
     color: #fff;

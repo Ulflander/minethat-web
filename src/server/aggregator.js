@@ -1,11 +1,16 @@
+/*jslint regexp:true*/
+
 var util = require('util'),
-    Twitter = require('twitter');
-var twit = new Twitter({
-    consumer_key: 'WO30xPwtmdSOzOmoJ5ruAdeHH',
-    consumer_secret: 'IH6UltER7AQsA9Y3vUCDGJxi3AKS4NbzcXDICwBGergu3wJKvm',
-    access_token_key: '58438762-2U1PaQyuvH9DIxcNU40rKxzjmz1klqYSzOlTY8tVk',
-    access_token_secret: 'ZGZF2dsQLshYautCNjuxbO7lM6gzRYJVEISDBrc07Kxep'
-});
+    Twitter = require('twitter'),
+    moment = require('moment'),
+    Entities = require('html-entities').AllHtmlEntities,
+    entities = new Entities(),
+    twit = new Twitter({
+        consumer_key: 'WO30xPwtmdSOzOmoJ5ruAdeHH',
+        consumer_secret: 'IH6UltER7AQsA9Y3vUCDGJxi3AKS4NbzcXDICwBGergu3wJKvm',
+        access_token_key: '58438762-2U1PaQyuvH9DIxcNU40rKxzjmz1klqYSzOlTY8tVk',
+        access_token_secret: 'ZGZF2dsQLshYautCNjuxbO7lM6gzRYJVEISDBrc07Kxep'
+    });
 
 /**
  * Feed aggregation program.
@@ -20,7 +25,7 @@ var twit = new Twitter({
         manager,
         internet = require('./lib/internet.js'),
         currSourcePage = 0,
-        limitPerPage = 5;
+        limitPerPage = 2;
 
     // Require and read configuration,
     // then initialize infinite loop
@@ -31,36 +36,115 @@ var twit = new Twitter({
         manager = require('./lib/job.js');
         model = models.model('Source');
 
-        setInterval(self.update, conf.env === 'local' ? 30000 : 10000);
+        setInterval(self.update, conf.env === 'local' ? 30000 : 1000);
 
         logger.log('Aggregator started...');
         manager.init(self.update);
     });
 
+    self.markError = function(source, err) {
+        if (!source.successive_errors) {
+            source.successive_errors = 0;
+        }
+        source.successive_errors += 1;
+        model.update({
+            _id: source._id
+        }, {
+            successive_errors: source.successive_errors,
+            last_error: !!err ? err.toString() : ''
+        },
+        function(err, numberAffected, rawResponse) {
+            if (!!err) {
+                logger.error('Error updating source', err);
+                return;
+            }
+            if (numberAffected === 0) {
+                logger.error('Error updating source: no item affected');
+            }
+        });
+    };
+
+
+    self.getLinkField = function(item) {
+        if (typeof item.origlink === 'string') {
+            return item.origlink;
+        }
+        if (Array.isArray(item.origlink)) {
+            return item.origlink[0];
+        }
+        if (typeof item.link === 'string') {
+            return item.link;
+        }
+        if (Array.isArray(item.link)) {
+            return item.link[0];
+        }
+
+        return undefined;
+    };
+
+    self.getTitleField = function(item) {
+        var title = '';
+        if (typeof item.title === 'string') {
+            title = item.title;
+        }
+        if (Array.isArray(item.title)) {
+            title = item.title[0];
+        }
+
+        return entities.decode(title.replace(/(<([^>]+)>)/ig,' '));
+    };
+
+    self.getDescField = function(item) {
+        var desc = '';
+        if (typeof item.description === 'string') {
+            desc = item.description;
+        }
+        if (Array.isArray(item.description)) {
+            desc = item.description[0];
+        }
+        if (typeof item.desc === 'string') {
+            desc = item.desc;
+        }
+        if (Array.isArray(item.desc)) {
+            desc = item.desc[0];
+        }
+
+        return entities.decode(desc.replace(/(<([^>]+)>)/ig,' '));
+    };
+
 
     self.submit = function(source, feedItem) {
+        var link = self.getLinkField(feedItem),
+            job;
+        if (!link) {
+            return;
+        }
 
         // Create job
-        var job = {
-                customerId: '2c7f9a',
-                gateway: 'API',
-                status: 'VOID',
-                type: 'FEED_URL',
-                value: feedItem.link[0],
-                meta: {
-                    doc_description_quality: source.quality,
-                    doc_title: feedItem.title[0],
-                    doc_published_date: feedItem.date,
-                    doc_description: feedItem.desc[0],
-                    doc_source_name: source.name,
-                    doc_source_url: source.url,
-                    doc_source_feed_url: source.feed_url
-                }
-            };
+        job = {
+            customerId: '2c7f9a',
+            gateway: 'API',
+            status: 'VOID',
+            type: 'FEED_URL',
+            value: self.getLinkField(feedItem),
+            meta: {
+                doc_description_quality: source.quality,
+                doc_title: self.getTitleField(feedItem),
+                doc_published_date: feedItem.date,
+                doc_description: self.getDescField(feedItem),
+                doc_source_name: source.name,
+                doc_source_url: source.url,
+                doc_source_id: source._id,
+                doc_source_feed_url: source.feed_url
+            }
+        };
 
         manager.makeup(job, function(err) {
             if (!!err) {
-                logger.error('Unable to publish job', err);
+                logger.warn('Unable to publish job for ' + source.name);
+                self.markError(source, err);
+            } else {
+                logger.debug('Job published for ' + source.name);
             }
         });
     };
@@ -75,23 +159,42 @@ var twit = new Twitter({
     self.aggregate = function(source, callback) {
         internet.feed(source.feed_url, function(err, feed) {
             if (!!err) {
-                logger.error('Unable to retrieve feed items', err);
+                logger.warn('Unable to retrieve feed items: ' +
+                        source.name, err);
+                self.markError(source, err);
                 return;
             }
 
             var items = feed.items,
                 i,
                 last = 0,
+                found = false,
+                date,
                 l = items.length;
 
             for (i = 0; i < l; i += 1) {
-                if (items[i].date > (source.last || 0)) {
-                    self.submit(source, items[i]);
+                date = items[i].date;
 
-                    if (items[i].date > last) {
-                        last = items[i].date;
+                if (isNaN(date)) {
+                    date = moment(date).valueOf();
+                }
+
+                if (typeof date === 'string' || isNaN(date) || date === 0) {
+                    logger.warn('Feed article date is not valid');
+                    self.markError(source);
+                } else if (date > (source.last || 0)) {
+                    items[i].date = date;
+                    self.submit(source, items[i]);
+                    found = true;
+                    if (date > last) {
+                        last = date;
                     }
                 }
+            }
+            if (last === 0 && found !== false) {
+                logger.warn('Unable to retrieve feed items: ' + source.name);
+                self.markError(source);
+                return;
             }
 
             if (last > 0) {
@@ -111,7 +214,7 @@ var twit = new Twitter({
         self.aggregate(source, function(source) {
             model.update({
                 _id: source._id
-            }, {last: source.last},
+            }, {last: source.last, successive_errors: 0},
             function(err, numberAffected, rawResponse) {
                 if (!!err) {
                     logger.error('Error updating source', err);
@@ -128,7 +231,13 @@ var twit = new Twitter({
      * Aggregate articles from a bunch of sources.
      */
     self.update = function() {
-        model.find({}, {}, {skip: currSourcePage, limit: limitPerPage},
+        model.find({
+            $or: [{successive_errors: {
+                    $lt: 4
+                }}, {successive_errors: {
+                    $exists: false
+                }}]
+        }, {}, {skip: currSourcePage, limit: limitPerPage},
             function(err, objs) {
                 if (!!err) {
                     logger.error('Error querying db', err);
@@ -138,6 +247,7 @@ var twit = new Twitter({
                     l = objs.length;
 
                 if (l === 0) {
+                    logger.log('No source found');
                     currSourcePage = 0;
                     return;
                 }
