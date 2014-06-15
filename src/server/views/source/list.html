@@ -22,7 +22,9 @@
                 <a href="<%= source.feed_url %>" target="_blank"><i class="fa fa-rss-square"></i></a><br />
 
                 <span><i class="fa fa-clock-o"></i> <%= !!source.last ? utils.tsToReadable(source.last) : 'Never' %></span>
-                <span><i class="fa fa-warning"></i> <%= !!source.successive_errors ? source.successive_errors : 0 %></span>
+                <span class="<%= source.successive_errors > 2 ? 'orange' : '' %>">
+                    <i class="fa fa-warning"></i> <%= !!source.successive_errors ? source.successive_errors : 0 %>
+                </span>
 
                 <span><a href="/api/v1/source/<%= data.docs[i]._id %>" data-action="delete">Delete</a></span>
             </li>

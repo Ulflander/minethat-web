@@ -21,7 +21,10 @@
             request({
                 url: url,
                 followAllRedirects: true,
-                headers: headers || {}
+                headers: headers || {
+                    'Accept-Language': '*',
+                    'User-Agent': 'Minethat 1.0'
+                }
             }, function(error, response) {
 
                 if (!error && response.statusCode >= 200 &&
@@ -78,16 +81,20 @@
                 });
             } catch (e) {
                 logger.log('Fallback to feedparser...');
-                feedparser.parseString(body, {}, function(err, meta, articles){
-                    if (!!err) {
-                        callback(err);
-                    }
+                try {
+                    feedparser.parseString(body, {}, function(err, meta, articles){
+                        if (!!err) {
+                            callback(err);
+                        }
 
-                    callback(null, {
-                        meta: meta,
-                        items: articles
-                    }, url);
-                });
+                        callback(null, {
+                            meta: meta,
+                            items: articles
+                        }, url);
+                    });
+                } catch (e) {
+                    callback('Url ' + url + ' feed parsing failed');
+                }
 
             }
         }, headers);

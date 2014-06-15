@@ -63,7 +63,7 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
-      <p class="stat">41.91</p>
+      <p class="stat">41.61</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
@@ -117,7 +117,7 @@ var util = require(&#039;util&#039;),
         manager,
         internet = require(&#039;./lib/internet.js&#039;),
         currSourcePage = 0,
-        limitPerPage = 1;
+        limitPerPage = 2;
 
     // Require and read configuration,
     // then initialize infinite loop
@@ -128,7 +128,7 @@ var util = require(&#039;util&#039;),
         manager = require(&#039;./lib/job.js&#039;);
         model = models.model(&#039;Source&#039;);
 
-        setInterval(self.update, conf.env === &#039;local&#039; ? 5000 : 1000);
+        setInterval(self.update, conf.env === &#039;local&#039; ? 30000 : 1000);
 
         logger.log(&#039;Aggregator started...&#039;);
         manager.init(self.update);

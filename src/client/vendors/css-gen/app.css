@@ -191,23 +191,72 @@ h1 a, h1 a:visited {
   list-style: none; }
   .content ul.list li {
     margin-bottom: 15px; }
+.content a {
+  color: #2d303b;
+  text-decoration: none;
+  font-weight: 400; }
+.content a:hover, .content a:visited, .content a:active {
+  color: #2d303b; }
 .content article {
-  border: 1px solid #eee;
+  position: relative;
   border-radius: 4px;
-  width: 260px;
-  height: 280px;
+  width: 300px;
+  height: 320px;
   margin: 0 20px 20px 0;
-  float: left; }
+  float: left;
+  background: #f2f2f4;
+  border: 1px solid #f2f2f4; }
+  .content article .fa-bookmark {
+    position: absolute;
+    top: -4px;
+    right: 10px;
+    font-size: 24px;
+    color: #a00;
+    text-shadow: 1px 1px 0 #fff; }
   .content article h4 {
-    margin-bottom: 0; }
+    vertical-align: middle;
+    height: 80px;
+    margin: 0;
+    padding: 10px; }
+  .content article .img {
+    width: 100%;
+    height: 140px;
+    background-repeat: no-repeat;
+    background-position: center center;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    border-radius: 2px 2px 0 0; }
   .content article .meta {
     margin: 0;
-    padding: 0;
+    padding: 0 10px;
     list-style: none; }
     .content article .meta li {
       display: inline-block;
       margin-right: 10px;
       font-size: 14px; }
+  .content article .actions {
+    position: absolute;
+    bottom: 0;
+    width: 100%; }
+    .content article .actions ul {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      width: 49%;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box; }
+      .content article .actions ul li {
+        display: inline-block;
+        font-size: 20px; }
+    .content article .actions .left {
+      float: left;
+      padding: 0 0 5px 10px; }
+    .content article .actions .right {
+      float: right;
+      text-align: right;
+      padding: 0 10px 5px 0; }
 .content .paginate {
   padding: 20px 30px;
   margin-bottom: 30px; }

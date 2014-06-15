@@ -25,7 +25,7 @@ var util = require('util'),
         manager,
         internet = require('./lib/internet.js'),
         currSourcePage = 0,
-        limitPerPage = 1;
+        limitPerPage = 2;
 
     // Require and read configuration,
     // then initialize infinite loop
@@ -36,7 +36,7 @@ var util = require('util'),
         manager = require('./lib/job.js');
         model = models.model('Source');
 
-        setInterval(self.update, conf.env === 'local' ? 5000 : 1000);
+        setInterval(self.update, conf.env === 'local' ? 30000 : 1000);
 
         logger.log('Aggregator started...');
         manager.init(self.update);
@@ -233,7 +233,7 @@ var util = require('util'),
     self.update = function() {
         model.find({
             $or: [{successive_errors: {
-                    $lt: 10
+                    $lt: 4
                 }}, {successive_errors: {
                     $exists: false
                 }}]

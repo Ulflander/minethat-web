@@ -91,7 +91,7 @@
 
             cv.findAll(req, res, 'Document',
                 futils.toCondition(obj.fields), null, {
-                    sort: {'properties.meta.published_date': -1}
+                    sort: {'properties.meta.doc_published_date': -1}
                 },
                 'filter/wall.html');
         });

@@ -19,6 +19,14 @@
                     type: String,
                     index: true
                 },
+                twitter_username: {
+                    type: String,
+                    index: true
+                },
+                kind: {
+                    type: String,
+                    'default': 'FEED' // FEED, TWITTER_USERNAME
+                },
                 type: {
                     type: String,
                     'default': 'CONTENT' // SPAM, FAKE, CONTENT

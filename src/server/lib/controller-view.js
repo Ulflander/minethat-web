@@ -44,7 +44,9 @@
                         d.getUTCFullYear() + ', ' +
                         utils.leadingZero(d.getHours()) + ':' +
                         utils.leadingZero(d.getMinutes());
-            }
+            },
+
+            moment: require('moment')
         };
 
 

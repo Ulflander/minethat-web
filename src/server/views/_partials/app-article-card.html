@@ -1,10 +1,64 @@
 
 <article data-item-id="<%= data.doc._id %>">
-<h4><a href="/app/doc/<%= data.doc._id %>"><%- data.props.meta.doc_title %></a></h4>
-<ul class="meta">
-    <% if (!!data.props.meta.doc_source_name) { %>
-    <li><%= data.props.meta.doc_source_name %></li>
+
+    <% if (!!data.props.basic_stats && data.props.basic_stats.quality_score > 30) { %>
+        <i class="fa fa-bookmark"></i>
     <% } %>
-    </li><span><a href="/api/v1/document/<%= data.doc._id %>" data-action="delete">Delete</a></span></li>
-</ul>
+
+
+    <a href="<%= data.props.meta.doc_url %>" target="blank">
+        <div class="img" <% if (!!data.props.meta.doc_image) { %>
+        style="background-image: url(<%= data.props.meta.doc_image%>)"<% } %>>
+
+        </div>
+    </a>
+
+    <h4>
+        <a href="<%= data.props.meta.doc_url %>" target="blank">
+            <%- data.props.meta.doc_title %>
+        </a>
+    </h4>
+
+    <ul class="meta main">
+        <% if (!!data.props.meta.doc_source_name) { %>
+            <li>
+                <a href="<%= data.props.meta.doc_source_url %>" target="blank">
+                    <%= data.props.meta.doc_source_name %>
+                </a>
+            </li>
+        <% } %>
+        <% if (!!data.props.meta.doc_twitter_username) { %>
+        <li>
+            <a href="https://twitter.com/<%= data.props.meta.doc_twitter_username.split('@').join('') %>" target="_blank">
+                <i class="fa fa-twitter"></i>
+            </a>
+        </li>
+        <% } %>
+    </ul>
+
+
+    <ul class="meta">
+        <li><%= utils.moment(data.props.meta.doc_published_date).fromNow() %></li>
+        <% if (!!data.props.basic_stats) { %>
+        <li><%= data.props.basic_stats.read_time_est %> min(s) read</li>
+        <% } %>
+    </ul>
+
+    <div class="actions">
+        <ul class="left">
+            <li>
+                <a href="/app/doc/<%= data.doc._id %>">
+                    <i class="fa fa-stethoscope"></i>
+                </a>
+            </li>
+        </ul>
+        <ul class="right">
+            <li>
+                <a href="/api/v1/document/<%= data.doc._id %>" data-action="delete">
+                    <i class="fa fa-trash-o"></i>
+                </a>
+            </li>
+        </ul>
+    </div>
+
 </article>

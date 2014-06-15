@@ -45,7 +45,8 @@
     "ortoo-feedparser": "^0.11.0",
     "html-entities": "^1.0.10",
     "node.extend": "^1.0.10",
-    "node-kmeans": "0.0.1"
+    "node-kmeans": "0.0.1",
+    "timeago": "^0.1.0"
   },
   "devDependencies": {
     "gulp-clean": "~0.2.4",
