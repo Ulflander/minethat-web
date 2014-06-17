@@ -65,7 +65,6 @@
             return;
         }
 
-        conf.logger.log('[RabbitMQ] Submitted job ' + jobId);
         connection.publish('extract', jobId, {
             deliveryMode: 2
         });

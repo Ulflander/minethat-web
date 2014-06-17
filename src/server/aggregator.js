@@ -36,7 +36,7 @@ var util = require('util'),
         manager = require('./lib/job.js');
         model = models.model('Source');
 
-        setInterval(self.update, conf.env === 'local' ? 30000 : 1000);
+        setInterval(self.update, conf.env === 'local' ? 10000 : 1000);
 
         logger.log('Aggregator started...');
         manager.init(self.update);
@@ -116,8 +116,12 @@ var util = require('util'),
     self.submit = function(source, feedItem) {
         var link = self.getLinkField(feedItem),
             job;
+
         if (!link) {
+            logger.debug('Unable to publish: no link, via ' + source.name);
             return;
+        } else {
+            logger.debug('Publishing ' + link + ' via ' + source.name);
         }
 
         // Create job
@@ -126,7 +130,7 @@ var util = require('util'),
             gateway: 'API',
             status: 'VOID',
             type: 'FEED_URL',
-            value: self.getLinkField(feedItem),
+            value: link,
             meta: {
                 doc_description_quality: source.quality,
                 doc_title: self.getTitleField(feedItem),
@@ -141,10 +145,8 @@ var util = require('util'),
 
         manager.makeup(job, function(err) {
             if (!!err) {
-                logger.warn('Unable to publish job for ' + source.name);
+                logger.warn('Unable to publish job for ' + source.name, err);
                 self.markError(source, err);
-            } else {
-                logger.debug('Job published for ' + source.name);
             }
         });
     };
@@ -179,7 +181,13 @@ var util = require('util'),
                     date = moment(date).valueOf();
                 }
 
-                if (typeof date === 'string' || isNaN(date) || date === 0) {
+                if (typeof date === 'object' &&
+                    typeof date.getTime === 'function') {
+
+                    date = date.getTime();
+                }
+
+                if (typeof date !== 'number' || date === 0) {
                     logger.warn('Feed article date is not valid');
                     self.markError(source);
                 } else if (date > (source.last || 0)) {
