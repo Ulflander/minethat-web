@@ -120,9 +120,9 @@ var util = require('util'),
         if (!link) {
             logger.debug('Unable to publish: no link, via ' + source.name);
             return;
-        } else {
-            logger.debug('Publishing ' + link + ' via ' + source.name);
         }
+
+        logger.debug('Publishing ' + link + ' via ' + source.name);
 
         // Create job
         job = {

@@ -20,7 +20,7 @@
             connection.queue(conf.RABBIT_EXTRACT_QUEUE, {
                 durable: true,
                 'exclusive': false,
-                'autoDelete': false,
+                'autoDelete': false
             }, function(q) {
                 console.log('[RabbitMQ] Queue declared');
                 ready = true;

@@ -63,7 +63,7 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
-      <p class="stat">18.86</p>
+      <p class="stat">19.32</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
@@ -98,7 +98,7 @@
     exports.index = function(req, res, next) {
         cv.findAll(req, res, &#039;Document&#039;,
             null, null, {
-                sort: {&#039;properties.meta.doc_aggregated_date&#039;: -1},
+                sort: {&#039;properties.meta.doc_published_date&#039;: -1},
                 limit: 50
             },
             &#039;document/list.html&#039;);
@@ -110,7 +110,7 @@
         }
         cv.findAll(req, res, &#039;Document&#039;,
             {&#039;status&#039;: &#039;MINED&#039;}, &#039;properties.meta&#039;, {
-                sort: {&#039;properties.meta.doc_aggregated_date&#039;: -1},
+                sort: {&#039;properties.meta.doc_published_date&#039;: -1},
                 limit: 10
             });
     };
@@ -122,7 +122,7 @@
     exports.export_bunch = function(req, res, next) {
         cv.findAll(req, res, &#039;Document&#039;,
             {&#039;status&#039;: &#039;MINED&#039;}, null, {
-                sort: {&#039;properties.meta.doc_aggregated_date&#039;: -1},
+                sort: {&#039;properties.meta.doc_published_date&#039;: -1},
                 limit: 100
             });
 

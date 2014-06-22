@@ -31,9 +31,8 @@
                     response.statusCode < 300) {
                     callback(null, response.body);
                 } else {
-                    logger.warn('URL is invalid: '
-                        + error, !!response ? response.statusCode :
-                        response, url);
+                    logger.warn('URL is invalid: '+ error,
+                        !!response ? response.statusCode : response, url);
                     callback(error);
                 }
             });
@@ -71,29 +70,29 @@
             try {
                 blindparser.parseString(body, {}, function(err, feed) {
                     if (!!err) {
-                        logger.warn('URL ' + url + ' feed is invalid: '
-                            + err);
+                        logger.warn('URL ' + url + ' feed is invalid: ' + err);
                         callback(err);
                         return;
                     }
 
                     callback(null, feed, url);
                 });
-            } catch (e) {
+            } catch (err1) {
                 logger.log('Fallback to feedparser...');
                 try {
-                    feedparser.parseString(body, {}, function(err, meta, articles){
-                        if (!!err) {
-                            callback(err);
-                        }
+                    feedparser.parseString(body, {}, 
+                        function(err, meta, articles){
+                            if (!!err) {
+                                callback(err);
+                            }
 
-                        callback(null, {
-                            meta: meta,
-                            items: articles
-                        }, url);
-                    });
-                } catch (e) {
-                    callback('Url ' + url + ' feed parsing failed');
+                            callback(null, {
+                                meta: meta,
+                                items: articles
+                            }, url);
+                        });
+                } catch (err2) {
+                    callback('Url ' + url + ' feed parsing failed', err2);
                 }
 
             }

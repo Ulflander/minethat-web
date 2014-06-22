@@ -45,11 +45,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
-      <p class="stat">68.67</p>
+      <p class="stat">67.48</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
-      <p class="stat">94</p>
+      <p class="stat">100</p>
     </div>
   </div>
   <div class="row historical">
@@ -63,11 +63,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
-      <p class="stat">25.16</p>
+      <p class="stat">24.96</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
-      <p class="stat">0.48</p>
+      <p class="stat">0.52</p>
     </div>
   </div>
 </div>
@@ -111,16 +111,18 @@
             request({
                 url: url,
                 followAllRedirects: true,
-                headers: headers || {}
+                headers: headers || {
+                    &#039;Accept-Language&#039;: &#039;*&#039;,
+                    &#039;User-Agent&#039;: &#039;Minethat 1.0&#039;
+                }
             }, function(error, response) {
 
                 if (!error &amp;&amp; response.statusCode &gt;= 200 &amp;&amp;
                     response.statusCode &lt; 300) {
                     callback(null, response.body);
                 } else {
-                    logger.warn(&#039;URL is invalid: &#039;
-                        + error, !!response ? response.statusCode :
-                        response, url);
+                    logger.warn(&#039;URL is invalid: &#039;+ error,
+                        !!response ? response.statusCode : response, url);
                     callback(error);
                 }
             });
@@ -158,26 +160,30 @@
             try {
                 blindparser.parseString(body, {}, function(err, feed) {
                     if (!!err) {
-                        logger.warn(&#039;URL &#039; + url + &#039; feed is invalid: &#039;
-                            + err);
+                        logger.warn(&#039;URL &#039; + url + &#039; feed is invalid: &#039; + err);
                         callback(err);
                         return;
                     }
 
                     callback(null, feed, url);
                 });
-            } catch (e) {
+            } catch (err1) {
                 logger.log(&#039;Fallback to feedparser...&#039;);
-                feedparser.parseString(body, {}, function(err, meta, articles){
-                    if (!!err) {
-                        callback(err);
-                    }
+                try {
+                    feedparser.parseString(body, {}, 
+                        function(err, meta, articles){
+                            if (!!err) {
+                                callback(err);
+                            }
 
-                    callback(null, {
-                        meta: meta,
-                        items: articles
-                    }, url);
-                });
+                            callback(null, {
+                                meta: meta,
+                                items: articles
+                            }, url);
+                        });
+                } catch (err2) {
+                    callback(&#039;Url &#039; + url + &#039; feed parsing failed&#039;, err2);
+                }
 
             }
         }, headers);
