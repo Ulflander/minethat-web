@@ -21,7 +21,9 @@
                 'css-gen/landing.css'
             ],
             js: [
-                'vendors/js/*.js',
+                'vendors/js/modernizr-2.6.2.min.js',
+                'vendors/js/jquery-1.10.2.min.js',
+                'vendors/js/hunk.js',
                 'js/landing/*.js'
             ]
         },
