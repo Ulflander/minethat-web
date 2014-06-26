@@ -5874,6 +5874,147 @@ if (!$.easing.easeout) {
 
 })(window, jQuery);
 
+/**
+ *  jQuery Avgrund Popin Plugin
+ *  http://github.com/voronianski/jquery.avgrund.js/
+ *
+ *  (c) 2012-2013 http://pixelhunter.me/
+ *  MIT licensed
+ */
+
+(function (factory) {
+	if (typeof define === 'function' && define.amd) {
+		// AMD
+		define(['jquery'], factory);
+	} else if (typeof exports === 'object') {
+		// CommonJS
+		module.exports = factory;
+	} else {
+		// Browser globals
+		factory(jQuery);
+	}
+}(function ($) {
+	$.fn.avgrund = function (options) {
+		var defaults = {
+			width: 380, // max = 640
+			height: 280, // max = 350
+			showClose: false,
+			showCloseText: '',
+			closeByEscape: true,
+			closeByDocument: true,
+			holderClass: '',
+			overlayClass: '',
+			enableStackAnimation: false,
+			onBlurContainer: '',
+			openOnEvent: true,
+			setEvent: 'click',
+			onLoad: false,
+			onUnload: false,
+			template: '<p>This is test popin content!</p>'
+		};
+
+		options = $.extend(defaults, options);
+
+		return this.each(function() {
+			var self = $(this),
+				body = $('body'),
+				maxWidth = options.width > 640 ? 640 : options.width,
+				maxHeight = options.height > 350 ? 350 : options.height,
+				template = typeof options.template === 'function' ? options.template(self) : options.template;
+
+			body.addClass('avgrund-ready');
+
+			if ($('.avgrund-overlay').length === 0) {
+				body.append('<div class="avgrund-overlay ' + options.overlayClass + '"></div>');
+			}
+
+			if (options.onBlurContainer !== '') {
+				$(options.onBlurContainer).addClass('avgrund-blur');
+			}
+
+			function onDocumentKeyup (e) {
+				if (options.closeByEscape) {
+					if (e.keyCode === 27) {
+						deactivate();
+					}
+				}
+			}
+
+			function onDocumentClick (e) {
+				if (options.closeByDocument) {
+					if ($(e.target).is('.avgrund-overlay, .avgrund-close')) {
+						e.preventDefault();
+						deactivate();
+					}
+				} else if ($(e.target).is('.avgrund-close')) {
+						e.preventDefault();
+						deactivate();
+				}
+			}
+
+			function activate () {
+				if (typeof options.onLoad === 'function') {
+					options.onLoad(self);
+				}
+
+				setTimeout(function() {
+					body.addClass('avgrund-active');
+				}, 100);
+
+				var $popin = $('<div class="avgrund-popin ' + options.holderClass + '"></div>');
+				$popin.append(template);
+				body.append($popin);
+
+				$('.avgrund-popin').css({
+					'width': maxWidth + 'px',
+					'height': maxHeight + 'px',
+					'margin-left': '-' + (maxWidth / 2 + 10) + 'px',
+					'margin-top': '-' + (maxHeight / 2 + 10) + 'px'
+				});
+
+				if (options.showClose) {
+					$('.avgrund-popin').append('<a href="#" class="avgrund-close">' + options.showCloseText + '</a>');
+				}
+
+				if (options.enableStackAnimation) {
+					$('.avgrund-popin').addClass('stack');
+				}
+
+				body.bind('keyup', onDocumentKeyup)
+					.bind('click', onDocumentClick);
+			}
+
+			function deactivate () {
+				body.unbind('keyup', onDocumentKeyup)
+					.unbind('click', onDocumentClick)
+					.removeClass('avgrund-active');
+
+				setTimeout(function() {
+					$('.avgrund-popin').remove();
+				}, 500);
+
+				if (typeof options.onUnload === 'function') {
+					options.onUnload(self);
+				}
+			}
+
+			if (options.openOnEvent) {
+				self.bind(options.setEvent, function (e) {
+					e.stopPropagation();
+
+					if ($(e.target).is('a')) {
+						e.preventDefault();
+					}
+
+					activate();
+				});
+			} else {
+				activate();
+			}
+		});
+	};
+}));
+
 
 (function(filter) {
     'use strict';
@@ -5886,35 +6027,107 @@ if (!$.easing.easeout) {
 
 }(hunk('filter')));
 
-/**
- * Manage entities selection.
- */
 (function(filter) {
     'use strict';
 
-    filter.entities = function() {
-        $('[name=entities]').selectize({
-                delimiter: ',',
-                persist: false,
-                create: function(input) {
-                    return {
-                        value: input,
-                        text: input
-                    }
-                }
-            });
+
+
+
+    filter.keywordsFromDB = function(from) {
+        var res = [], i, l;
+
+        if ($.isArray(from)) {
+            for (i = 0, l = from.length; i < l; i += 1) {
+                res.push(filter.keywordFieldFromDB(from[i]));
+            }
+        } else {
+            res.push(filter.keywordFieldFromDB(from));
+        }
+
+        return res;
+    };
+
+    filter.keywordFieldFromDB = function (obj) {
+        var res = filter.generateCondition('keywords');
+
+        if (!!obj.m_in) {
+            res.val = obj.m_in.join(',');
+            res.inclusive = true;
+        } else {
+            res.val = obj.join(',');
+            res.inclusive = true;
+        }
+
+        return res;
+    };
+
+    filter.keywordsToDB = function(conditions) {
+        var res = [],
+            i,
+            l = conditions.length;
+
+        for (i = 0; i < l; i += 1) {
+            if (conditions[i].type === 'keywords') {
+                res.push(filter.keywordFieldToDB(conditions[i]));
+            }
+        }
+
+        return res;
+    };
+
+    filter.keywordFieldToDB = function(obj) {
+        var res = {};
+
+        if (obj.inclusive) {
+            res[obj.field] = {m_in: obj.val.split(',')};
+        } else {
+            res[obj.field] = obj.val.split(',');
+        }
+
+        return res;
+    };
+
+
+
+}(hunk('filter')));
+
+
+(function(filter) {
+    'use strict';
+
+
+    filter.rangeFromDB = function(obj) {
+
+    };
+
+    filter.rangeToDB = function(e) {
+
     };
 
 }(hunk('filter')));
 
-/**
- * Manage keywords selection.
- */
+
 (function(filter) {
     'use strict';
 
-    filter.keywords = function() {
-        $('[name=keywords]').selectize({
+    var idIndex = 0,
+
+        conditions = [];
+
+    filter.views = {
+        keywords: function(obj) {
+            idIndex += 1;
+
+            var elId = 'condition_' + idIndex + '_container',
+                $el = $(hunk.tpl.render('tpl-conditions-keyword', {
+                    id: elId,
+                    input_id: 'condition_' + idIndex,
+                    value: obj.val
+                }));
+
+            $('#conditions-container').append($el);
+
+            $('input[type=text]', $el).selectize({
                 delimiter: ',',
                 persist: false,
                 create: function(input) {
@@ -5924,7 +6137,197 @@ if (!$.easing.easeout) {
                     }
                 }
             });
+
+            $('input[type=text]', $el).on('change', function() {
+                obj.val = $(this).val();
+            });
+
+            $('input[type=checkbox]', $el).on('click', function() {
+                obj.inclusive = this.checked;
+            });
+
+            $('.remove', $el).on('click', function(e) {
+                if (window.confirm('Are you sure?')) {
+                    e.preventDefault();
+                    $el.remove();
+                }
+            });
+
+
+            return elId;
+        }
     };
+
+
+    filter.conditions = {
+
+        /**
+         * KEYWORDS
+         */
+        keywords: {
+            label: 'Keywords',
+            type: 'keywords',
+            field: 'properties/keywords/main',
+            exclusive: false,
+            def: '',
+            multiple: true,
+
+            autocomplete: function(str, cb) {
+                if (typeof cb === 'function') {
+                    cb(['some', 'thing']);
+                }
+            },
+
+            validate: function(value) {
+                return !!value && value !== '';
+            },
+        },
+
+        /**
+         * Metrics
+         */
+        token_frequency: {
+            label: 'Token frequency',
+            type: 'range',
+            field: 'properties/basic_stats/avg_token_frequency',
+            range: [0, 3],
+            def: [1, 3]
+        },
+        entity_frequency: {
+            label: 'Entity frequency',
+            type: 'range',
+            field: 'properties/basic_stats/avg_entity_frequency',
+            range: [0, 5],
+            def: [0, 5]
+        },
+        quality: {
+            label: 'Quality',
+            type: 'range',
+            field: 'properties/basic_stats/quality_score',
+            range: [0, 100],
+            def: [10, 100]
+        },
+        read_time: {
+            label: 'Read time',
+            type: 'range',
+            field: 'properties/basic_stats/read_time_est',
+            range: [0, 90],
+            def: [0, 15]
+        },
+        paragraphs: {
+            label: 'Amount of paragraph',
+            type: 'range',
+            field: 'properties/basic_stats/read_time_est',
+            range: [0, 1000],
+            def: [0, 1000]
+        },
+        sent_per_paragraph: {
+            label: 'Average sentences per paragraph',
+            type: 'range',
+            field: 'properties/basic_stats/ave_sent_per_par',
+            range: [0, 50],
+            def: [0, 50]
+        }
+    };
+
+
+    filter.addCondition = function(e) {
+        var id = $('#conditions-selector').val(),
+            obj = filter.generateCondition(id),
+            elId;
+
+        e.preventDefault();
+
+        // Check if condition is applyable
+        if (obj.mutiple !== true) {
+
+        }
+
+
+        // Add condition
+        console.log(obj);
+
+        if (!!filter.views[id]) {
+            filter.views[id](obj);
+        }
+
+        conditions.push(obj);
+    };
+
+    filter.fromDB = function(obj) {
+        var res = [],
+            k;
+
+        for(k in obj.conditions) {
+            if (obj.conditions.hasOwnProperty(k)) {
+                res.push(filter.conditionFromDB(k, obj.conditions[k]));
+            }
+        }
+
+        conditions = res;
+
+        return res;
+    };
+
+
+    filter.toDB = function() {
+        var res = [],
+            i,
+            l = !!conditions ? conditions.length : 0;
+
+        for(i = 0; i < l; i += 1) {
+            if (conditions[i].type !== 'keywords') {
+                res.push(filter.conditionToDB(conditions[i]));
+            }
+        }
+
+        return res.concat(filter.keywordsToDB(conditions));
+    };
+
+
+    filter.generateCondition = function(id) {
+        if (!filter.conditions[id]) {
+            console.warn('No condition with id ' + id)
+            return {};
+        }
+
+        return $.extend({val: filter.conditions[id].def}, filter.conditions[id]);
+    };
+
+
+    filter.conditionFromDB = function(key, obj) {
+        var res = [];
+        switch(key) {
+            case 'properties/keywords/main':
+                res = res.concat(filter.keywordsFromDB(obj));
+                break;
+        }
+
+        return res;
+    };
+
+
+    filter.conditionToDB = function(obj) {
+        console.log(obj);
+        switch(obj.type) {
+            default:
+                console.log(obj.type + ' not found for serialization');
+        }
+    };
+
+    filter.initSelector = function() {
+        var k;
+
+        for (k in filter.conditions) {
+            $('#conditions-selector').append(
+                $('<option value="' + k + '">' +
+                    filter.conditions[k].label + '</option>')
+            );
+        }
+        $('#conditions-selector').selectize();
+        $('#condition-add').on('click', filter.addCondition);
+    };
+
 
 }(hunk('filter')));
 
@@ -5934,61 +6337,80 @@ if (!$.easing.easeout) {
 (function(filter) {
     'use strict';
 
-    filter.filterNumber = 0;
+    var current;
 
     // On start, bind metrics
     filter.start = function() {
         filter.color();
-        filter.entities();
-        filter.keywords();
-
         $('.tooltip').tooltipster();
+        filter.initSelector();
 
-        $('[data-bind]').on('click', function(e){
+        $('#filter-estimate').on('click', function(e) {
             e.preventDefault();
-            hunk.filter[$(this).attr('data-bind')]();
-        });
-
-        if ($('[name=keywords]').val() != '') {
             filter.estimate();
+        });
+        $('#filter-submit').on('click', function(e) {
+            e.preventDefault();
+            filter.submit();
+        });
+        $('#filter-remove').on('click', function(e) {
+            e.preventDefault();
+            filter.remove();
+        });
+    };
+
+    filter.init = function(f) {
+        var i, l, conds;
+
+        if (!!f) {
+            current = f;
+        } else {
+            current = {
+                name: '',
+                color: '#333333',
+                conditions: []
+            }
         }
+
+        console.log(current);
+        conds = filter.fromDB(current);
+
+        for (i = 0, l = conds.length; i < l; i += 1) {
+            if (!!filter.views[conds[i].id]) {
+                filter.views[conds[i].id](conds[i]);
+            }
+        }
+
     };
 
     filter.gather = function() {
         var f = {
             name: $('[name=name]').val(),
             color: $('[name=color]').val(),
-            entities: $('[name=entities]').val(),
-            keywords: $('[name=keywords]').val(),
-        },
-        i = 0,
-        key;
-
-        while(true) {
-            key = $('[name=key\\[' + i + '\\]]');
-            if (key.length === 0) {
-                break;
-            }
-
-            f[key.val()] = $('[name=val\\[' + i + '\\]]').val();
-
-            i += 1;
-        }
+            conditions: filter.toDB()
+        };
 
         return f;
     };
 
-    filter.remove = function() {
-        $('#estimation').html(hunk.tpl.render('tpl-loading-state'));
 
-        $.ajax({
-            method: 'DELETE',
-            contentType: 'application/json',
-            url: $('#filter-remove').attr('href'),
-        })
-        .done(function(data) {
-            console.log(data);
-        });
+
+
+
+
+    filter.remove = function() {
+        if (window.confirm('Are you sure?')) {
+            $('#estimation').html(hunk.tpl.render('tpl-loading-state'));
+
+            $.ajax({
+                method: 'DELETE',
+                contentType: 'application/json',
+                url: $('#filter-remove').attr('href'),
+            })
+            .done(function(data) {
+                console.log(data);
+            });
+        }
     };
 
     filter.submit = function() {
@@ -5998,7 +6420,7 @@ if (!$.easing.easeout) {
             method: 'POST',
             data: JSON.stringify(filter.gather()),
             contentType: 'application/json',
-            url: $('#filter-form').attr('data-url'),
+            url: $('.filter-settings').attr('data-url'),
         })
         .done(function(data) {
             console.log(data);
@@ -6006,8 +6428,6 @@ if (!$.easing.easeout) {
     };
 
     filter.estimate = function() {
-        $('#estimation').html(hunk.tpl.render('tpl-loading-state'));
-
         $.ajax({
             method: 'POST',
             data: JSON.stringify(filter.gather()),

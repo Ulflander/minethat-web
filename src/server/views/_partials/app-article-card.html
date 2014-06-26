@@ -1,10 +1,12 @@
 
 <article data-item-id="<%= data.doc._id %>">
 
-    <% if (!!data.props.basic_stats && data.props.basic_stats.quality_score > 30) { %>
+    <!--
+    <% if (!!data.props.basic_stats && (data.props.basic_stats.quality_score > 20
+        || data.props.basic_stats.read_time_est > 4)) { %>
         <i class="fa fa-bookmark"></i>
     <% } %>
-
+    -->
 
     <a href="<%= data.props.meta.doc_url %>" target="blank">
         <div class="img" <% if (!!data.props.meta.doc_image) { %>

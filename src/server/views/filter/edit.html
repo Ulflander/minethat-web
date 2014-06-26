@@ -1,7 +1,7 @@
 
 
 <%- partial('app-header', {
-    title: 'Create a new filter'
+    title: !!data.doc ? 'Edit filter' : 'Create a new filter'
 }) %>
 <%- partial('app-menu', {
     customer_filters: data.customer_filters
@@ -10,43 +10,38 @@
 <section class="content filters">
 
 
-    <section class="filter-settings">
-        <form method="post" data-url="/app/filter/<%= !!data.doc ? data.doc._id : 'new' %>" id="filter-form">
+    <section class="filter-settings" data-url="/app/filter/<%= !!data.doc ? data.doc._id : 'new' %>">
+
             <div class="input-wrap header">
                 <input type="text" class="color" name="color" value="<%= !!data.doc ? data.doc.color : '' %>" />
                 <input type="text" class="input" name="name" placeholder="Your filter name" value="<%= !!data.doc ? data.doc.name : '' %>" />
             </div>
 
-            <h4>Entities</h4>
-            <div id="entities">
-                <div class="input-wrap">
-                    <input class="input selectized" name="entities" type="text" placeholder="Type an entity name..." />
-                </div>
+            <div id="conditions-container">
+
             </div>
 
-            <h4>Keywords</h4>
-            <div id="keywords">
-                <div class="input-wrap">
-                    <input class="input selectized" name="keywords" type="text" placeholder="Type a keyword..."
-                     value="<%= !!data.doc && !!data.doc.fields ? data.doc.fields.keywords : '' %>" />
-                </div>
-            </div>
-
-            <h4>Metrics <span class="cta">
-                <a class="button little green tooltip" href="#" data-bind="addMetric" title="Add a new metric"><i class="fa fa-plus"></i></a></span>
+            <h4>New condition:
+            <select id="conditions-selector">
+            </select>
+            <span class="cta">
+                <a class="button little green tooltip " href="#" id="condition-add" title="Add condition"><i class="fa fa-plus"></i></a></span>
             </h4>
-            <div id="metrics">
 
-            </div>
 
             <div class="input-wrap cta">
                 <% if (!!data.doc) { %>
-                <a href="/api/v1/filters/<%= data.doc._id %>" data-bind="remove" id="filter-remove">Delete</a>
+                <a href="/api/v1/filters/<%= data.doc._id %>" id="filter-remove">Delete</a>
                 <% } %>
-                <button class="button green" data-bind="estimate">Estimate</button>
-                <input class="button" type="submit" value="Create filter" data-bind="submit" />
+                <button class="button green" id="filter-estimate">Estimate</button>
+                <button class="button " id="filter-submit">Submit</button>
             </div>
-        </form>
+
+        <div class="right keywords clearfix">
+            <pre style="font-size: 10px;"><code><%- data.doc %>
+            </code></pre>
+        </div>
+
     </section>
 
 
@@ -63,5 +58,31 @@
         Estimation result: <span class="count"><%= data.total || 0 %> documents</span>
     </p>
 </section>
+
+
+<section style="display: none">
+    <textarea id="tpl-conditions-keyword">
+
+        <div class="input-wrap condition" id="{{id}}">
+
+            <label for="{{input_id}}">Keywords</label>
+            <span>
+                <input type="checkbox" name="inclusive" />
+            </span>
+
+            <span class="cta">
+                <a class="button little remove orange tooltip tooltipstered" href="#" title="Remove condition"><i class="fa fa-minus"></i></a>
+            </span>
+
+            <br />
+            <input id="{{input_id}}" class="input" name="keywords" type="text" placeholder="Type a keyword..." value="{{value}}" />
+        </div>
+
+    </textarea>
+</section>
+
+<script type="text/javascript">
+    hunk.filter.init(<%- !!data.doc ? JSON.stringify(data.doc.toObject()) : 'null' %>);
+</script>
 
 <%- partial('app-footer') %>

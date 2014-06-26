@@ -49,6 +49,7 @@
                 'css/selectize.css',
                 'css/tooltipster.css',
                 'css/spectrum.css',
+                'css/avgrund.css',
                 'css-gen/main.css',
                 'css-gen/basic-form.css',
                 'css-gen/table.css',
@@ -66,6 +67,7 @@
                 'vendors/js/selectize.js',
                 'vendors/js/jquery.tooltipster.min.js',
                 'vendors/js/spectrum.js',
+                'vendors/js/jquery.avgrund.js',
                 'js/app/**/*.js',
                 'js/app/*.js'
             ]

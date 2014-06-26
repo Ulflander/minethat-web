@@ -40,7 +40,6 @@
 
 
 
-
     /**
      * Run Quality Assurance tools on server files.
      *
@@ -48,7 +47,7 @@
      * - Google closure compiler
      * - Plato
      */
-    gulp.task('qa-js', function() {
+    gulp.task('qa-js-hard', function() {
         return gulp.src([
                 'src/server/*.js',
                 'src/server/**/*.js',
@@ -80,11 +79,39 @@
             .pipe(gulp.dest('dist'));
     });
 
+
+
+    /**
+     * Run Quality Assurance tools on server files.
+     *
+     * - JSHint
+     * - Google closure compiler
+     * - Plato
+     */
+    gulp.task('qa-js', function() {
+        return gulp.src([
+                'src/server/*.js',
+                'src/server/**/*.js',
+            ])
+            .pipe(filesize())
+            .pipe(jshint())
+            .pipe(jshint.reporter('default'))
+            .pipe(jslint({
+                node: true,
+                unparam: true,
+                nomen: true,
+                maxlen: 80,
+                white: true,
+                indent: 4
+            }))
+            .pipe(gulp.dest('dist'));
+    });
+
     /**
      * Once Quality Automation checks done, open and read plato report.
      * Build fails if maintainability is less than MIN_MAINTAINABILITY.
      */
-    gulp.task('qa-js-validation', ['qa-js'], function() {
+    gulp.task('qa-js-validation', ['qa-js-hard'], function() {
 
 
         if (!fs.existsSync('dist/private/plato-web/report.json')) {
@@ -191,12 +218,17 @@
     });
 
     gulp.task('build-js-no-check', function(cb) {
+        var stack;
         for (var k in stacks.stacks) {
-            gulp.src(stacks.get(k, 'js'))
+            stack = stacks.get(k, 'js');
+            if (!stack) {
+                continue;
+            }
+            gulp.src(stack)
                 .pipe(concat(k + '.js'))
                 .pipe(gulp.dest('dist/js/'))
-                .pipe(uglify())
-                .pipe(gulp.dest('dist/js/'))
+                //.pipe(uglify())
+                //.pipe(gulp.dest('dist/js/'))
                 .pipe(filesize());
         }
 
@@ -211,9 +243,9 @@
 
     gulp.task('watch', function() {
         WATCHING = true;
-        gulp.watch('src/client/js/*.js', ['qa-js-validation', 'build-js']);
-        gulp.watch('src/client/js/**/*.js', ['qa-js-validation', 'build-js']);
-        gulp.watch('src/client/vendors/js/*.js', ['qa-js-validation', 'build-js']);
+        gulp.watch('src/client/js/*.js', ['qa-js', 'build-js-no-check']);
+        gulp.watch('src/client/js/**/*.js', ['qa-js', 'build-js-no-check']);
+        gulp.watch('src/client/vendors/js/*.js', ['qa-js', 'build-js-no-check']);
 
         gulp.watch('src/client/scss/*', ['sass', 'build-css']);
         gulp.watch('src/client/vendors/css/*.css', ['build-css']);

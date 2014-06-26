@@ -45,11 +45,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
-      <p class="stat">62.51</p>
+      <p class="stat">63.04</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
-      <p class="stat">271</p>
+      <p class="stat">294</p>
     </div>
   </div>
   <div class="row historical">
@@ -63,11 +63,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
-      <p class="stat">40.87</p>
+      <p class="stat">41.42</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
-      <p class="stat">2.16</p>
+      <p class="stat">2.25</p>
     </div>
   </div>
 </div>
@@ -204,6 +204,33 @@ var util = require(&#039;util&#039;),
         return entities.decode(desc.replace(/(&lt;([^&gt;]+)&gt;)/ig,&#039; &#039;));
     };
 
+    /**
+     * Parse and normalize feed date.
+     * @param  {[type]} date [description]
+     * @return {[type]}      [description]
+     */
+    self.parseDate = function(date, now) {
+
+        // Try to parse with momentjs
+        if (isNaN(date)) {
+            date = moment(date).valueOf();
+        }
+
+        // Get ts from date object
+        if (typeof date === &#039;object&#039; &amp;&amp;
+            typeof date.getTime === &#039;function&#039;) {
+
+            return date.getTime();
+        }
+
+        // Valid
+        if (typeof date === &#039;number&#039; &amp;&amp; date &gt; 0) {
+            return date;
+        }
+
+        return 0;
+    };
+
 
     self.submit = function(source, feedItem) {
         var link = self.getLinkField(feedItem),
@@ -248,11 +275,13 @@ var util = require(&#039;util&#039;),
      * Read feed and create jobs for each aggregated article.
      *
      * @param  {Object}   source   Source
+     * @param {Number} now Timestamp at aggregation time
      * @param  {Function} callback Callback (mandatory)
      */
-    self.aggregate = function(source, callback) {
+    self.aggregate = function(source, now, callback) {
         internet.feed(source.feed_url, function(err, feed) {
-            if (!!err) {
+
+            if (!!err || !feed || !feed.items) {
                 logger.warn(&#039;Unable to retrieve feed items: &#039; +
                         source.name, err);
                 self.markError(source, err);
@@ -267,19 +296,9 @@ var util = require(&#039;util&#039;),
                 l = items.length;
 
             for (i = 0; i &lt; l; i += 1) {
-                date = items[i].date;
+                date = self.parseDate(items[i].date, now);
 
-                if (isNaN(date)) {
-                    date = moment(date).valueOf();
-                }
-
-                if (typeof date === &#039;object&#039; &amp;&amp;
-                    typeof date.getTime === &#039;function&#039;) {
-
-                    date = date.getTime();
-                }
-
-                if (typeof date !== &#039;number&#039; || date === 0) {
+                if (date === 0) {
                     logger.warn(&#039;Feed article date is not valid&#039;);
                     self.markError(source);
                 } else if (date &gt; (source.last || 0)) {
@@ -311,10 +330,14 @@ var util = require(&#039;util&#039;),
      * @param  {Object} source Source to aggregate
      */
     self.check = function(source) {
-        self.aggregate(source, function(source) {
+        self.aggregate(source, Date.now(), function(source) {
+
             model.update({
                 _id: source._id
-            }, {last: source.last, successive_errors: 0},
+            }, {
+                last: source.last,
+                successive_errors: 0
+            },
             function(err, numberAffected, rawResponse) {
                 if (!!err) {
                     logger.error(&#039;Error updating source&#039;, err);

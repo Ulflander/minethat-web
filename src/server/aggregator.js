@@ -112,6 +112,33 @@ var util = require('util'),
         return entities.decode(desc.replace(/(<([^>]+)>)/ig,' '));
     };
 
+    /**
+     * Parse and normalize feed date.
+     * @param  {[type]} date [description]
+     * @return {[type]}      [description]
+     */
+    self.parseDate = function(date, now) {
+
+        // Try to parse with momentjs
+        if (isNaN(date)) {
+            date = moment(date).valueOf();
+        }
+
+        // Get ts from date object
+        if (typeof date === 'object' &&
+            typeof date.getTime === 'function') {
+
+            return date.getTime();
+        }
+
+        // Valid
+        if (typeof date === 'number' && date > 0) {
+            return date;
+        }
+
+        return 0;
+    };
+
 
     self.submit = function(source, feedItem) {
         var link = self.getLinkField(feedItem),
@@ -156,11 +183,13 @@ var util = require('util'),
      * Read feed and create jobs for each aggregated article.
      *
      * @param  {Object}   source   Source
+     * @param {Number} now Timestamp at aggregation time
      * @param  {Function} callback Callback (mandatory)
      */
-    self.aggregate = function(source, callback) {
+    self.aggregate = function(source, now, callback) {
         internet.feed(source.feed_url, function(err, feed) {
-            if (!!err) {
+
+            if (!!err || !feed || !feed.items) {
                 logger.warn('Unable to retrieve feed items: ' +
                         source.name, err);
                 self.markError(source, err);
@@ -175,19 +204,9 @@ var util = require('util'),
                 l = items.length;
 
             for (i = 0; i < l; i += 1) {
-                date = items[i].date;
+                date = self.parseDate(items[i].date, now);
 
-                if (isNaN(date)) {
-                    date = moment(date).valueOf();
-                }
-
-                if (typeof date === 'object' &&
-                    typeof date.getTime === 'function') {
-
-                    date = date.getTime();
-                }
-
-                if (typeof date !== 'number' || date === 0) {
+                if (date === 0) {
                     logger.warn('Feed article date is not valid');
                     self.markError(source);
                 } else if (date > (source.last || 0)) {
@@ -219,10 +238,14 @@ var util = require('util'),
      * @param  {Object} source Source to aggregate
      */
     self.check = function(source) {
-        self.aggregate(source, function(source) {
+        self.aggregate(source, Date.now(), function(source) {
+
             model.update({
                 _id: source._id
-            }, {last: source.last, successive_errors: 0},
+            }, {
+                last: source.last,
+                successive_errors: 0
+            },
             function(err, numberAffected, rawResponse) {
                 if (!!err) {
                     logger.error('Error updating source', err);
