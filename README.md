@@ -1,6 +1,8 @@
 web
 ===
 
+Discontinued project, see [Minethat](https://github.com/Ulflander/minethat) for details.
+
 Node web server for Minethat.
 
 ### Install
